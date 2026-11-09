@@ -15,7 +15,7 @@ dialog:
     en: "Yea, you told me that this is what they do here. I think that it's really rude."
   - speaker: Michelle
     pt: "É o s<mark>i</mark>stema del<mark>e</mark>s, né? Mas s<mark>e</mark> você cont<mark>i</mark>nua com fom<mark>e</mark>, ped<mark>e</mark>."
-    es: "Es el sistema de ellos, ¿verdad? Pero si tú sigues con hambre, pída-lo."
+    es: "Es el sistema de ellos, ¿verdad? Pero si tú sigues con hambre, pídelo."
     en: "That's the way they do things here, right? But if you're still hungry, go ahead and ask."
   - speaker: Valdo
     pt: "Ah, vou ped<mark>i</mark>r um mont<mark>e</mark> então."
