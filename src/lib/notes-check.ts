@@ -30,6 +30,8 @@ export function checkNotes({ id, body = '', data }: NotesEntry): void {
     if (problem) fail(where, problem);
   };
 
+  if (!data.dialog && !data.clips && !id.startsWith('supplementary-'))
+    fail('', 'give a dialog or clips. Only supplementary lessons may have neither.');
   check(body, '', false);
   if (Array.isArray(data.dialog))
     data.dialog.forEach((turn, i) => {
