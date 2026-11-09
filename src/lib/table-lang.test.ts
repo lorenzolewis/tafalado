@@ -1,6 +1,7 @@
 import { markdownToHtml } from 'satteri';
 import { describe, expect, it } from 'vitest';
-import { tableLang } from './table-lang';
+import type { Element, ElementContent } from 'hast';
+import { tableLang, tagTable } from './table-lang';
 
 const render = async (md: string) =>
   (await markdownToHtml(md, { hastPlugins: [tableLang], fileURL: new URL('file:///site/src/content/notes/grammar-02.md') }))
@@ -63,7 +64,57 @@ describe('tableLang', () => {
     );
   });
 
+  it('lists every header it accepts when it fails', async () => {
+    await expect(render(['| Contraction |', '| --- |', '| no |'].join('\n'))).rejects.toThrow(
+      'Use Portuguese, Preposition + article, Spanish, English, Symbol, Symbol (Portuguese), Symbol (Spanish), ' +
+        'Symbol (English), Notes, Examples or Form',
+    );
+  });
+
   it('leaves Markdown without tables alone', async () => {
     expect(await render('Plain <i lang="pt-BR">bife</i>.')).toBe('<p>Plain <i lang="pt-BR">bife</i>.</p>\n');
+  });
+});
+
+const el = (tagName: string, children: ElementContent[] = [], properties: Element['properties'] = {}): Element => ({
+  type: 'element',
+  tagName,
+  properties,
+  children,
+});
+const cell = (tag: 'td' | 'th', value: string, properties: Element['properties'] = {}) =>
+  el(tag, [{ type: 'text', value }], properties);
+const table = (head: Element[], ...body: Element[][]) =>
+  el('table', [el('thead', [el('tr', head)]), el('tbody', body.map((row) => el('tr', row)))]);
+const bodyLangs = (t: Element) =>
+  ((t.children[1] as Element).children as Element[]).map((row) =>
+    (row.children as Element[]).map((c) => `${c.tagName}:${c.properties.lang ?? '-'}`),
+  );
+
+describe('tagTable', () => {
+  it('counts a <th> in a body row as a column', () => {
+    const tagged = tagTable(
+      table([cell('th', 'Notes'), cell('th', 'Portuguese'), cell('th', 'Spanish')], [cell('th', 'Masc'), cell('td', 'no'), cell('td', 'en el')]),
+      'grammar-02.md',
+    );
+    expect(bodyLangs(tagged)).toEqual([['th:-', 'td:pt-BR', 'td:es']]);
+  });
+
+  it('honours colspan in the header and the body', () => {
+    const tagged = tagTable(
+      table(
+        [cell('th', 'Portuguese', { colSpan: 2 }), cell('th', 'Spanish'), cell('th', 'English')],
+        [cell('td', 'no'), cell('td', 'na'), cell('td', 'en el'), cell('td', 'in the')],
+        [cell('td', 'em + o', { colSpan: 2 }), cell('td', 'en el'), cell('td', 'in the')],
+        [cell('td', 'no'), cell('td', 'na · en el', { colSpan: 2 }), cell('td', 'in the')],
+      ),
+      'grammar-02.md',
+    );
+    expect(bodyLangs(tagged)).toEqual([
+      ['td:pt-BR', 'td:pt-BR', 'td:es', 'td:en'],
+      ['td:pt-BR', 'td:es', 'td:en'],
+      // Spanning a Portuguese and a Spanish column: no single language, so untagged.
+      ['td:pt-BR', 'td:-', 'td:en'],
+    ]);
   });
 });
