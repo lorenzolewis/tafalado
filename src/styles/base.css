@@ -160,43 +160,50 @@ a {
   outline-offset: 2px;
 }
 
-/* PLACEHOLDER (#88): the highlight on the sounds and forms a lesson teaches (<mark>, red in the
-   original PDFs). Its final style is being agreed separately; swap it here, in these custom
-   properties and this one rule, and nowhere else. Light: a wash of the series' paper. Dark: the
-   paper with ink type. Print: backgrounds don't print by default, so an underline instead. */
+/* Highlights (#88): the sounds and forms a lesson teaches, in the PDFs' own colours and bold.
+   Red is <mark>; some lessons contrast a second and third set in blue and green (<mark class>,
+   docs/lesson-schema.md). Blue and green also carry a dashed and a dotted underline, so the sets
+   stay apart for readers who can't tell the colours apart and on a grayscale printer, where red
+   gets a solid underline too. Lighter tints in dark mode keep the contrast. */
 :root {
-  --mark-bg: color-mix(in srgb, var(--paper) 70%, transparent);
-  --mark-ink: currentColor;
-  --mark-line: none;
+  --mark-red: #c62828;
+  --mark-blue: #1565c0;
+  --mark-green: #2e7d32;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --mark-bg: var(--paper);
-    --mark-ink: var(--print-ink);
-  }
-}
-@media print {
-  :root {
-    --mark-bg: transparent;
-    --mark-ink: currentColor;
-    --mark-line: underline 0.12em;
+    --mark-red: #ff8a80;
+    --mark-blue: #82b1ff;
+    --mark-green: #81c784;
   }
 }
 mark {
-  background: var(--mark-bg);
-  color: var(--mark-ink);
-  text-decoration: var(--mark-line);
-  text-underline-offset: 0.12em;
-}
-/* PLACEHOLDER: the second and third contrast sets (blue and green in the PDFs) must read apart
-   from the plain <mark> and from each other, also in grayscale print. */
-mark.blue {
   background: none;
-  text-decoration: underline 0.12em;
+  color: var(--mark-red);
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.08em;
+  print-color-adjust: exact;
+}
+mark.blue {
+  color: var(--mark-blue);
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
 }
 mark.green {
-  background: none;
-  text-decoration: underline dotted 0.12em;
+  color: var(--mark-green);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+}
+@media print {
+  :root {
+    --mark-red: #c62828;
+    --mark-blue: #1565c0;
+    --mark-green: #2e7d32;
+  }
+  mark:not([class]) {
+    text-decoration-line: underline;
+  }
 }
 
 /* Inline SVG icons (src/components/Icon.astro): a 24px grid, 2.5px square strokes, solid shapes. */

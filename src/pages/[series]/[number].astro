@@ -63,7 +63,7 @@ const NotesContent = notes && (await render(notes.entry)).Content;
         notes ? (
           <a href="#notes">
             <Icon name="doc" />
-            <span>Dialog &amp; notes ↓</span>
+            <span>{notes.dialog || notes.clips ? 'Dialog & notes ↓' : 'Notes ↓'}</span>
           </a>
         ) : (
           <a href={data.pdf.url}>
