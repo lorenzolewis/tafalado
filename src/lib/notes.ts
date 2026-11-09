@@ -7,17 +7,14 @@ export type NotesEntry = CollectionEntry<'notes'>;
 /** A lesson's notes, ready for its page: the entry (for `render`), and its dialog with any shared one resolved. */
 export type LessonNotes = { entry: NotesEntry; dialog?: Turn[]; clips?: NotesEntry['data']['clips'] };
 
-/**
- * TODO(#89): set to true once src/content/notes/ has a file for every lesson. While false, a lesson
- * may have no notes (its page keeps the PDF link); notes with no lesson always fail the build.
- */
-const REQUIRE_NOTES_FOR_EVERY_LESSON = false;
+/** Every lesson has notes (#89), so a lesson without them fails the build, as do notes with no lesson. */
+const REQUIRE_NOTES_FOR_EVERY_LESSON = true;
 
 let cache: Promise<Map<string, LessonNotes>> | undefined;
 
 /**
  * Every lesson's notes, keyed by lesson id (`pronunciation-01`). Fails the build, naming the file,
- * on bad markup, an empty body, notes with no lesson (or, once required, a lesson with no notes)
+ * on bad markup, an empty body, notes with no lesson, a lesson with no notes
  * and a shared dialog that can't be resolved.
  */
 export function getAllNotes(): Promise<Map<string, LessonNotes>> {

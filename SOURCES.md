@@ -24,6 +24,98 @@ The lesson data in `src/content/lessons/` and the media in `public/mp3/`, `publi
 | `photo.url`, `photo.alt` | The `<img>` inside the lesson intro and its original `alt` text. The supplementary lessons have no photo. See [Lesson photos](#lesson-photos) for their licensing.                                                                                                                                                                                       |
 | body                     | The lesson page's intro paragraph; `<i>`/`<b>` became Markdown emphasis. The feed's dialogue text was not imported.                                                                                                                                                                                                                                      |
 
+## Study notes
+
+The dialogs and notes in `src/content/notes/` (lorenzolewis/tafalado#88, #89) come from the lessons' PDF transcripts in `public/pdf/`: `tafalado_NN.pdf` (pronunciation), `tafalado_gra_NN.pdf` (grammar) and `tafalado_suppl_NN.pdf` (supplementary). Their text was extracted once with a throwaway pdfplumber script, not kept, and then checked by hand, lesson by lesson, against the rendered PDF pages. There was no native-speaker proofread: that pass is the proofread.
+
+- **Highlights.** The PDFs' red becomes `<mark>`; the blue and green some lessons contrast with it become `<mark class="blue">` and `<mark class="green">`. Most PDFs carry the colour in their character data. In Pronunciation 6–9 and Supplementary 1 it only shows when rendered, so those were marked by eye.
+- **IPA.** Pronunciation 6, 8 and 9 and Supplementary 1 use an old SIL Doulos font with its own encoding, so extraction gives `[Dv]`, `Znv\` and the like. Every symbol was retyped as Unicode IPA from the rendered page. Supplementary 2 was already Unicode.
+- **Shared dialogs.** Pronunciation 11, 13 and 15 reuse the dialogs of 10, 12 and 14 (their PDFs match apart from the link), so the turns are stored once, in the first lesson.
+- **Layout.** The banner, footer and "These notes accompany…" line are left out. Charts became tables whose headers set the cells' language (`docs/lesson-schema.md`); some pattern lists became bullet lists, and `->` became `→`. Supplementary 1's three vowel charts are split into one table per section. Pronunciation 24 has no dialog: its six clips keep their transcripts and Observations, and the PDF's other prose is the body.
+- **Wording.** Clear spelling slips were fixed and are listed below. Awkward but correct wording and translations are kept as published, and so are the speaker labels and Grammar 20's word list (lorenzolewis/tafalado#92 checks them against the audio).
+
+### Changes from the original notes
+
+Notation, not typos:
+
+- Pronunciation 5 types ASCII stand-ins `[@]`, `[E]`, `[O]` in its normal font; they are `[ə]`, `[ɛ]`, `[ɔ]` here. Pronunciation 6 `[ha.'pajs]` and Pronunciation 16 `['awa]` use a straight apostrophe for the stress mark; it is `ˈ` here.
+- Pronunciation 6, 8, 9 and Supplementary 1: the legacy Doulos IPA is retyped as Unicode (above).
+- Supplementary 2: the velarized l row's symbol is `ɫ` (U+026B, velarized l), as the row's own "Velarized lateral" says, where the PDF's font encodes `ɬ` (U+026C, the voiceless lateral fricative). Its `lj` is the rendered `lʲ`.
+- Grammar 19: three `(cid:31)` extraction artifacts are dropped.
+- Grammar 4: in "trouxeram → trouxer" the red started one letter late; all of "trouxer" is highlighted, as in the other examples.
+- Pronunciation 24: the paragraph that introduces clips 3–6 now follows them, so "below" is dropped and "The next four clips" reads "Clips 3 to 6".
+
+Typos (lesson, where: before → after). "(and 11)": the alternate lesson repeats the notes.
+
+- Pronunciation 1, dialog (es): pída-lo → pídelo
+- Pronunciation 3, dialog (es): pié → pie
+- Pronunciation 3 and 4, notes: If the syllable is stress → If the syllable is stressed
+- Pronunciation 4, dialog (es): ¿Como podemos pagar? → ¿Cómo podemos pagar?
+- Pronunciation 4, notes: with the"open "o" → with the open "o"
+- Pronunciation 5, dialog (es): esa cossa → esa cosa
+- Pronunciation 7, notes: eg., → e.g.,
+- Pronunciation 8, dialog: ¿En que sección → ¿En qué sección (es); vegtables → vegetables, mellons → melons, our mom's → our moms (en)
+- Pronunciation 8, notes: This nasal diphthong in also heard → is also heard
+- Pronunciation 9, dialog (en): I'm dieing of hunger → I'm dying of hunger; the United State → the United States
+- Pronunciation 9, notes: more complicated that the 5 → more complicated than the 5; the 3 vowels sounds → the 3 vowel sounds
+- Pronunciation 10 (and 11), notes: these word end → these words end; ma[ch]ure.). → ma[ch]ure.)
+- Pronunciation 12 (and 13), dialog (es): Salío una película → Salió
+- Pronunciation 12 (and 13), notes: the American moving going experience → movie going experience; vocal chords → vocal cords (twice); e.g, liv.ros → e.g., liv.ros
+- Pronunciation 14 (and 15), dialog (es): el diez porciento ya está incluído → por ciento, incluido
+- Pronunciation 14 (and 15), notes: oven-backed rice → oven-baked rice; at only at restaurants → and only at restaurants; tipping costumes → tipping customs; gorgeta → gorjeta (as in the dialog); disappear all together → disappear altogether
+- Pronunciation 16, dialog (es): el água → el agua; el impuesto incluído → incluido
+- Pronunciation 16, notes: an avacado → an avocado
+- Pronunciation 17, notes: I going to keep on using → I'm going to; straight forward → straightforward
+- Pronunciation 18, dialog: That true. → That's true. (en); acojedores → acogedores (es)
+- Pronunciation 19, dialog (es): vengo en la mañanas → en las mañanas; lavar e secar → lavar y secar
+- Pronunciation 20, dialog (es): mojaba la hojas → las hojas
+- Pronunciation 21, dialog (es): revelé la mías → las mías
+- Pronunciation 21, notes: prints for you pictures → for your pictures; Brazil, fatal, local, ideal, sol → Brasil, … (Portuguese examples)
+- Pronunciation 22, dialog (es): digna de los dióses → dioses; nuestra ritmo de vida → nuestro ritmo
+- Pronunciation 23, dialog (es): a outros → a otros; forma diminutivo → forma diminutiva; no serúa → no sería; "Liz para Elizabeth → "Liz" para Elizabeth
+- Pronunciation 23, dialog (en): the person hás → the person has; "Liz for Elizabeth → "Liz" for Elizabeth
+- Pronunciation 24, notes: exlamations → exclamations; but do worry too much → but don't worry too much; This clips offers a chance to here → This clip offers a chance to hear
+- Pronunciation 24, clips: como sabe ingles → inglês (clip 3, as its Observations quote it); no Brazil não → no Brasil não (clip 6); Jose Luis → José Luis (the speakers of clips 4–6, as in clip 3)
+- Supplementary 2, chart: gata, agua → gata, água; approximate → approximant (ɲ and ɫ rows)
+- Grammar 1, dialog: les gustan os libros → los libros, Te gusta sentarte … estudiar? → ¿Te gusta … (es); the United State → the United States (en)
+- Grammar 1, notes: a "regular verb → a "regular" verb; Voce gosta de estudar? → Você gosta de estudar?
+- Grammar 2, dialog (en): Wating in line → Waiting in line
+- Grammar 2, charts 1 and 2: em + essa, em + essas, de + essa, de + essas (for nesta, nestas, desta, destas) → em + esta, em + estas, de + esta, de + estas (the rows repeated the esse/essa inputs)
+- Grammar 3, dialog (es): No! Vamos a dejar → ¡No! Vamos a dejar
+- Grammar 3, notes: help costumers → help customers; fossil -> fósseis → fóssil → fósseis
+- Grammar 4, dialog (es): Claro que no! → ¡Claro que no!; Si Diós quiere → Si Dios quiere
+- Grammar 4, notes: We don't have this is Spanish → this in Spanish; Os que qusierem → Os que quiserem
+- Grammar 5, dialog: Sit down hear → Sit down here (en); descúlpaame → discúlpame (es)
+- Grammar 6, dialog (pt): exatamente por isso.. → exatamente por isso.
+- Grammar 7, dialog (es): Y nada de agua! → ¡Y nada de agua!
+- Grammar 7, notes: dando agua → dando água (Portuguese); les está dando água → dando agua (Spanish, twice); English → English: (as Spanish: and Portuguese:)
+- Grammar 8, dialog: But be care that → But be careful that, different then in Brazil → different than (en); compra luego un carro nuevo! → ¡compra … (es)
+- Grammar 8, notes: end in 'aõ' → end in 'ão'; as nãções → as nações
+- Grammar 9, dialog: What wrong with her purse? I looks like → What's wrong … It looks like, that in from their perspective → that from their perspective (en); Es verdad! … vaqueros con chinelas! → ¡Es verdad! … ¡vaqueros con chinelas! (es)
+- Grammar 9, charts 3 and 4 (es): su libros, su casas → sus libros, sus casas
+- Grammar 9, chart notes: Some speakers could seu and sua → could use seu and sua (and sua and suas); chart 6's second "o livro delas" → os livros delas (the plural)
+- Grammar 9, notes: su casa could mean you, his → your, his
+- Grammar 10, dialog (es): No, eso no es cierto! → ¡No, eso no es cierto!
+- Grammar 11, dialog (es): en el Brazil → en el Brasil (twice)
+- Grammar 12, dialog: past the vestibular → pass the vestibular (en); en el Brazil → en el Brasil (es)
+- Grammar 12, notes: that the can go without → that they can go without; There is not need for a details decription → There is no need for a detailed description; I is good → It is good; Future Subjuntive → Future Subjunctive (twice)
+- Grammar 13, dialog: ¿Pero como así? → ¿Pero cómo así?, la edade → la edad (es); 21 years old.. → 21 years old., to by alcohol → to buy alcohol (en)
+- Grammar 13, notes: el Puente → el puente; el arbol → el árbol; a agua – el água → a água – el agua
+- Grammar 14, dialog: with every thing in it → with everything in it (en); Por que? Você não gosta → Por quê? (pt)
+- Grammar 14, notes: a strange site indeed → a strange sight indeed
+- Grammar 15, dialog: my first and last name.? → my first and last name? (en); embarassada → embaraçada (pt)
+- Grammar 15, word list: esquisito (exquisite) → exquisito, assistir (to attend) → asistir (es); longo (long → longo (long)
+- Grammar 16, dialog: Eloas andan besándonos → Ellas (es); the region in Brasil → in Brazil (en)
+- Grammar 16, notes: two kisses on the check → on the cheek
+- Grammar 17, dialog: Que bueno que aquí → Qué bueno, el peeaje → el peaje (es); weren't working either.. → either. (en)
+- Grammar 17, notes: Eu gosto da comida.. → Eu gosto da comida.
+- Grammar 18, dialog: the United State → the United States, it give people → it gives people (en); eso les dá → eso les da (es)
+- Grammar 18, notes: follow a patter of → a pattern of; líderes do contresso → do congresso
+- Grammar 19, dialog: Sí, Recientemente → Sí, recientemente (es); have used the a system → have used a system (en)
+- Grammar 19, notes: (Marcos has been studying that book lately. → … lately.)
+- Grammar 20, dialog: reclamar por que el sistema → porque, los autobuses anda → andan (es); the buses en up → end up (en)
+- Grammar 20, notes: for it's handicapped citizens → for its; slopped curbs → sloped curbs
+
 ## Pronunciation 13 and the "lower-bitrate file"
 
 The survey in lorenzolewis/tafalado#1 noted a second, lower-bitrate file for Pronunciation 13 on the home page. There isn't a second file: the home page shows Lesson 13 as its "Random Podcast Example" and links the same `mp3/tafalado_13.mp3` (4,028,140 bytes) as the lesson page and the feed. No other variant is linked anywhere on the site, and the obvious alternative names (`tafalado_13_lo.mp3`, `tafalado_13b.mp3`, …) return 404.

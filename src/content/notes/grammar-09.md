@@ -39,7 +39,7 @@ Possessive pronouns are those that mean *my*, *your*, *his*, *her*, *our*, and *
 
 ### Chart #1: my
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>meu livro</mark> | my book | mi libro |
 | Fem & Sing | <mark>minha casa</mark> | my house | mi casa |
@@ -48,7 +48,7 @@ Possessive pronouns are those that mean *my*, *your*, *his*, *her*, *our*, and *
 
 ### Chart #2: your
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>seu livro</mark> | your book | tu libro |
 | Fem & Sing | <mark>sua casa</mark> | your house | tu casa |
@@ -59,7 +59,7 @@ Note: Some speakers use <i lang="pt-BR">teu</i> and <i lang="pt-BR">tua</i>, but
 
 ### Chart #3: his
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>o livro dele</mark> | his book | su libro |
 | Fem & Sing | <mark>a casa dele</mark> | his house | su casa |
@@ -70,7 +70,7 @@ Note: Some speakers could use <i lang="pt-BR">seu</i> and <i lang="pt-BR">sua</i
 
 ### Chart #4: her
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>o livro dela</mark> | her book | su libro |
 | Fem & Sing | <mark>a casa dela</mark> | her house | su casa |
@@ -81,7 +81,7 @@ Note: Some speakers could use <i lang="pt-BR">sua</i> and <i lang="pt-BR">suas</
 
 ### Chart #5: our
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>nosso livro</mark> | our book | nuestro libro |
 | Fem & Sing | <mark>nossa casa</mark> | our house | nuestra casa |
@@ -92,7 +92,7 @@ Note: Speakers could also use <i lang="pt-BR">da gente</i>, as in <i lang="pt-BR
 
 ### Chart #6: their
 
-| Notes | Portuguese | English | Spanish |
+| Form | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | Masc & Sing | <mark>o livro deles</mark> | their book | su libro |
 | Fem & Sing | <mark>a casa deles</mark> | their house | su casa |

@@ -103,14 +103,15 @@ This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
 | `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
 | body | Markdown: `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`, in the PDF's order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
 
-A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
+A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"` (single quotes work too, for double-quoted YAML strings); a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a lesson with no notes; and a shared dialog that can't be resolved.
 
 ## Markup in notes
 
 - **Highlights.** The sounds or forms a lesson teaches (red in the PDFs) are `<mark>`, in dialog strings and the body: `b<mark>i</mark>f<mark>e</mark>`. Some lessons contrast a second or third set in blue or green (Pronunciation 10: red ti/te, blue di/de): write those as `<mark class="blue">` and `<mark class="green">`, so the contrast survives. No other `<mark>` attributes are allowed. Their style is in one block in `src/styles/base.css`.
 - **Words** follow the intro rules above: `<i lang="pt-BR">`, `<i lang="es">`, `*…*` for English.
 - **IPA** is `<span lang="pt-BR-fonipa">[ej]</span>`, or `es-fonipa` / `en-fonipa` when the symbol is about Spanish or English sounds.
-- Those five values are the only `lang` allowed in notes. Dialog lines get `pt-BR`, `es` and `en` from the page.
+- **English and Italian inside another language.** `<span lang="en">` marks English where the surrounding text is Portuguese or Spanish: the glosses in a Portuguese or Spanish table cell (Grammar 15: `sobrenome <span lang="en">(last name)</span>`) and the English turns in Pronunciation 24's clips. `<i lang="it">` marks the Italian words Pronunciation 20 compares.
+- Those seven values (`pt-BR`, `es`, `en`, `it` and the three `-fonipa`) are the only `lang` allowed in notes. Dialog lines get `pt-BR`, `es` and `en` from the page.
 
 ## Tables
 
@@ -118,12 +119,13 @@ Ordinary GFM tables. Each column header sets the `lang` of every cell below it (
 
 | Header | Cells get |
 | --- | --- |
-| `Portuguese` | `pt-BR` |
+| `Portuguese`, `Preposition + article` | `pt-BR` |
 | `Spanish` | `es` |
 | `English` | `en` |
 | `Symbol`, `Symbol (Portuguese)` | `pt-BR-fonipa` |
 | `Symbol (Spanish)` | `es-fonipa` |
 | `Symbol (English)` | `en-fonipa` |
 | `Notes`, `Examples` | Nothing: mixed content, marked inline with `<i lang>` / `<span lang>` |
+| `Form` | Nothing: English labels such as "Masc & Sing" (Grammar 9) |
 
 Any other header fails the build with the file name, so no table ships untagged. Add a header to `COLUMN_LANG` only with its language.

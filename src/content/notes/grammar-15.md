@@ -39,32 +39,32 @@ This grammar lesson is really a vocabulary lesson. That is to say, although many
 
 | Portuguese                 | Spanish                          |
 | -------------------------- | -------------------------------- |
-| sobrenome (last name)      | apellido (last name)             |
-| apelido (nickname)         | sobrenombre – apodo (nickname)   |
-| escritório (office)        | oficina (office)                 |
-| brincar (to play around)   | jugar (to play around)           |
-| pegar (to get)             | coger, sacar (to get)            |
-| tirar (to take out)        | quitar, sacar (to take out)      |
-| esquisito (weird)          | raro (weird)                     |
-| gostoso                    | exquisito (exquisite)            |
-| grávida (pregnant)         | embarazada (pregnant)            |
-| freqüentar (to attend)     | asistir (to attend)              |
-| envelope (envelope)        | sobre (envelope)                 |
-| pronto (ready)             | listo (ready, clever)            |
-| logo (soon)                | pronto (soon)                    |
-| deitar (lie down)          | acostar (to lie down)            |
-| ainda (still)              | todavía (still)                  |
-| dirigir (to drive)         | manejar (to drive, handle)       |
-| dirigir (to manage)        | dirigir (to manage)              |
-| carteira (license)         | licencia (license)               |
-| carteira (wallet)          | cartera (wallet)                 |
-| licença (permission)       | permiso (permission)             |
-| roxo (purple)              | morado (purple)                  |
-| vermelho (red)             | rojo (red)                       |
-| largo (wide)               | ancho (wide)                     |
-| longo (long)               | largo (long)                     |
-| cena (scene)               | cena (dinner)                    |
-| escrivaninha (desk)        | escritorio (desk)                |
-| acordar (to wake up)       | acordarse (to remember)          |
-| barata (cockroach)         | barata (cheap)                   |
+| sobrenome <span lang="en">(last name)</span>      | apellido <span lang="en">(last name)</span>             |
+| apelido <span lang="en">(nickname)</span>         | sobrenombre – apodo <span lang="en">(nickname)</span>   |
+| escritório <span lang="en">(office)</span>        | oficina <span lang="en">(office)</span>                 |
+| brincar <span lang="en">(to play around)</span>   | jugar <span lang="en">(to play around)</span>           |
+| pegar <span lang="en">(to get)</span>             | coger, sacar <span lang="en">(to get)</span>            |
+| tirar <span lang="en">(to take out)</span>        | quitar, sacar <span lang="en">(to take out)</span>      |
+| esquisito <span lang="en">(weird)</span>          | raro <span lang="en">(weird)</span>                     |
+| gostoso                    | exquisito <span lang="en">(exquisite)</span>            |
+| grávida <span lang="en">(pregnant)</span>         | embarazada <span lang="en">(pregnant)</span>            |
+| freqüentar <span lang="en">(to attend)</span>     | asistir <span lang="en">(to attend)</span>              |
+| envelope <span lang="en">(envelope)</span>        | sobre <span lang="en">(envelope)</span>                 |
+| pronto <span lang="en">(ready)</span>             | listo <span lang="en">(ready, clever)</span>            |
+| logo <span lang="en">(soon)</span>                | pronto <span lang="en">(soon)</span>                    |
+| deitar <span lang="en">(lie down)</span>          | acostar <span lang="en">(to lie down)</span>            |
+| ainda <span lang="en">(still)</span>              | todavía <span lang="en">(still)</span>                  |
+| dirigir <span lang="en">(to drive)</span>         | manejar <span lang="en">(to drive, handle)</span>       |
+| dirigir <span lang="en">(to manage)</span>        | dirigir <span lang="en">(to manage)</span>              |
+| carteira <span lang="en">(license)</span>         | licencia <span lang="en">(license)</span>               |
+| carteira <span lang="en">(wallet)</span>          | cartera <span lang="en">(wallet)</span>                 |
+| licença <span lang="en">(permission)</span>       | permiso <span lang="en">(permission)</span>             |
+| roxo <span lang="en">(purple)</span>              | morado <span lang="en">(purple)</span>                  |
+| vermelho <span lang="en">(red)</span>             | rojo <span lang="en">(red)</span>                       |
+| largo <span lang="en">(wide)</span>               | ancho <span lang="en">(wide)</span>                     |
+| longo <span lang="en">(long)</span>               | largo <span lang="en">(long)</span>                     |
+| cena <span lang="en">(scene)</span>               | cena <span lang="en">(dinner)</span>                    |
+| escrivaninha <span lang="en">(desk)</span>        | escritorio <span lang="en">(desk)</span>                |
+| acordar <span lang="en">(to wake up)</span>       | acordarse <span lang="en">(to remember)</span>          |
+| barata <span lang="en">(cockroach)</span>         | barata <span lang="en">(cheap)</span>                   |
 | competição (competition)   | competencia (competition)        |

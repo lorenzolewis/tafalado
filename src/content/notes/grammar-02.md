@@ -41,7 +41,7 @@ One of the possible reasons is because Portuguese has a number of contractions t
 
 ### Chart #1: <i lang="pt-BR">em</i>
 
-| Portuguese | Portuguese | English | Spanish |
+| Preposition + article | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | em + o | <mark>no</mark> | in the | en el |
 | em + a | <mark>na</mark> | in the | en la |
@@ -66,7 +66,7 @@ One of the possible reasons is because Portuguese has a number of contractions t
 
 ### Chart #2: <i lang="pt-BR">de</i>
 
-| Portuguese | Portuguese | English | Spanish |
+| Preposition + article | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | de + o | <mark>do</mark> | of the | del |
 | de + a | <mark>da</mark> | of the | de la |
@@ -91,7 +91,7 @@ One of the possible reasons is because Portuguese has a number of contractions t
 
 ### Chart #3: <i lang="pt-BR">a</i>
 
-| Portuguese | Portuguese | English | Spanish |
+| Preposition + article | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | a + o | <mark>ao</mark> | to the | al |
 | a + a | <mark>à</mark> | to the | a la |
@@ -104,7 +104,7 @@ One of the possible reasons is because Portuguese has a number of contractions t
 
 ### Chart #4: <i lang="pt-BR">por</i>
 
-| Portuguese | Portuguese | English | Spanish |
+| Preposition + article | Portuguese | English | Spanish |
 | --- | --- | --- | --- |
 | por + o | <mark>pelo</mark> | by the | por el |
 | por + a | <mark>pela</mark> | by the | por la |

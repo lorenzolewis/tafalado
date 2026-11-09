@@ -43,6 +43,15 @@ describe('tableLang', () => {
     expect(html).toContain('<td><i lang="pt-BR">no carro</i></td>');
   });
 
+  it('tags a "Preposition + article" column Portuguese and leaves a "Form" column untagged', async () => {
+    const html = await render(
+      ['| Preposition + article | Form | Spanish |', '| --- | --- | --- |', '| em + o | Masc & Sing | en el |'].join('\n'),
+    );
+    expect(html).toContain('<td lang="pt-BR">em + o</td>');
+    expect(html).toMatch(/<td>Masc &(amp;|#x26;) Sing<\/td>/);
+    expect(html).toContain('<td lang="es">en el</td>');
+  });
+
   it('matches headers regardless of case and surrounding space', async () => {
     const html = await render(['|  portuguese  |', '| --- |', '| no |'].join('\n'));
     expect(html).toContain('<td lang="pt-BR">no</td>');

@@ -20,8 +20,8 @@ const errors: string[] = [];
 const fail = (message: string) => errors.push(message);
 const warnings: string[] = [];
 
-// Each lesson's dialog, by lesson id (`pronunciation-01`), from the notes' frontmatter. A lesson with
-// no notes yet, or with clips (Pronunciation 24), has none, so its episode notes need none.
+// Each lesson's dialog, by lesson id (`pronunciation-01`), from the notes' frontmatter. Every lesson
+// has one (#89) except Pronunciation 24, which has clips, and the supplementary lessons.
 const notesEntries: NotesEntry[] = readdirSync(NOTES)
   .filter((file) => file.endsWith('.md'))
   .map((file) => {
@@ -30,6 +30,7 @@ const notesEntries: NotesEntry[] = readdirSync(NOTES)
   });
 const notesById = new Map(notesEntries.map((entry) => [entry.id, entry]));
 const dialogs = new Map(notesEntries.map((entry) => [entry.id, resolveDialog(entry, notesById)]));
+const hasNoDialog = (lessonId: string) => lessonId === 'pronunciation-24' || lessonId.startsWith('supplementary-');
 
 // The dialog is only part of the episode, so the feed must not promise a transcript (#90).
 if (xml.includes('podcast:transcript')) fail('feed has <podcast:transcript>: the notes hold the dialog, not a transcript');
@@ -104,6 +105,8 @@ items.forEach((item, index) => {
   if (!description.includes('CC BY 3.0')) fail(`${where}: description lacks the CC BY 3.0 credit`);
   if (!description.includes(`href="${text(item.link)}"`)) fail(`${where}: description lacks a link to the lesson page`);
   const lessonId = text(item.guid).replace(/^tafalado-/, '');
+  if (!notesById.has(lessonId)) fail(`${where}: no notes in src/content/notes/${lessonId}.md`);
+  else if (!dialogs.get(lessonId) && !hasNoDialog(lessonId)) fail(`${where}: its notes have no dialog`);
   const notesCheck = checkDescription(description, dialogs.get(lessonId));
   for (const error of notesCheck.errors) fail(`${where}: description ${error}`);
   for (const warning of notesCheck.warnings) warnings.push(`${where}: description ${warning}`);

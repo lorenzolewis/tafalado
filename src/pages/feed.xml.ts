@@ -57,12 +57,10 @@ function item(lesson: Lesson, notes: LessonNotes | undefined, url: (path: string
   const { data } = lesson;
   const page = url(lessonPath(data));
   const number = String(data.number).padStart(2, '0');
-  // TODO(#89): every lesson has notes once they're all written; until then the page keeps the PDF.
-  const linkText = notes ? notesLinkText(data.series) : 'Lesson page, with the transcript';
   const description = [
     lesson.rendered?.html ?? '',
     notes?.dialog ? dialogHtml(notes.dialog) : '',
-    `<p><a href="${page}">${linkText}</a></p>`,
+    `<p><a href="${page}">${notesLinkText(data.series)}</a></p>`,
     `<p>${CREDIT}</p>`,
   ]
     .filter(Boolean)

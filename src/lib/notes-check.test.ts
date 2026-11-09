@@ -34,6 +34,13 @@ describe('checkNotes', () => {
     expect(() => checkNotes(notes('pronunciation-10', {}, '<mark class="blue">t<mark>u</mark></mark>'))).toThrow(/pronunciation-10.*<mark>/);
   });
 
+  it('accepts single-quoted classes, as double-quoted YAML strings write them', () => {
+    expect(() => checkNotes(notes('grammar-11', { dialog: [turn('Valdo', "<mark class='blue'>Eu</mark> acho.")] }))).not.toThrow();
+    expect(() => checkNotes(notes('grammar-11', {}, "<mark class='green'>se</mark>"))).not.toThrow();
+    expect(() => checkNotes(notes('grammar-11', {}, "<mark class='red'>t</mark>"))).toThrow(/grammar-11.*<mark class='red'>/);
+    expect(() => checkNotes(notes('grammar-11', {}, `<mark class='blue">t</mark>`))).toThrow(/grammar-11.*<mark/);
+  });
+
   it('lets only supplementary lessons have neither a dialog nor clips', () => {
     expect(() => checkNotes(notes('supplementary-01', { dialog: undefined }))).not.toThrow();
     expect(() => checkNotes(notes('grammar-03', { dialog: undefined }))).toThrow(/grammar-03.*dialog or clips/);
@@ -50,6 +57,13 @@ describe('checkNotes', () => {
       /pronunciation-01.*lang="pt"/,
     );
     expect(() => checkNotes(notes('pronunciation-01', {}, '<span lang="fonipa">[i]</span>'))).toThrow(/lang="fonipa"/);
+  });
+
+  it('allows English and Italian on words, for glosses and quoted turns', () => {
+    expect(() =>
+      checkNotes(notes('grammar-15', {}, 'sobrenome <span lang="en">(last name)</span>, <i lang="it">figlia</i>')),
+    ).not.toThrow();
+    expect(() => checkNotes(notes('grammar-15', {}, '<i lang="fr">fille</i>'))).toThrow(/grammar-15.*lang="fr"/);
   });
 
   it('allows only <mark>, <i>, <em> and <span> markup in dialog and clip strings', () => {

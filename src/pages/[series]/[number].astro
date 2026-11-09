@@ -2,8 +2,7 @@
 // A lesson page (#56): the lesson's print bleeds across the top of the pane, with the series and
 // number on a paper tab rising into its foot, as on the episode art (#61); then the title, the facts,
 // Play, the intro and a link down to the dialog and the study notes (#88), which follow. Portuguese and
-// Spanish words in the intro and notes are marked as in docs/lesson-schema.md. A lesson whose notes
-// aren't written yet (#89) keeps the PDF link instead.
+// Spanish words in the intro and notes are marked as in docs/lesson-schema.md.
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
 import Icon from '../../components/Icon.astro';
@@ -11,7 +10,7 @@ import PlayButton from '../../components/PlayButton.astro';
 import Print from '../../components/Print.astro';
 import Base from '../../layouts/Base.astro';
 import { ogImagePath } from '../../lib/artwork';
-import { formatDate, formatKilobytes, formatMinutes, isoDate, isoDuration } from '../../lib/format';
+import { formatDate, formatMinutes, isoDate, isoDuration } from '../../lib/format';
 import { getLessons, lessonPath, lessonTitle, type Lesson } from '../../lib/lessons';
 import { getNotes } from '../../lib/notes';
 import { lessonDescription, podcastEpisodeLd } from '../../lib/seo';
@@ -58,23 +57,16 @@ const NotesContent = notes && (await render(notes.entry)).Content;
     <div class="intro">
       <Content />
     </div>
-    <p class="transcript">
-      {
-        notes ? (
+    {
+      notes && (
+        <p class="transcript">
           <a href="#notes">
             <Icon name="doc" />
             <span>{notes.dialog || notes.clips ? 'Dialog & notes ↓' : 'Notes ↓'}</span>
           </a>
-        ) : (
-          <a href={data.pdf.url}>
-            <Icon name="doc" />
-            <span>
-              Read the transcript <span class="size">PDF, {formatKilobytes(data.pdf.bytes)}</span>
-            </span>
-          </a>
-        )
-      }
-    </p>
+        </p>
+      )
+    }
     {
       notes && NotesContent && (
         <section id="notes" class="notes" aria-label="Dialog and notes">
@@ -324,10 +316,6 @@ const NotesContent = notes && (await render(notes.entry)).Content;
     text-decoration-color: var(--paper);
     text-decoration-thickness: 4px;
     text-underline-offset: 4px;
-  }
-  .size {
-    color: var(--muted);
-    font-weight: 400;
   }
 
   /* Phone: the print bleeds to the pane's top, under the pinned "‹ Lessons" button. */

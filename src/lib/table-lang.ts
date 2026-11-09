@@ -6,12 +6,13 @@ import type { Element, ElementContent } from 'hast';
 import { defineHastPlugin } from 'satteri';
 
 /**
- * Column header → the `lang` of the cells below it. `Notes` and `Examples` columns (mixed content,
+ * Column header → the `lang` of the cells below it. `Notes`, `Examples` and `Form` columns (mixed content,
  * marked inline with `<i lang>` / `<span lang>`) map to null and stay untagged. A symbol column is
  * about Portuguese sounds unless its header says otherwise.
  */
 export const COLUMN_LANG: Readonly<Record<string, string | null>> = {
   portuguese: 'pt-BR',
+  'preposition + article': 'pt-BR',
   spanish: 'es',
   english: 'en',
   symbol: 'pt-BR-fonipa',
@@ -20,6 +21,7 @@ export const COLUMN_LANG: Readonly<Record<string, string | null>> = {
   'symbol (english)': 'en-fonipa',
   notes: null,
   examples: null,
+  form: null,
 };
 
 const isElement = (node: ElementContent, tag?: string): node is Element =>

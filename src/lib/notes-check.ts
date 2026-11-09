@@ -14,8 +14,12 @@ export type Clip = {
 export type NotesData = { source: string; dialog?: Turn[] | SharedDialog; clips?: Clip[] };
 export type NotesEntry = { id: string; body?: string; data: NotesData };
 
-/** The `lang` values notes may mark inline: words (`<i lang>`) and IPA (`<span lang>`). */
-export const NOTES_LANGS = new Set(['pt-BR', 'es', 'pt-BR-fonipa', 'es-fonipa', 'en-fonipa']);
+/**
+ * The `lang` values notes may mark inline: words (`<i lang>`) and IPA (`<span lang>`). `en` marks
+ * English inside a Portuguese or Spanish context (a gloss in a table cell, an English turn in a clip);
+ * `it` the Italian words Pronunciation 20 compares.
+ */
+export const NOTES_LANGS = new Set(['pt-BR', 'es', 'en', 'it', 'pt-BR-fonipa', 'es-fonipa', 'en-fonipa']);
 
 /** The only tags allowed inside dialog and clip strings (rendered as HTML). */
 const STRING_TAGS = new Set(['mark', 'i', 'em', 'span']);
@@ -51,7 +55,7 @@ export const MARK_CLASSES = new Set(['blue', 'green']);
 
 function markProblem(text: string): string | undefined {
   for (const [tag, attrs] of text.matchAll(/<mark\b([^>]*)>/g)) {
-    const cls = attrs.match(/^\s+class="([^"]*)"\s*$/)?.[1];
+    const cls = attrs.match(/^\s+class=(?:"([^"]*)"|'([^']*)')\s*$/)?.slice(1).find((v) => v !== undefined);
     if (attrs.trim() && !(cls && MARK_CLASSES.has(cls)))
       return `${tag} isn't allowed. Use <mark>, <mark class="blue"> or <mark class="green">.`;
   }
@@ -66,7 +70,7 @@ function markProblem(text: string): string | undefined {
 function langProblem(text: string): string | undefined {
   for (const [, lang] of text.matchAll(/\blang=["']?([^"'\s>]*)/g))
     if (!NOTES_LANGS.has(lang))
-      return `lang="${lang}" isn't allowed. Use pt-BR or es on words, pt-BR-fonipa, es-fonipa or en-fonipa on IPA.`;
+      return `lang="${lang}" isn't allowed. Use pt-BR, es, en or it on words, pt-BR-fonipa, es-fonipa or en-fonipa on IPA.`;
 }
 
 function tagProblem(text: string): string | undefined {
@@ -75,8 +79,8 @@ function tagProblem(text: string): string | undefined {
 }
 
 /**
- * Every notes file must belong to a lesson. Every lesson must have notes once `requireAll` is on
- * (src/lib/notes.ts: it's off until the notes for all 46 lessons are written, #89).
+ * Every notes file must belong to a lesson, and with `requireAll` (on in src/lib/notes.ts since #89)
+ * every lesson must have notes.
  */
 export function checkNotesCoverage(lessonIds: string[], notesIds: string[], requireAll: boolean): void {
   const lessons = new Set(lessonIds);
