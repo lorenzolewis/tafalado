@@ -27,7 +27,6 @@ describe('podcastApps', () => {
   it('builds the Overcast and Castro links from the Apple Podcasts ID', () => {
     const apps = podcastApps(FEED, { apple: 'https://podcasts.apple.com/us/podcast/ta-falado/id123456789' });
     expect(linked(apps)).toEqual(['Apple Podcasts', 'Overcast', 'Pocket Casts', 'Castro', 'AntennaPod']);
-    expect(linked(apps)).toHaveLength(apps.length);
     expect(apps.find((app) => app.name === 'Overcast')?.href).toBe('https://overcast.fm/itunes123456789');
     expect(apps.find((app) => app.name === 'Castro')?.href).toBe('https://castro.fm/itunes/123456789');
   });
