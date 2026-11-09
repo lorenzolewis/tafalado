@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { checkNotes, checkNotesCoverage, resolveDialog, type NotesData } from './notes-check';
+import { checkNotes, checkNotesCoverage, resolveDialog } from './notes-check';
+import type { NotesData, Speaker } from './notes-schema';
 
-const turn = (speaker: string, pt = 'Que b<mark>i</mark>fe.') => ({ speaker, pt, es: 'Qué biftec.', en: 'What a steak.' });
+const turn = (speaker: Speaker, pt = 'Que b<mark>i</mark>fe.') => ({ speaker, pt, es: 'Qué biftec.', en: 'What a steak.' });
 const notes = (id: string, data: Partial<NotesData> = {}, body = '## Cultural notes\n\nText.') => ({
   id,
   body,
@@ -88,17 +89,17 @@ describe('checkNotes', () => {
 
 describe('checkNotesCoverage', () => {
   it('fails on notes with no lesson', () => {
-    expect(() => checkNotesCoverage(['pronunciation-01'], ['pronunciation-01', 'pronunciation-99'], true)).toThrow(
+    expect(() => checkNotesCoverage(['pronunciation-01'], ['pronunciation-01', 'pronunciation-99'])).toThrow(
       /pronunciation-99/,
     );
   });
 
-  it('fails on a lesson with no notes when every lesson must have them', () => {
-    expect(() => checkNotesCoverage(['pronunciation-01', 'grammar-01'], ['pronunciation-01'], true)).toThrow(/grammar-01/);
+  it('fails on a lesson with no notes', () => {
+    expect(() => checkNotesCoverage(['pronunciation-01', 'grammar-01'], ['pronunciation-01'])).toThrow(/grammar-01/);
   });
 
-  it('lets lessons go without notes while they are still being written', () => {
-    expect(() => checkNotesCoverage(['pronunciation-01', 'grammar-01'], ['pronunciation-01'], false)).not.toThrow();
+  it('accepts notes for exactly the lessons', () => {
+    expect(() => checkNotesCoverage(['pronunciation-01', 'grammar-01'], ['grammar-01', 'pronunciation-01'])).not.toThrow();
   });
 });
 

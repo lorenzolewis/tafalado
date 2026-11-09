@@ -7,7 +7,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { parse as parseYaml } from 'yaml';
 import { checkDescription } from '../src/lib/feed-notes.ts';
-import { resolveDialog, type NotesEntry } from '../src/lib/notes-check.ts';
+import { resolveDialog, type NotesFile } from '../src/lib/notes-check.ts';
+import { notesSchema } from '../src/lib/notes-schema.ts';
 
 const DIST = new URL('../dist/', import.meta.url);
 const EPISODES = 46;
@@ -20,17 +21,22 @@ const errors: string[] = [];
 const fail = (message: string) => errors.push(message);
 const warnings: string[] = [];
 
-// Each lesson's dialog, by lesson id (`pronunciation-01`), from the notes' frontmatter. Every lesson
-// has one (#89) except Pronunciation 24, which has clips, and the supplementary lessons.
-const notesEntries: NotesEntry[] = readdirSync(NOTES)
+// Each lesson's dialog, by lesson id (`pronunciation-01`), from the notes' frontmatter, parsed with
+// the collection's own schema (Astro's loader needs the Astro runtime, so the files are read here).
+// Undefined for a lesson whose notes have no `dialog`, whose item must then hold none.
+const notesFiles: NotesFile[] = readdirSync(NOTES)
   .filter((file) => file.endsWith('.md'))
   .map((file) => {
     const frontmatter = readFileSync(new URL(file, NOTES), 'utf8').match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
-    return { id: file.replace(/\.md$/, ''), data: parseYaml(frontmatter) };
+    const parsed = notesSchema.safeParse(parseYaml(frontmatter));
+    if (!parsed.success) {
+      console.error(`✗ src/content/notes/${file}: ${parsed.error.message}`);
+      process.exit(1);
+    }
+    return { id: file.replace(/\.md$/, ''), data: parsed.data };
   });
-const notesById = new Map(notesEntries.map((entry) => [entry.id, entry]));
-const dialogs = new Map(notesEntries.map((entry) => [entry.id, resolveDialog(entry, notesById)]));
-const hasNoDialog = (lessonId: string) => lessonId === 'pronunciation-24' || lessonId.startsWith('supplementary-');
+const notesById = new Map(notesFiles.map((notes) => [notes.id, notes]));
+const dialogs = new Map(notesFiles.map((notes) => [notes.id, resolveDialog(notes, notesById)]));
 
 // The dialog is only part of the episode, so the feed must not promise a transcript (#90).
 if (xml.includes('podcast:transcript')) fail('feed has <podcast:transcript>: the notes hold the dialog, not a transcript');
@@ -106,7 +112,7 @@ items.forEach((item, index) => {
   if (!description.includes(`href="${text(item.link)}"`)) fail(`${where}: description lacks a link to the lesson page`);
   const lessonId = text(item.guid).replace(/^tafalado-/, '');
   if (!notesById.has(lessonId)) fail(`${where}: no notes in src/content/notes/${lessonId}.md`);
-  else if (!dialogs.get(lessonId) && !hasNoDialog(lessonId)) fail(`${where}: its notes have no dialog`);
+  // Its dialog iff its notes have one, every turn in every language; none otherwise.
   const notesCheck = checkDescription(description, dialogs.get(lessonId));
   for (const error of notesCheck.errors) fail(`${where}: description ${error}`);
   for (const warning of notesCheck.warnings) warnings.push(`${where}: description ${warning}`);

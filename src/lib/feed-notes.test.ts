@@ -23,6 +23,11 @@ describe('dialogHtml', () => {
     const turn = { speaker: 'Vivian', pt: 'ga<mark>t</mark>o, <mark class="blue">d</mark>ia', es: 'gato, día', en: 'cat, day' };
     expect(dialogHtml([turn])).toContain('<span lang="pt-BR">gato, dia</span>');
   });
+
+  it('escapes the speaker, a plain name rather than HTML', () => {
+    const turn = { speaker: 'Tom & <Jerry>', pt: 'Oi.', es: 'Hola.', en: 'Hi.' };
+    expect(dialogHtml([turn])).toContain('<p><b>Tom &amp; &lt;Jerry&gt;:</b> ');
+  });
 });
 
 describe('notesLinkText', () => {
@@ -51,8 +56,14 @@ describe('checkDescription', () => {
     ]);
   });
 
-  it('allows notes with no dialog when the lesson has none (Pronunciation 24, or notes not written yet)', () => {
+  it('allows notes with no dialog when the lesson has none (Pronunciation 24, the supplementary lessons)', () => {
     expect(checkDescription('<p>Intro.</p>', undefined)).toEqual({ errors: [], warnings: [] });
+  });
+
+  it('fails on a dialog in the notes of a lesson that has none', () => {
+    expect(checkDescription(`<p>Intro.</p>\n${valdo}`, undefined).errors).toEqual([
+      "has a dialog, but the lesson's notes have none",
+    ]);
   });
 
   it("fails on a highlight left in, which podcast apps don't show", () => {

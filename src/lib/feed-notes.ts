@@ -2,18 +2,21 @@
 // <description>, and what scripts/validate-feed.ts checks there. Pure and free of astro:content, so
 // both the build and the plain-Node validator import it.
 
-import type { Turn } from './notes-check.ts';
+import type { Turn } from './notes-schema.ts';
 import type { Series } from './series.ts';
+
+/** A dialog turn as the feed writes it. The speaker is any plain name, escaped on the way out. */
+type FeedTurn = Omit<Turn, 'speaker'> & { speaker: string };
 
 /**
  * One paragraph per turn: the speaker, then Portuguese, Spanish and English, each with its lang.
  * Podcast apps show only basic HTML, so the highlights (`<mark>`, any class) go and their text stays.
  */
-export function dialogHtml(turns: readonly Turn[]): string {
+export function dialogHtml(turns: readonly FeedTurn[]): string {
   return turns
     .map(
       (turn) =>
-        `<p><b>${turn.speaker}:</b> <span lang="pt-BR">${stripMark(turn.pt)}</span><br>` +
+        `<p><b>${escapeHtml(turn.speaker)}:</b> <span lang="pt-BR">${stripMark(turn.pt)}</span><br>` +
         `<i lang="es">${stripMark(turn.es)}</i><br><span lang="en">${stripMark(turn.en)}</span></p>`,
     )
     .join('\n');
@@ -28,16 +31,21 @@ export function notesLinkText(series: Series): string {
 /** Past this, podcast apps are widely reported to cut episode notes off. */
 export const DESCRIPTION_LIMIT = 4000;
 
+/** The start of a turn as `dialogHtml` writes it: the speaker in bold, then the Portuguese. */
+const TURN = /<p><b>[^<]*:<\/b> <span lang="pt-BR">/;
+
 /**
  * Problems with an item's <description>: `errors` when it lacks a turn of `dialog` (the lesson's,
- * undefined when it has none) in any language, or keeps a `<mark>`; `warnings` past the limit.
+ * undefined when it has none) in any language, holds a dialog when the lesson has none, or keeps a
+ * `<mark>`; `warnings` past the limit.
  */
 export function checkDescription(
   description: string,
-  dialog: readonly Turn[] | undefined,
+  dialog: readonly FeedTurn[] | undefined,
 ): { errors: string[]; warnings: string[] } {
   const errors: string[] = [];
   const warnings: string[] = [];
+  if (!dialog && TURN.test(description)) errors.push("has a dialog, but the lesson's notes have none");
   dialog?.forEach((turn, i) => {
     const expected = {
       'pt-BR': `<span lang="pt-BR">${stripMark(turn.pt)}</span>`,
@@ -55,6 +63,10 @@ export function checkDescription(
       `is ${description.length.toLocaleString('en-US')} characters, over the ${DESCRIPTION_LIMIT.toLocaleString('en-US')} at which some apps cut notes off`,
     );
   return { errors, warnings };
+}
+
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function stripMark(html: string): string {

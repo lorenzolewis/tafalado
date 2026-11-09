@@ -1,18 +1,12 @@
 // Checks on the notes collection (#88, docs/lesson-schema.md) that Zod can't make per field: the
 // markup inside strings and bodies, lessons without notes, and shared dialogs. Pure, so unit tests
-// reach it without astro:content; src/lib/notes.ts runs it when the collection loads.
+// reach it without astro:content; src/lib/notes.ts runs it when the collection loads. The shape
+// itself is src/lib/notes-schema.ts.
 
-export type Turn = { speaker: string; pt: string; es: string; en: string };
-export type SharedDialog = { from: string; speakers?: string[] };
-export type Clip = {
-  heading: string;
-  speakers: string[];
-  lines: string[];
-  translation?: { es: string; en: string };
-  observations: string;
-};
-export type NotesData = { source: string; dialog?: Turn[] | SharedDialog; clips?: Clip[] };
-export type NotesEntry = { id: string; body?: string; data: NotesData };
+import type { NotesData, Turn } from './notes-schema.ts';
+
+/** A notes file as these checks see it: its lesson id, Markdown body and parsed frontmatter. */
+export type NotesFile = { id: string; body?: string; data: NotesData };
 
 /**
  * The `lang` values notes may mark inline: words (`<i lang>`) and IPA (`<span lang>`). `en` marks
@@ -25,7 +19,7 @@ export const NOTES_LANGS = new Set(['pt-BR', 'es', 'en', 'it', 'pt-BR-fonipa', '
 const STRING_TAGS = new Set(['mark', 'i', 'em', 'span']);
 
 /** Fails the build with the file and place of the first markup problem in a notes entry. */
-export function checkNotes({ id, body = '', data }: NotesEntry): void {
+export function checkNotes({ id, body = '', data }: NotesFile): void {
   const fail = (where: string, problem: string) => {
     throw new Error(`Notes "${id}"${where ? ` (${where})` : ''}: ${problem}`);
   };
@@ -78,16 +72,12 @@ function tagProblem(text: string): string | undefined {
     if (!STRING_TAGS.has(tag.toLowerCase())) return `<${tag}> isn't allowed. Use only <mark>, <i>, <em> and <span>.`;
 }
 
-/**
- * Every notes file must belong to a lesson, and with `requireAll` (on in src/lib/notes.ts since #89)
- * every lesson must have notes.
- */
-export function checkNotesCoverage(lessonIds: string[], notesIds: string[], requireAll: boolean): void {
+/** Every notes file must belong to a lesson, and every lesson must have notes (#89). */
+export function checkNotesCoverage(lessonIds: string[], notesIds: string[]): void {
   const lessons = new Set(lessonIds);
   const orphans = notesIds.filter((id) => !lessons.has(id));
   if (orphans.length)
     throw new Error(`Notes with no lesson: ${orphans.join(', ')}. Name each file after its lesson (src/content/lessons/).`);
-  if (!requireAll) return;
   const notes = new Set(notesIds);
   const missing = lessonIds.filter((id) => !notes.has(id));
   if (missing.length) throw new Error(`Lessons with no notes: ${missing.join(', ')}. Add src/content/notes/<lesson>.md.`);
@@ -97,7 +87,7 @@ export function checkNotesCoverage(lessonIds: string[], notesIds: string[], requ
  * A lesson's dialog: its own, or the one it shares (`dialog: { from }`), with the speakers recast
  * turn by turn when it gives `speakers`. Undefined for clips.
  */
-export function resolveDialog(entry: NotesEntry, byId: ReadonlyMap<string, NotesEntry>): Turn[] | undefined {
+export function resolveDialog(entry: NotesFile, byId: ReadonlyMap<string, NotesFile>): Turn[] | undefined {
   const { dialog } = entry.data;
   if (!dialog || Array.isArray(dialog)) return dialog;
   const shared = byId.get(dialog.from)?.data.dialog;
