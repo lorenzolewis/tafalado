@@ -1,7 +1,7 @@
 // Validates the built podcast feed (dist/feed.xml): well-formed XML, the RSS 2.0 required
 // elements, Apple's required iTunes tags, ADR 0003, the permanent feed URL, and every
-// enclosure length against the file on disk, and the dialog in each episode's notes (#90) against
-// src/content/notes/. Run after `pnpm build`: `pnpm validate:feed`. Exits non-zero on any error.
+// enclosure length against the file on disk, the dialog in each episode's notes (#90) against
+// src/content/notes/, and each episode's transcript (docs/transcripts.md). Run after `pnpm build`: `pnpm validate:feed`. Exits non-zero on any error.
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
@@ -9,6 +9,8 @@ import { parse as parseYaml } from 'yaml';
 import { checkDescription } from '../src/lib/feed-notes.ts';
 import { resolveDialog, type NotesFile } from '../src/lib/notes-check.ts';
 import { notesSchema } from '../src/lib/notes-schema.ts';
+import { TRANSCRIPT_TYPE, transcriptPath } from '../src/lib/podcast.ts';
+import { checkTranscript } from '../src/lib/transcript-check.ts';
 
 const DIST = new URL('../dist/', import.meta.url);
 const EPISODES = 46;
@@ -37,9 +39,6 @@ const notesFiles: NotesFile[] = readdirSync(NOTES)
   });
 const notesById = new Map(notesFiles.map((notes) => [notes.id, notes]));
 const dialogs = new Map(notesFiles.map((notes) => [notes.id, resolveDialog(notes, notesById)]));
-
-// The dialog is only part of the episode, so the feed must not promise a transcript (#90).
-if (xml.includes('podcast:transcript')) fail('feed has <podcast:transcript>: the notes hold the dialog, not a transcript');
 
 const wellFormed = XMLValidator.validate(xml);
 if (wellFormed !== true) {
@@ -95,6 +94,9 @@ if (!/unofficial/i.test(text(channel.description))) fail('channel: description m
 const items: any[] = channel.item ?? [];
 if (items.length !== EPISODES) fail(`expected ${EPISODES} items, found ${items.length}`);
 const guids = new Set<string>();
+let transcriptCues = 0;
+let transcripts = 0;
+const withoutTranscript: string[] = [];
 items.forEach((item, index) => {
   const where = `item ${index + 1} (${text(item.title) || 'untitled'})`;
   for (const name of ['title', 'link', 'guid', 'pubDate', 'description', 'itunes:duration']) requireText(item, name, where);
@@ -117,6 +119,8 @@ items.forEach((item, index) => {
   for (const error of notesCheck.errors) fail(`${where}: description ${error}`);
   for (const warning of notesCheck.warnings) warnings.push(`${where}: description ${warning}`);
 
+  checkTranscriptTag(item['podcast:transcript'], lessonId, where);
+
   const guid = text(item.guid);
   if (guids.has(guid)) fail(`${where}: duplicate guid ${guid}`);
   guids.add(guid);
@@ -138,10 +142,50 @@ items.forEach((item, index) => {
 });
 if (!/^Pronunciation 1 · /.test(text(items[0]?.title))) fail('the first item must be Pronunciation 1 (Lesson 1)');
 
+// An episode with a transcript (docs/transcripts.md) links it once: type text/vtt, on the site, at
+// the lesson's own path, served from a file in dist/ that passes the format checks. Transcripts are
+// being added a few episodes at a time, so an episode without one is only a warning.
+function checkTranscriptTag(tag: any, lessonId: string, where: string) {
+  const tags = [tag].flat().filter(Boolean);
+  if (tags.length === 0) {
+    withoutTranscript.push(lessonId);
+    return;
+  }
+  if (tags.length > 1) {
+    fail(`${where}: ${tags.length} <podcast:transcript> tags, at most one`);
+    return;
+  }
+  transcripts++;
+  const url = tags[0]['@url'];
+  if (tags[0]['@type'] !== TRANSCRIPT_TYPE) fail(`${where} <podcast:transcript>: type must be ${TRANSCRIPT_TYPE}`);
+  if (!url) {
+    fail(`${where} <podcast:transcript>: missing url`);
+    return;
+  }
+  const transcript = new URL(url);
+  if (transcript.origin !== site.origin) {
+    fail(`${where} <podcast:transcript>: ${url} is not on ${site.origin}`);
+    return;
+  }
+  if (transcript.pathname !== transcriptPath(lessonId)) fail(`${where} <podcast:transcript>: ${url} is not ${transcriptPath(lessonId)}`);
+  let vtt: string;
+  try {
+    vtt = readFileSync(new URL(`.${decodeURIComponent(transcript.pathname)}`, DIST), 'utf8');
+  } catch {
+    fail(`${where}: transcript ${transcript.pathname} is not in dist/`);
+    return;
+  }
+  const check = checkTranscript(vtt);
+  for (const error of check.errors.slice(0, 5)) fail(`${where}: transcript ${error}`);
+  if (check.errors.length > 5) fail(`${where}: transcript has ${check.errors.length - 5} more problem(s)`);
+  transcriptCues += check.cues;
+}
+
 const withDialog = items.filter((item) => dialogs.get(text(item.guid).replace(/^tafalado-/, ''))).length;
 const withNotes = [...dialogs.values()].filter(Boolean).length;
 if (withDialog !== withNotes) fail(`${withNotes} lessons have a dialog in their notes, but ${withDialog} feed items match them`);
 
+if (withoutTranscript.length) warnings.push(`${withoutTranscript.length} episodes have no transcript yet: ${withoutTranscript.join(', ')}`);
 for (const warning of warnings) console.warn(`⚠ ${warning}`);
 if (errors.length) {
   for (const error of errors) console.error(`✗ ${error}`);
@@ -153,5 +197,6 @@ console.log('✓ Apple required tags (itunes:image, itunes:category, itunes:expl
 console.log(`✓ atom:link self is ${FEED_URL}; links, images and enclosures on ${site.origin}`);
 console.log('✓ ADR 0003: itunes:type serial, itunes:episode 1–46 in order, no itunes:season, series in titles');
 console.log(`✓ ${items.length} enclosures, every length matches the file size in dist/`);
-console.log(`✓ ${withDialog} descriptions hold their lesson's dialog in pt-BR, es and en; no <mark>, no podcast:transcript`);
+console.log(`✓ ${withDialog} descriptions hold their lesson's dialog in pt-BR, es and en; no <mark>`);
+console.log(`✓ ${transcripts} transcripts (text/vtt, on the site, in dist/): ${transcriptCues} cues, each with a speaker, ≤ 2 lines of ≤ 65 characters`);
 console.log(`✓ first episode: ${text(items[0].title)}`);

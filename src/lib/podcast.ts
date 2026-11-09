@@ -60,3 +60,23 @@ export function podcastApps(feed: string, show: Partial<Record<ShowUrl, string>>
     ),
   ];
 }
+
+// Episode transcripts (docs/transcripts.md): one WebVTT file per lesson in public/transcripts/,
+// named by the lesson id (`pronunciation-13.vtt`), linked from the feed's <podcast:transcript>.
+
+export const TRANSCRIPT_TYPE = 'text/vtt';
+
+/** `/transcripts/pronunciation-13.vtt`: where a lesson's transcript is served. */
+export function transcriptPath(lessonId: string): string {
+  return `/transcripts/${lessonId}.vtt`;
+}
+
+/**
+ * The item's <podcast:transcript> tag, or '' when the lesson has no transcript. `available` holds
+ * the lesson ids with a file in public/transcripts/; `url` makes a path absolute. The full file is
+ * linked, its <v> speakers and <lang> spans included.
+ */
+export function transcriptTag(lessonId: string, available: ReadonlySet<string>, url: (path: string) => string): string {
+  if (!available.has(lessonId)) return '';
+  return `<podcast:transcript url="${url(transcriptPath(lessonId))}" type="${TRANSCRIPT_TYPE}"/>`;
+}

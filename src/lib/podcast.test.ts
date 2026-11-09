@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { APPLE_PODCASTS_URL, podcastApps } from './podcast';
+import { APPLE_PODCASTS_URL, podcastApps, transcriptPath, transcriptTag } from './podcast';
 
 const FEED = 'https://tafalado.lorenzo.soy/feed.xml';
 const linked = (apps: ReturnType<typeof podcastApps>) => apps.filter((app) => app.href).map((app) => app.name);
@@ -36,5 +36,20 @@ describe('podcastApps', () => {
     const apps = podcastApps(FEED);
     expect(apps.find((app) => app.name === 'Overcast')?.href).toBe('https://overcast.fm/itunes6831601239');
     expect(apps.find((app) => app.name === 'Castro')?.href).toBe('https://castro.fm/itunes/6831601239');
+  });
+});
+
+describe('transcriptTag', () => {
+  const url = (path: string) => new URL(path, 'https://tafalado.lorenzo.soy').href;
+
+  it('links the lesson’s WebVTT file on the site', () => {
+    expect(transcriptPath('grammar-04')).toBe('/transcripts/grammar-04.vtt');
+    expect(transcriptTag('pronunciation-13', new Set(['pronunciation-13']), url)).toBe(
+      '<podcast:transcript url="https://tafalado.lorenzo.soy/transcripts/pronunciation-13.vtt" type="text/vtt"/>',
+    );
+  });
+
+  it('adds nothing for a lesson without a transcript', () => {
+    expect(transcriptTag('grammar-04', new Set(['pronunciation-13']), url)).toBe('');
   });
 });
