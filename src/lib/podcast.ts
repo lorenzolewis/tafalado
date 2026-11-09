@@ -13,17 +13,13 @@ export const PODCAST_DESCRIPTION =
 
 export const PODCAST_AUTHOR = 'COERLL, University of Texas at Austin';
 
-// Where to follow the podcast (the home page's "Follow the podcast" section). Some apps subscribe
-// straight from the feed URL; the rest list a show only once its owner has submitted the feed, and
-// only then is there a link to it. Fill in each show URL below once the app has one: until then the
-// app is shown greyed out, with no link, so no dead link ships. The steps are in issue #50.
+// Where to follow the podcast (the home page's "Follow the podcast" section). Pocket Casts and
+// AntennaPod subscribe straight from the feed URL; Apple Podcasts lists the show, and Overcast and
+// Castro find it through its Apple Podcasts ID. Spotify and YouTube Music aren't offered: they list a
+// show only once its owner submits the feed, and it hasn't been submitted to them (issue #50).
 
 /** podcasts.apple.com/…/id<number>, from Apple Podcasts Connect. Overcast's and Castro's links come from its ID. */
 export const APPLE_PODCASTS_URL: string | undefined = 'https://podcasts.apple.com/us/podcast/t%C3%A1-falado/id6831601239';
-/** open.spotify.com/show/…, from Spotify for Creators ("Find an existing show"). */
-export const SPOTIFY_URL: string | undefined = undefined;
-/** music.youtube.com/playlist?list=…, from YouTube Studio (podcast by RSS feed). */
-export const YOUTUBE_MUSIC_URL: string | undefined = undefined;
 
 export interface PodcastApp {
   name: string;
@@ -33,12 +29,10 @@ export interface PodcastApp {
   href: string | undefined;
 }
 
-type ShowUrl = 'apple' | 'spotify' | 'youtubeMusic';
+type ShowUrl = 'apple';
 
 export const SHOW_URLS: Partial<Record<ShowUrl, string>> = {
   apple: APPLE_PODCASTS_URL,
-  spotify: SPOTIFY_URL,
-  youtubeMusic: YOUTUBE_MUSIC_URL,
 };
 
 /** Every app to offer, in order; `feed` is the feed's absolute URL. */
@@ -55,8 +49,6 @@ export function podcastApps(feed: string, show: Partial<Record<ShowUrl, string>>
     // Overcast's and Castro's web links take the Apple Podcasts ID (overcast.fm/podcasterinfo,
     // castro.fm/blog/a-podcast-url-scheme).
     app('Overcast', 'overcast', appleId && `https://overcast.fm/itunes${appleId}`),
-    app('Spotify', 'spotify', show.spotify),
-    app('YouTube Music', 'youtube-music', show.youtubeMusic),
     // Follow links work from the feed alone (support.pocketcasts.com, antennapod.org/documentation).
     app('Pocket Casts', 'pocket-casts', `https://pocketcasts.com/follow/${feedParam}`),
     // Castro's link takes the Apple Podcasts ID too.

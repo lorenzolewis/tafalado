@@ -10,8 +10,6 @@ describe('podcastApps', () => {
     expect(apps.map((app) => app.name)).toEqual([
       'Apple Podcasts',
       'Overcast',
-      'Spotify',
-      'YouTube Music',
       'Pocket Casts',
       'Castro',
       'AntennaPod',
@@ -23,7 +21,7 @@ describe('podcastApps', () => {
     expect(apps.find((app) => app.name === 'AntennaPod')?.href).toBe(
       'https://antennapod.org/deeplink/subscribe?url=https%3A%2F%2Ftafalado.lorenzo.soy%2Ffeed.xml&title=T%C3%A1%20Falado',
     );
-    expect(apps.find((app) => app.name === 'YouTube Music')?.icon).toBe('/images/apps/youtube-music.png');
+    expect(apps.find((app) => app.name === 'Overcast')?.icon).toBe('/images/apps/overcast.png');
   });
 
   it('builds the Overcast and Castro links from the Apple Podcasts ID', () => {
@@ -31,15 +29,6 @@ describe('podcastApps', () => {
     expect(linked(apps)).toEqual(['Apple Podcasts', 'Overcast', 'Pocket Casts', 'Castro', 'AntennaPod']);
     expect(apps.find((app) => app.name === 'Overcast')?.href).toBe('https://overcast.fm/itunes123456789');
     expect(apps.find((app) => app.name === 'Castro')?.href).toBe('https://castro.fm/itunes/123456789');
-  });
-
-  it('links every app once all the show URLs are in', () => {
-    const apps = podcastApps(FEED, {
-      apple: 'https://podcasts.apple.com/us/podcast/ta-falado/id1',
-      spotify: 'https://open.spotify.com/show/x',
-      youtubeMusic: 'https://music.youtube.com/playlist?list=x',
-    });
-    expect(linked(apps)).toHaveLength(7);
   });
 
   it('links Apple Podcasts, Overcast and Castro from the published Apple listing', () => {
