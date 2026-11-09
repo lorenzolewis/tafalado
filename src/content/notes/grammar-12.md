@@ -43,13 +43,13 @@ The personalized infinitive refers to the use of a verb that could be in the inf
 The ambiguity is this, who is leaving? The answer is that we do not know. The sentence allows for a verb <i lang="pt-BR">sair</i> in the infinitive, and we don't know who the person is. The solution is what is called the personalized infinitive where we add extra endings to the infinitive of the verb that shows who the person is. Notice the following examples.
 
 > <i lang="pt-BR">Antes de <mark>sairmos</mark>, eu quero falar com João.</i>\
-> *Before we leave, I want to talk to João.*\
+> *Before <mark class="blue">we</mark> leave, I want to talk to João.*\
 > <i lang="pt-BR">Antes de <mark>sairem</mark>, eu quero falar com João.</i>\
-> *Before they leave, I want to talk to João.*\
+> *Before <mark class="blue">they</mark> leave, I want to talk to João.*\
 > <i lang="pt-BR">Antes de <mark>eu sair</mark>, eu quero falar com João.</i>\
-> *Before I leave, I want to talk to João.*\
+> *Before <mark class="blue">I</mark> leave, I want to talk to João.*\
 > <i lang="pt-BR">Antes de <mark>você sair</mark>, eu quero falar com João.</i>\
-> *Before you leave, I want to talk to João.*
+> *Before <mark class="blue">you</mark> leave, I want to talk to João.*
 
 To form the personalized infinitive you simply add <i lang="pt-BR">–<mark>mos</mark></i> to the end of the infinitive if we are referring to 1st person plural "we" or <i lang="pt-BR">–<mark>em</mark></i> to the end of verbs if we are referring to 3rd person plural "they". In the singular, you simply add the subject pronoun in front of the verb. This works 100% of the time. There are no exceptions and no irregular forms. You are simply personalizing the infinitive form. Because the personalized infinitive is 'optional' many students of Portuguese think that they can go without using it. The truth is, however, it is very common in everyday speech.
 
@@ -57,10 +57,10 @@ One final note. The personalized infinitive and future subjunctive look very sim
 
 > <i lang="pt-BR">É bom <mark>estudarmos</mark> aqui.</i> (Personalized Infinitive)\
 > *It is good (for us) to study here.*\
-> <i lang="pt-BR">Se estudarmos aqui, vamos aprender muito</i> (Future Subjunctive)\
+> <i lang="pt-BR">Se <mark class="blue">estudarmos</mark> aqui, vamos aprender muito</i> (Future Subjunctive)\
 > *If we study here, we'll learn a lot.*
 
 > <i lang="pt-BR">É bom <mark>fazermos</mark> o trabalho.</i> (Personalized Infinitive)\
 > *It is good (for us) to do the work.*\
-> <i lang="pt-BR">Se fizermos o trabalho, vamos aprender muito.</i> (Future Subjunctive)\
+> <i lang="pt-BR">Se <mark class="blue">fizermos</mark> o trabalho, vamos aprender muito.</i> (Future Subjunctive)\
 > *If we do the work, we'll learn a lot.*
