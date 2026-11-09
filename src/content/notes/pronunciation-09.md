@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-09.html
+highlights:
+  red: 'Raised before the stress: <span lang="pt-BR-fonipa">[e]</span> to <span lang="pt-BR-fonipa">[i]</span>, <span lang="pt-BR-fonipa">[o]</span> to <span lang="pt-BR-fonipa">[u]</span>'
+  blue: 'Unstressed at the end: e as <span lang="pt-BR-fonipa">[i]</span>, o as <span lang="pt-BR-fonipa">[u]</span>, a as <span lang="pt-BR-fonipa">[ə]</span>'
 dialog:
   - speaker: Valdo
     pt: 'Ond<mark class="blue">e</mark> podem<mark class="blue">o</mark>s <mark>e</mark>stacionar <mark class="blue">o</mark> carr<mark class="blue">o</mark>? Já <mark>e</mark>stou morrend<mark class="blue">o</mark> d<mark class="blue">e</mark> fom<mark class="blue">e</mark>.'

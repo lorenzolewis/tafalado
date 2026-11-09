@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-24.html
+highlights:
+  red: 's sounds <span lang="pt-BR-fonipa">[z]</span>'
+  blue: 's sounds <span lang="pt-BR-fonipa">[s]</span>'
 clips:
   - heading: "Clip #1, from Lesson 13 dialog"
     speakers: [Valdo, Vivian]

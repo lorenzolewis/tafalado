@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-04.html
+highlights:
+  red: 'Closed o <span lang="pt-BR-fonipa">/ô/</span>'
+  blue: 'Open o <span lang="pt-BR-fonipa">/ó/</span>'
 dialog:
   - speaker: Valdo
     pt: 'Lá vem o n<mark class="blue">o</mark>sso <mark>ô</mark>nibus! Vamos c<mark>o</mark>rrer!'

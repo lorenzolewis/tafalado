@@ -10,6 +10,12 @@ const notes = (id: string, data: Partial<NotesData> = {}, body = '## Cultural no
 });
 
 describe('checkNotes', () => {
+  it('checks the markup of highlight labels like dialog strings', () => {
+    expect(() =>
+      checkNotes(notes('pronunciation-03', { highlights: { red: 'Closed e <b>/ê/</b>' } })),
+    ).toThrow(/pronunciation-03.*highlights\.red.*<b>/);
+  });
+
   it('accepts balanced highlights and the notes languages', () => {
     expect(() =>
       checkNotes(
