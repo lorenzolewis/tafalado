@@ -30,6 +30,12 @@ export function ogImagePath(lesson: LessonRef): string {
   return `/artwork/og/${artworkSlug(lesson)}.png`;
 }
 
+/** The site's own Open Graph image's file name, beside the lessons' (never a lesson's `series-NN`). */
+export const SITE_OG_SLUG = 'site';
+
+/** The Open Graph image of every page that isn't a lesson (1200×630): the home page and the 404. */
+export const SITE_OG_PATH = `/artwork/og/${SITE_OG_SLUG}.png`;
+
 /** `pronunciation-01`: the file name both per-lesson images share. */
 export function artworkSlug({ series, number }: LessonRef): string {
   return `${series}-${String(number).padStart(2, '0')}`;

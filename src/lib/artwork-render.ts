@@ -12,6 +12,7 @@ import {
   OG_HEIGHT,
   OG_WIDTH,
   PODCAST_COVER_SLUG,
+  SITE_OG_SLUG,
   type ManifestIcon,
 } from './artwork';
 import { getLessons, type Lesson } from './lessons';
@@ -127,6 +128,36 @@ export async function renderOgImage(lesson: Lesson): Promise<Buffer> {
     },
     OG.width,
   );
+}
+
+/**
+ * The Open Graph image of every other page (#77): the podcast cover's sheet, landscape. The
+ * subtitle at the top, "Tá Falado" stacked large at the foot, as on the cover.
+ */
+async function renderSiteOgImage(): Promise<Buffer> {
+  return render(
+    {
+      canvas: OG,
+      paper: DEFAULT_PAPER,
+      printed: [at({ left: 52, bottom: 28 }, [name(236, 'Tá', 0.82), name(236, 'Falado', 0.82)])],
+      over: [at({ left: 60, top: 56, width: 640, fontFamily: SANS, fontSize: 42, lineHeight: 1.12 }, SUBTITLE)],
+    },
+    OG.width,
+  );
+}
+
+/**
+ * getStaticPaths for /artwork/og/: the site's image, then one per lesson page. One route, as with
+ * coverArtworkPaths. The site image's text lives in this module, so its key only needs the fonts.
+ */
+export async function ogArtworkPaths() {
+  const site = { params: { slug: SITE_OG_SLUG }, props: { lesson: undefined }, cacheKey: await fontHash() };
+  return [site, ...(await lessonArtworkPaths())];
+}
+
+/** Draws an image from `ogArtworkPaths`: the site's when there is no lesson. */
+export function renderOg(lesson: Lesson | undefined): Promise<Buffer> {
+  return lesson ? renderOgImage(lesson) : renderSiteOgImage();
 }
 
 /** Paper and dots with no photo: the name at the top, the series, number and title at the foot. */
