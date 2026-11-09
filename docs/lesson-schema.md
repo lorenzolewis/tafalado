@@ -66,8 +66,64 @@ sentence it is quoted from (`<i lang="es">esquisito</i>` in Spanish means exquis
 
 ## Helpers
 
-`src/lib/lessons.ts`: `getLessons()` (all, episode order), `lessonsBySeries(series)`, `getLesson(series, number)`, `nextLesson(lesson)` (next by episode, across series) and `lessonPath({ series, number })`.
+`src/lib/notes.ts`: `getAllNotes()`, `getNotes(lesson)` (its notes with any shared dialog resolved). `src/lib/lessons.ts`: `getLessons()` (all, episode order), `lessonsBySeries(series)`, `getLesson(series, number)`, `nextLesson(lesson)` (next by episode, across series) and `lessonPath({ series, number })`.
 
 ## Fixtures
 
 The three entries on `main` before the extraction (#3) are fixtures. `pronunciation-01.md` is the real Lesson 1. `grammar-01.md` and `supplementary-01.md` have their real title, date and intro, but point at Lesson 1's MP3 and PDF. The extraction replaces all three.
+
+# Notes schema
+
+A lesson's study notes (#88: the dialog and teaching notes the original PDFs held) are one Markdown file in `src/content/notes/`, named like its lesson (`pronunciation-01.md`). The frontmatter is checked by the Zod schema in `src/content.config.ts`; the body holds the notes. The lesson page shows **Dialog** (or **Clips**), then the body, then "Original lesson on COERLL".
+
+```md
+---
+source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-01.html
+dialog:
+  - speaker: Valdo
+    pt: "Qu<mark>e</mark> b<mark>i</mark>f<mark>e</mark> gostoso."
+    es: "Qué biftec sabroso."
+    en: "What a tasty steak."
+---
+
+## Cultural notes
+
+In many restaurants in the US …
+
+## Pronunciation notes
+
+This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
+```
+
+| Field | Rule |
+| --- | --- |
+| `source` | The episode's lesson page on COERLL, as in SOURCES.md (`lesson-01.html`, `lesson-gra02.html`, `lesson-suppl01.html`). The page, not the PDF. |
+| `dialog` | A list of turns: `speaker` (one of `SPEAKERS` in `src/content.config.ts`: Valdo, Michelle, Vivian, Orlando, José Luis; add names there), `pt`, `es`, `en`, none empty. |
+| `dialog` (shared) | Instead of turns, `{ from: <notes id>, speakers?: [...] }`: the dialog stored in another lesson's notes (the alternate takes 10/11, 12/13, 14/15 store it once, in the first). `speakers`, if given, recasts it with one speaker per turn (Pronunciation 13's guest Vivian). The named notes must have turns of their own. |
+| `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
+| body | Markdown: `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`, in the PDF's order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
+
+A notes file has a `dialog` or `clips`, never both. Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
+
+## Markup in notes
+
+- **Highlights.** The sounds or forms a lesson teaches (red in the PDFs) are `<mark>`, in dialog strings and the body: `b<mark>i</mark>f<mark>e</mark>`. Their style is one rule in `src/styles/base.css`.
+- **Words** follow the intro rules above: `<i lang="pt-BR">`, `<i lang="es">`, `*…*` for English.
+- **IPA** is `<span lang="pt-BR-fonipa">[ej]</span>`, or `es-fonipa` / `en-fonipa` when the symbol is about Spanish or English sounds.
+- Those five values are the only `lang` allowed in notes. Dialog lines get `pt-BR`, `es` and `en` from the page.
+
+## Tables
+
+Ordinary GFM tables. Each column header sets the `lang` of every cell below it (`src/lib/table-lang.ts`, a Sätteri hast plugin in `astro.config.ts`). Headers are matched ignoring case:
+
+| Header | Cells get |
+| --- | --- |
+| `Portuguese` | `pt-BR` |
+| `Spanish` | `es` |
+| `English` | `en` |
+| `Symbol`, `Symbol (Portuguese)` | `pt-BR-fonipa` |
+| `Symbol (Spanish)` | `es-fonipa` |
+| `Symbol (English)` | `en-fonipa` |
+| `Notes`, `Examples` | Nothing: mixed content, marked inline with `<i lang>` / `<span lang>` |
+
+Any other header fails the build with the file name, so no table ships untagged. Add a header to `COLUMN_LANG` only with its language.

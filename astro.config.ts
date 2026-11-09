@@ -1,4 +1,6 @@
+import { satteri } from "@astrojs/markdown-satteri";
 import sitemap from "@astrojs/sitemap";
+import { tableLang } from "./src/lib/table-lang";
 import { defineConfig, fontProviders } from "astro/config";
 
 // The #52 identity's fonts, both OFL, from the pinned @fontsource packages (devDependencies), so
@@ -52,5 +54,8 @@ export default defineConfig({
 			fallbacks: ["sans-serif"],
 		},
 	],
+	// Sätteri, Astro's default processor, with one plugin: notes tables get `lang` from their column
+	// headers (src/lib/table-lang.ts, docs/lesson-schema.md).
+	markdown: { processor: satteri({ hastPlugins: [tableLang] }) },
 	experimental: { incrementalBuild: true },
 });

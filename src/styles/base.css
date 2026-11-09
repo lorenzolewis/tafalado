@@ -160,6 +160,35 @@ a {
   outline-offset: 2px;
 }
 
+/* PLACEHOLDER (#88): the highlight on the sounds and forms a lesson teaches (<mark>, red in the
+   original PDFs). Its final style is being agreed separately; swap it here, in these custom
+   properties and this one rule, and nowhere else. Light: a wash of the series' paper. Dark: the
+   paper with ink type. Print: backgrounds don't print by default, so an underline instead. */
+:root {
+  --mark-bg: color-mix(in srgb, var(--paper) 70%, transparent);
+  --mark-ink: currentColor;
+  --mark-line: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mark-bg: var(--paper);
+    --mark-ink: var(--print-ink);
+  }
+}
+@media print {
+  :root {
+    --mark-bg: transparent;
+    --mark-ink: currentColor;
+    --mark-line: underline 0.12em;
+  }
+}
+mark {
+  background: var(--mark-bg);
+  color: var(--mark-ink);
+  text-decoration: var(--mark-line);
+  text-underline-offset: 0.12em;
+}
+
 /* Inline SVG icons (src/components/Icon.astro): a 24px grid, 2.5px square strokes, solid shapes. */
 .icon {
   inline-size: 1.5rem;
