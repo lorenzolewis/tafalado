@@ -7,7 +7,7 @@ dialog:
     en: "That man is signaling that we should turn down the headlights?"
   - speaker: Michelle
     pt: "Não! Vamos deixar os <mark>faróis</mark> acesos... E onde está o frentista pra colocar o combustível no nosso <mark>automóvel</mark>?"
-    es: "¡No! Vamos a dejar las luces ascendidas… ¿Y dónde está el mozo para poner el combustible en el carro?"
+    es: "¡No! Vamos a dejar las luces encendidas… ¿Y dónde está el mozo para poner el combustible en el carro?"
     en: "No! Let's leave the lights on... And where is the attendant to put gas in our car?"
   - speaker: Valdo
     pt: "Aqui não é tão <mark>fácil</mark> como no Brasil. Os <mark>automóveis</mark> são abastecidos pelo próprio motorista."
@@ -39,7 +39,7 @@ If there were two Brazils, in Portuguese that would be <i lang="pt-BR"><mark>Bra
 
 - AL: <i lang="pt-BR">animal</i> → <i lang="pt-BR"><mark>animais</mark></i>; <i lang="pt-BR">radical</i> → <i lang="pt-BR"><mark>radicais</mark></i>; <i lang="pt-BR">nacional</i> → <i lang="pt-BR"><mark>nacionais</mark></i>
 - EL: <i lang="pt-BR">papel</i> → <i lang="pt-BR"><mark>papéis</mark></i>; <i lang="pt-BR">túnel</i> → <i lang="pt-BR"><mark>túneis</mark></i>
-- OL: <i lang="pt-BR">espanhol</i> → <i lang="pt-BR"><mark>espanhóis</mark></i>; <i lang="pt-BR">farol</i> → <i lang="pt-BR"><mark>faróis</mark></i>; <i lang="pt-BR">sol</i> → <i lang="pt-BR"><mark>soles</mark></i>
+- OL: <i lang="pt-BR">espanhol</i> → <i lang="pt-BR"><mark>espanhóis</mark></i>; <i lang="pt-BR">farol</i> → <i lang="pt-BR"><mark>faróis</mark></i>; <i lang="pt-BR">sol</i> → <i lang="pt-BR"><mark>sóis</mark></i>
 - UL: <i lang="pt-BR">azul</i> → <i lang="pt-BR"><mark>azuis</mark></i>
 
 This basic rule does have a few twists and turns. The first is when a word ends in "il", there would be no reason to have double "ii":

@@ -4,6 +4,8 @@ dialog:
   from: pronunciation-10
 ---
 
+Each line is read by Valdo or Michelle, then repeated by Alfredo Barros (Terezinha, Pernambuco), who doesn't palatalize *t* and *d*.
+
 ## Cultural notes
 
 Besides the lessons in pronunciation, all of the dialogs key on some cultural issue that Valdo and Michelle have noticed as Brazilians living in the United States.

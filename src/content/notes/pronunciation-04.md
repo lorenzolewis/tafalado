@@ -6,7 +6,7 @@ highlights:
 dialog:
   - speaker: Valdo
     pt: 'Lá vem o n<mark class="blue">o</mark>sso <mark>ô</mark>nibus! Vamos c<mark>o</mark>rrer!'
-    es: "Ahí viene nuestro autobús. Vamos a correr"
+    es: "Ahí viene nuestro autobús. Vamos a correr."
     en: "Here comes our bus. Let's run."
   - speaker: Michelle
     pt: 'C<mark class="blue">o</mark>rre, s<mark class="blue">o</mark>be l<mark class="blue">o</mark>go!'

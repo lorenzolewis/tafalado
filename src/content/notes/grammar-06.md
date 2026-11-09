@@ -11,7 +11,7 @@ dialog:
     en: "I know. In Brazil we generally stay at home or study in the library."
   - speaker: Valdo
     pt: "Eu <mark>fico</mark> meio <mark>distraído</mark> com o movimento das pessoas entrando e saindo."
-    es: "Me distrai con el movimiento de personas que entran y salen."
+    es: "Me distraigo con el movimiento de personas que entran y salen."
     en: "I get distracted with all the movement of people coming in and out."
   - speaker: Michelle
     pt: "Fora que você <mark>fica</mark> mais <mark>pobre</mark>, porque pra <mark>ficar lá</mark> você sempre tem que consumir algo."

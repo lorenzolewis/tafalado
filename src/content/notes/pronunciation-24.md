@@ -103,6 +103,6 @@ clips:
 
 This lesson is not based on a dialog, but is designed to give listeners a chance to focus on the intonation patterns of Brazilian Portuguese.
 
-Clips 3 to 6 were recorded as Michelle, Valdo, Orlando, and José Luis were practicing and discussing what they were going to say as part of their lesson on epenthetic vowels (lesson 23). They didn't know they were being recorded and so their banter, give and take, turn-taking, and exchanges all have excellent examples of intonation patterns that are typical of Brazilians. As you listen to these clips, focus on the intonation patterns. A rough transcription of their exchanges is provided, but don't worry too much about what they are saying. Focus more on how the intonation sounds.
+Clips 3 to 6 were recorded as Michelle, Valdo, Orlando, and José Luis were practicing and discussing what they were going to say as part of their lesson on epenthetic vowels (lesson 22). They didn't know they were being recorded and so their banter, give and take, turn-taking, and exchanges all have excellent examples of intonation patterns that are typical of Brazilians. As you listen to these clips, focus on the intonation patterns. A rough transcription of their exchanges is provided, but don't worry too much about what they are saying. Focus more on how the intonation sounds.
 
 To summarize, these three factors, (i.e., lengthening of syllables, higher pitch on non-stressed syllables, and high pitch that is sustained throughout the whole sentence) are some of the major characteristics of Brazilian Portuguese intonation.

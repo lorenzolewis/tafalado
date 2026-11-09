@@ -15,7 +15,7 @@ dialog:
     en: "But it's important to remember that public universities in the United States are not for free like they are in Brazil."
   - speaker: Valdo
     pt: "Pois é, e como custa caro! Por isso é que <mark>depois de terminarem</mark> os estudos os alunos estão todos pobres e endividados."
-    es: "Es verdad, y qué caro es! Es por eso que después de terminar con los estudios los alumnos están pobres y endeudados."
+    es: "Es verdad, y ¡qué caro es! Es por eso que después de terminar con los estudios los alumnos están pobres y endeudados."
     en: "Right, and it is expensive! That's why after students are done with their studies they end up poor and in debt."
   - speaker: Michelle
     pt: "Ainda bem que para as universidades públicas no Brasil só <mark>basta passarmos</mark> no vestibular e pronto."

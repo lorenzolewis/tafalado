@@ -17,7 +17,7 @@ dialog:
     es: "A ella le gustó, pero desde que llegó decidió hablar mal de los que usan el celular en el tráfico."
     en: "She liked it, but ever since she arrived she has decided to talk bad about those who use their cell phone while driving."
   - speaker: Michelle
-    pt: "Não acre<mark class=\"blue\">di</mark>to. Por que?"
+    pt: "Não acre<mark class=\"blue\">di</mark>to. Por quê?"
     es: "No lo creo. ¿Por qué?"
     en: "I can't believe that. Why?"
   - speaker: Valdo
@@ -26,7 +26,7 @@ dialog:
     en: "She lost her teeth in a typical car accident where the driver was using a cell phone while driving."
   - speaker: Michelle
     pt: "Que coisa tris<mark>te</mark>! Eh, <mark class=\"blue\">di</mark>ante <mark class=\"blue\">di</mark>sso é até bom que no Brasil a gen<mark>te</mark> seja proibido de usar o celular no volan<mark>te</mark>. Você po<mark class=\"blue\">de</mark> receber aquela multa!"
-    es: "Qué cosa triste! A causa de esto, es bueno que en Brasil nosotros seamos prohibidos usar el celular en el volante. Usted puede recibir una multa!"
+    es: "¡Qué cosa triste! A causa de esto, es bueno que en Brasil nosotros seamos prohibidos usar el celular en el volante. ¡Usted puede recibir una multa!"
     en: "How sad! Given that it's a good thing that in Brazil it's against the law to use a cell phone while driving. You could get a ticket!"
 ---
 

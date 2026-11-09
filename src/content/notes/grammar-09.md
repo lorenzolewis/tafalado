@@ -16,7 +16,7 @@ dialog:
   - speaker: Valdo
     pt: "É verdade! Olha a calça <mark>dele</mark>… jeans com chinelo!"
     es: "¡Es verdad! Mira sus pantalones… ¡vaqueros con chinelas!"
-    en: "You're right! And look at her pants… jeans with flip flops!"
+    en: "You're right! And look at his pants… jeans with flip flops!"
   - speaker: Michelle
     pt: "Eh, por aí a gente percebe a diferença entre a roupa <mark>deles</mark> e a <mark>nossa</mark>."
     es: "Por aquí te das cuenta de la diferencia entre su ropa y la nuestra."

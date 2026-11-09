@@ -7,7 +7,7 @@ dialog:
     en: "I don't know, I'm feeling a little fat … if we go out to eat tonight I'm only going to drink water."
   - speaker: Valdo
     pt: "Eu vou tomar refrigerante e <mark>o quanto eu puder</mark>, afinal com esse sistema de <i>refil</i> a gente pode beber <mark>o quanto quiser</mark>."
-    es: "Yo voy a tomar refrescos, y todo lo que pueda, a final con ese sistema de <i>refill</i> se puede beber cuanto desee."
+    es: "Yo voy a tomar refrescos, y todo lo que pueda, al final con ese sistema de <i>refill</i> se puede beber cuanto desee."
     en: "I'm going to drink sodas and as much as I want, after all, with this refill system we can drink as much as we want to."
   - speaker: Michelle
     pt: "Eh, mas <mark>quando nós chegarmos</mark> lá fique atento com os copos..."
@@ -15,7 +15,7 @@ dialog:
     en: "OK, but when we get there, keep an eye on your cups …"
   - speaker: Valdo
     pt: "Fique tranqüila, os copos são diferentes. E <mark>se estivermos</mark> com muita fome, será que eles vão deixar a gente repetir sem pagar de novo?"
-    es: "Tranquílate, los vasos son diferentes. Y si tenemos mucha hambre, ¿será que se permite que nosotros repitamos sin pagar otra vez?"
+    es: "Tranquilízate, los vasos son diferentes. Y si tenemos mucha hambre, ¿será que se permite que nosotros repitamos sin pagar otra vez?"
     en: "Don't worry, the cups are different. And if we are really hungry, do you think that they'll let us have seconds on food without paying again?"
   - speaker: Michelle
     pt: "Claro que não! O <i>refil</i> é só pra bebida."
@@ -51,7 +51,7 @@ For example:
 - <i lang="pt-BR">Poder</i>: <i lang="pt-BR"><mark class="blue">puder</mark>am</i> (past tense) → <i lang="pt-BR"><mark>puder, pudermos, puderem</mark></i>
 - <i lang="pt-BR">Ter</i>: <i lang="pt-BR"><mark class="blue">tiver</mark>am</i> (past tense) → <i lang="pt-BR"><mark>tiver, tivermos, tiverem</mark></i>
 
-No exceptions, it works 100% of the time. Go ahead, try your least favorite verbs, it will work every time: <i lang="pt-BR"><mark class="blue">trouxer</mark>am</i> → <i lang="pt-BR">t<mark>rouxer</mark></i>; <i lang="pt-BR"><mark class="blue">puser</mark>am</i> → <i lang="pt-BR"><mark>puser</mark></i>; <i lang="pt-BR"><mark class="blue">vier</mark>am</i> → <i lang="pt-BR"><mark>vier</mark></i>.
+No exceptions, it works 100% of the time. Go ahead, try your least favorite verbs, it will work every time: <i lang="pt-BR"><mark class="blue">trouxer</mark>am</i> → <i lang="pt-BR"><mark>trouxer</mark></i>; <i lang="pt-BR"><mark class="blue">puser</mark>am</i> → <i lang="pt-BR"><mark>puser</mark></i>; <i lang="pt-BR"><mark class="blue">vier</mark>am</i> → <i lang="pt-BR"><mark>vier</mark></i>.
 
 Now, how to use it? Begin with this sentence that has the word "if":
 

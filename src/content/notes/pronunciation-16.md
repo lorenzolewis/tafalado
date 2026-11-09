@@ -11,7 +11,7 @@ dialog:
     en: "I need to buy some things for the house. Everything I bought last week is gone."
   - speaker: Valdo
     pt: "Você não tem mais na<mark class=\"blue\">d</mark>a? Eu não a<mark class=\"green\">g</mark>üento mais to<mark class=\"blue\">d</mark>a semana ter que te levar ca<mark class=\"blue\">d</mark>a vez para um lu<mark class=\"green\">g</mark>ar diferente."
-    es: "No tienes nada más? No aguanto más, cada semana tengo que llevarte siempre a un lugar diferente."
+    es: "¿No tienes nada más? No aguanto más, cada semana tengo que llevarte siempre a un lugar diferente."
     en: "You don't have anymore? I can't stand having to take you to different places every week."
   - speaker: Michelle
     pt: "<mark class=\"blue\">D</mark>eixa de bo<mark>b</mark>agem e me aju<mark class=\"blue\">d</mark>a antes que minha comi<mark class=\"blue\">d</mark>a e minha á<mark class=\"green\">g</mark>ua aca<mark>b</mark>em!"

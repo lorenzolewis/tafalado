@@ -10,7 +10,7 @@ dialog:
     en: "This line is really long."
   - speaker: Michelle
     pt: 'É verd<mark class="blue">a</mark>de. Vamos p<mark class="blue">a</mark>g<mark class="blue">a</mark>r no auto-<mark class="blue">a</mark>tendimento.'
-    es: "Es verdad. Vamos a pagar en el auto-servicio"
+    es: "Es verdad. Vamos a pagar en el auto-servicio."
     en: "That's right. Let's pay at the self-service machine."
   - speaker: Valdo
     pt: 'Onde fic<mark>a</mark> <mark>a</mark> m<mark class="blue">á</mark>quin<mark>a</mark>?'
