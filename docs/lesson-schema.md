@@ -103,11 +103,11 @@ This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
 | `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
 | body | Markdown: `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`, in the PDF's order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
 
-A notes file has a `dialog` or `clips`, never both. Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
+A notes file has a `dialog` or `clips`, never both. Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
 
 ## Markup in notes
 
-- **Highlights.** The sounds or forms a lesson teaches (red in the PDFs) are `<mark>`, in dialog strings and the body: `b<mark>i</mark>f<mark>e</mark>`. Their style is one rule in `src/styles/base.css`.
+- **Highlights.** The sounds or forms a lesson teaches (red in the PDFs) are `<mark>`, in dialog strings and the body: `b<mark>i</mark>f<mark>e</mark>`. Some lessons contrast a second or third set in blue or green (Pronunciation 10: red ti/te, blue di/de): write those as `<mark class="blue">` and `<mark class="green">`, so the contrast survives. No other `<mark>` attributes are allowed. Their style is in one block in `src/styles/base.css`.
 - **Words** follow the intro rules above: `<i lang="pt-BR">`, `<i lang="es">`, `*…*` for English.
 - **IPA** is `<span lang="pt-BR-fonipa">[ej]</span>`, or `es-fonipa` / `en-fonipa` when the symbol is about Spanish or English sounds.
 - Those five values are the only `lang` allowed in notes. Dialog lines get `pt-BR`, `es` and `en` from the page.
