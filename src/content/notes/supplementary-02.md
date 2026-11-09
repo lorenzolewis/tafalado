@@ -31,5 +31,5 @@ source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-suppl02.html
 | n | <i lang="pt-BR"><mark>n</mark>ada, A<mark>n</mark>a</i> | Similar to English |
 | ɲ or j̃ | <i lang="pt-BR">se<mark>nh</mark>or, ba<mark>nh</mark>o</i> | Palatal nasal or nasalized palatal approximant |
 | l | <i lang="pt-BR"><mark>l</mark>ata, ba<mark>l</mark>a</i> | Similar to English |
-| ɫ or w | <i lang="pt-BR">sa<mark>l</mark>, ca<mark>l</mark>ma, Brasi<mark>l</mark></i> | Velarized lateral or labio-velarized approximant |
+| ɬ or w | <i lang="pt-BR">sa<mark>l</mark>, ca<mark>l</mark>ma, Brasi<mark>l</mark></i> | Velarized lateral or labio-velarized approximant |
 | ʎ or lʲ | <i lang="pt-BR">abe<mark>lh</mark>a, ve<mark>lh</mark>a</i> | Palatal lateral or palatalized <span lang="pt-BR-fonipa">/l/</span> |

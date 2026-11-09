@@ -93,12 +93,14 @@ This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
 | Field | Rule |
 | --- | --- |
 | `source` | The episode's lesson page on COERLL, as in SOURCES.md (`lesson-01.html`, `lesson-gra02.html`, `lesson-suppl01.html`). The page, not the PDF. |
-| `dialog` | A list of turns: `speaker` (one of `SPEAKERS` in `src/content.config.ts`: Valdo, Michelle, Vivian, Orlando, José Luis; add names there), `pt`, `es`, `en`, none empty. |
+| `dialog` | A list of turns: `speaker` (one of `SPEAKERS` in `src/lib/notes-schema.ts`: Valdo, Michelle, Vivian, Orlando, José Luis; add names there), `pt`, `es`, `en`, none empty. |
 | `dialog` (shared) | Instead of turns, `{ from: <notes id>, speakers?: [...] }`: the dialog stored in another lesson's notes (the alternate takes 10/11, 12/13, 14/15 store it once, in the first). `speakers`, if given, recasts it with one speaker per turn (Pronunciation 13's guest Vivian). The named notes must have turns of their own. |
 | `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
-| body | Markdown: `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`, in the PDF's order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
+| body | Markdown, following the PDF's sections in its order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
 
-A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"` (single quotes work too, for double-quoted YAML strings); a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a lesson with no notes; and a shared dialog that can't be resolved.
+The body's sections are the PDF's. Most lessons have `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`: that's the norm, not a rule. The supplementary lessons hold charts under their own headings (`## Chart #1: Major vowel sounds in English`, with `###` subheadings), and Pronunciation 24 has no Cultural notes, only `## Pronunciation notes` after its clips.
+
+A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (shape in `src/lib/notes-schema.ts`, checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"` (single quotes work too, for double-quoted YAML strings); a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a lesson with no notes; and a shared dialog that can't be resolved.
 
 ## Markup in notes
 

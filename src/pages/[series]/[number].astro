@@ -28,8 +28,8 @@ const { lesson } = Astro.props as { lesson: Lesson };
 const { data } = lesson;
 const { Content } = await render(lesson);
 const description = lessonDescription(lesson.rendered?.html ?? '');
-const notes = await getNotes(lesson);
-const NotesContent = notes && (await render(notes.entry)).Content;
+const lessonNotes = await getNotes(lesson);
+const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNotes.entry)).Content };
 ---
 
 <Base
@@ -59,7 +59,7 @@ const NotesContent = notes && (await render(notes.entry)).Content;
     </div>
     {
       notes && (
-        <p class="transcript">
+        <p class="notes-link">
           <a href="#notes">
             <Icon name="doc" />
             <span>{notes.dialog || notes.clips ? 'Dialog & notes ↓' : 'Notes ↓'}</span>
@@ -68,7 +68,7 @@ const NotesContent = notes && (await render(notes.entry)).Content;
       )
     }
     {
-      notes && NotesContent && (
+      notes && (
         <section id="notes" class="notes" aria-label="Dialog and notes">
           {notes.dialog && (
             <section class="dialog" aria-labelledby="dialog">
@@ -107,7 +107,7 @@ const NotesContent = notes && (await render(notes.entry)).Content;
             </section>
           )}
           <div class="notes-body">
-            <NotesContent />
+            <notes.Content />
           </div>
           <p class="source">
             <a href={notes.entry.data.source}>Original lesson on COERLL</a>
@@ -175,9 +175,7 @@ const NotesContent = notes && (await render(notes.entry)).Content;
     margin-block-start: var(--space-16);
   }
   /* Portuguese words: bold, underlined in the series' paper, below the letters so they stay clear. */
-  .intro :global(i[lang='pt-BR']),
-  .notes-body :global(i[lang='pt-BR']),
-  .dialog :global(i[lang='pt-BR']) {
+  :is(.intro, .notes-body, .dialog) :global(i[lang='pt-BR']) {
     font-weight: 700;
     text-decoration: underline var(--paper);
     text-decoration-thickness: 0.16em;
@@ -186,15 +184,14 @@ const NotesContent = notes && (await render(notes.entry)).Content;
   }
   /* In the inverted print the word takes the paper itself. */
   @media (prefers-color-scheme: dark) {
-    .intro :global(i[lang='pt-BR']),
-    .notes-body :global(i[lang='pt-BR']),
-    .dialog :global(i[lang='pt-BR']) {
+    :is(.intro, .notes-body, .dialog) :global(i[lang='pt-BR']) {
       color: var(--paper);
       text-decoration: none;
     }
   }
 
-  /* The dialog and the study notes (#88), in the intro's measure. */
+  /* The dialog and the study notes (#88), in the intro's measure. The 56px and 48px gaps are past
+     the largest --space-* step (32px), like the intro's 40px. */
   .notes {
     max-inline-size: 38rem;
     margin-block-start: 56px;
@@ -302,10 +299,10 @@ const NotesContent = notes && (await render(notes.entry)).Content;
     }
   }
 
-  .transcript {
+  .notes-link {
     margin: var(--space-32) 0 0;
   }
-  .transcript a {
+  .notes-link a {
     display: inline-flex;
     align-items: center;
     gap: var(--space-8);

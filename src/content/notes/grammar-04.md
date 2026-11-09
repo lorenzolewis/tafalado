@@ -51,7 +51,7 @@ For example:
 - <i lang="pt-BR">Poder</i>: <i lang="pt-BR"><mark class="blue">puder</mark>am</i> (past tense) → <i lang="pt-BR"><mark>puder, pudermos, puderem</mark></i>
 - <i lang="pt-BR">Ter</i>: <i lang="pt-BR"><mark class="blue">tiver</mark>am</i> (past tense) → <i lang="pt-BR"><mark>tiver, tivermos, tiverem</mark></i>
 
-No exceptions, it works 100% of the time. Go ahead, try your least favorite verbs, it will work every time: <i lang="pt-BR"><mark class="blue">trouxer</mark>am</i> → <i lang="pt-BR"><mark>trouxer</mark></i>; <i lang="pt-BR"><mark class="blue">puser</mark>am</i> → <i lang="pt-BR"><mark>puser</mark></i>; <i lang="pt-BR"><mark class="blue">vier</mark>am</i> → <i lang="pt-BR"><mark>vier</mark></i>.
+No exceptions, it works 100% of the time. Go ahead, try your least favorite verbs, it will work every time: <i lang="pt-BR"><mark class="blue">trouxer</mark>am</i> → <i lang="pt-BR">t<mark>rouxer</mark></i>; <i lang="pt-BR"><mark class="blue">puser</mark>am</i> → <i lang="pt-BR"><mark>puser</mark></i>; <i lang="pt-BR"><mark class="blue">vier</mark>am</i> → <i lang="pt-BR"><mark>vier</mark></i>.
 
 Now, how to use it? Begin with this sentence that has the word "if":
 

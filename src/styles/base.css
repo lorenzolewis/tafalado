@@ -164,13 +164,14 @@ a {
    Red is <mark>; some lessons contrast a second and third set in blue and green (<mark class>,
    docs/lesson-schema.md). Blue and green also carry a dashed and a dotted underline, so the sets
    stay apart for readers who can't tell the colours apart and on a grayscale printer, where red
-   gets a solid underline too. Lighter tints in dark mode keep the contrast. */
+   gets a solid underline too. Lighter tints in dark mode keep the contrast, on screen only: paper
+   is light, so print keeps these colours whatever the OS scheme. */
 :root {
   --mark-red: #c62828;
   --mark-blue: #1565c0;
   --mark-green: #2e7d32;
 }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --mark-red: #ff8a80;
     --mark-blue: #82b1ff;
@@ -196,11 +197,6 @@ mark.green {
   text-decoration-style: dotted;
 }
 @media print {
-  :root {
-    --mark-red: #c62828;
-    --mark-blue: #1565c0;
-    --mark-green: #2e7d32;
-  }
   mark:not([class]) {
     text-decoration-line: underline;
   }

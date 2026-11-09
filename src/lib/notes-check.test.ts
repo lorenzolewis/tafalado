@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkNotes, checkNotesCoverage, resolveDialog } from './notes-check';
-import type { NotesData, Speaker } from './notes-schema';
+import type { Clip, NotesData, Speaker } from './notes-schema';
 
 const turn = (speaker: Speaker, pt = 'Que b<mark>i</mark>fe.') => ({ speaker, pt, es: 'Qué biftec.', en: 'What a steak.' });
 const notes = (id: string, data: Partial<NotesData> = {}, body = '## Cultural notes\n\nText.') => ({
@@ -74,7 +74,7 @@ describe('checkNotes', () => {
   });
 
   it('checks clip lines and observations too', () => {
-    const clip = {
+    const clip: Clip = {
       heading: 'Clip #1',
       speakers: ['Valdo', 'Vivian'],
       lines: ['Ah, é me<mark>s</mark>mo.'],

@@ -36,3 +36,12 @@ test('Pronunciation 1 shows its dialog and notes, in their languages', async ({ 
     'https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-01.html',
   );
 });
+
+test('highlights print in the PDF red even when the OS is in dark mode', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/pronunciation/01');
+  const mark = page.locator('.dialog mark').first();
+  await expect(mark).toHaveCSS('color', 'rgb(255, 138, 128)');
+  await page.emulateMedia({ media: 'print', colorScheme: 'dark' });
+  await expect(mark).toHaveCSS('color', 'rgb(198, 40, 40)');
+});

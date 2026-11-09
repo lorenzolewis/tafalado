@@ -41,9 +41,8 @@ Notation, not typos:
 
 - Pronunciation 5 types ASCII stand-ins `[@]`, `[E]`, `[O]` in its normal font; they are `[ə]`, `[ɛ]`, `[ɔ]` here. Pronunciation 6 `[ha.'pajs]` and Pronunciation 16 `['awa]` use a straight apostrophe for the stress mark; it is `ˈ` here.
 - Pronunciation 6, 8, 9 and Supplementary 1: the legacy Doulos IPA is retyped as Unicode (above).
-- Supplementary 2: the velarized l row's symbol is `ɫ` (U+026B, velarized l), as the row's own "Velarized lateral" says, where the PDF's font encodes `ɬ` (U+026C, the voiceless lateral fricative). Its `lj` is the rendered `lʲ`.
+- Supplementary 2: the font's `lj` is the rendered `lʲ`.
 - Grammar 19: three `(cid:31)` extraction artifacts are dropped.
-- Grammar 4: in "trouxeram → trouxer" the red started one letter late; all of "trouxer" is highlighted, as in the other examples.
 - Pronunciation 24: the paragraph that introduces clips 3–6 now follows them, so "below" is dropped and "The next four clips" reads "Clips 3 to 6".
 
 Typos (lesson, where: before → after). "(and 11)": the alternate lesson repeats the notes.

@@ -16,4 +16,4 @@ pnpm dev
 ## License
 
 - **Code:** MIT. See [`LICENSE`](LICENSE).
-- **Content** (the lessons, audio, transcripts and photos): © University of Texas at Austin, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), modified: re-hosted and re-presented. See [`CREDITS.md`](CREDITS.md) for the full attribution and [`SOURCES.md`](SOURCES.md) for where it came from.
+- **Content** (the lessons, audio, dialogs and notes, and photos): © University of Texas at Austin, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), modified: re-hosted and re-presented. See [`CREDITS.md`](CREDITS.md) for the full attribution and [`SOURCES.md`](SOURCES.md) for where it came from.
