@@ -89,7 +89,7 @@ describe('podcastSeriesLd', () => {
   });
 
   it('links the show in the podcast apps that list it, and leaves sameAs out until one does', () => {
-    expect(podcastSeriesLd(site, { apple: 'https://podcasts.apple.com/us/podcast/x/id1', spotify: undefined }).sameAs).toEqual([
+    expect(podcastSeriesLd(site, { apple: 'https://podcasts.apple.com/us/podcast/x/id1' }).sameAs).toEqual([
       'https://podcasts.apple.com/us/podcast/x/id1',
     ]);
     expect(podcastSeriesLd(site, {})).not.toHaveProperty('sameAs');
