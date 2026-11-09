@@ -5,15 +5,7 @@ import Credit from '../components/Credit.astro';
 import Icon from '../components/Icon.astro';
 import Player from '../components/Player.astro';
 import Sidebar from '../components/Sidebar.astro';
-import {
-  APPLE_TOUCH_ICON_PATH,
-  COVER_SIZE,
-  FAVICON_PATH,
-  FAVICON_SIZES,
-  OG_HEIGHT,
-  OG_WIDTH,
-  PODCAST_COVER_PATH,
-} from '../lib/artwork';
+import { APPLE_TOUCH_ICON_PATH, FAVICON_PATH, FAVICON_SIZES, OG_HEIGHT, OG_WIDTH, SITE_OG_PATH } from '../lib/artwork';
 import { LESSONS_ID, pagePath, seriesOf, viewOf } from '../lib/nav';
 import { INK, PAPER } from '../lib/print';
 import { PODCAST_TITLE } from '../lib/podcast';
@@ -25,7 +17,7 @@ interface Props {
   /** Page title, before the site name. Omit on the home page. */
   title?: string;
   description?: string;
-  /** Root-relative path of the page's Open Graph image (1200×630), e.g. from ogImagePath(). Defaults to the podcast cover. */
+  /** Root-relative path of the page's Open Graph image (1200×630), e.g. from ogImagePath(). Defaults to the site's card (SITE_OG_PATH). */
   ogImage?: string;
   /** schema.org data for the page, from src/lib/seo.ts. */
   jsonLd?: object;
@@ -36,7 +28,7 @@ interface Props {
 const {
   title,
   description = SITE_DESCRIPTION,
-  ogImage,
+  ogImage = SITE_OG_PATH,
   jsonLd,
   noindex = false,
 } = Astro.props;
@@ -44,10 +36,8 @@ const {
 if (!Astro.site) throw new Error('Set `site` in astro.config.ts: canonical URLs and og:image need it.');
 const fullTitle = title ? `${title} · ${PODCAST_TITLE}` : PODCAST_TITLE;
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site).href;
-// Lesson pages have a 1200×630 card; other pages fall back to the square podcast cover.
-const image = ogImage
-  ? { url: new URL(ogImage, Astro.site).href, width: OG_WIDTH, height: OG_HEIGHT, card: 'summary_large_image' }
-  : { url: new URL(PODCAST_COVER_PATH, Astro.site).href, width: COVER_SIZE, height: COVER_SIZE, card: 'summary' };
+// Every page has a 1200×630 card (#77): a lesson page its own, every other page the site's, the 404 included.
+const ogImageUrl = new URL(ogImage, Astro.site).href;
 // The phone shows one view at a time (#53): this page's own (home or page), or the Lessons view,
 // which src/lib/sidebar-ui.ts switches to when the URL ends in #lessons. The "‹ Lessons" button,
 // pinned to the top of every page, opens it; the sidebar's site name leads back home.
@@ -88,10 +78,10 @@ const printColours = [
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={canonical} />}
-    <meta property="og:image" content={image.url} />
-    <meta property="og:image:width" content={String(image.width)} />
-    <meta property="og:image:height" content={String(image.height)} />
-    <meta name="twitter:card" content={image.card} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(OG_WIDTH)} />
+    <meta property="og:image:height" content={String(OG_HEIGHT)} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLdScript(jsonLd)} />}
