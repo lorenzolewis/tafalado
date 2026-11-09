@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { episodeCoverPath, PODCAST_COVER_PATH } from '../lib/artwork';
+import { dialogHtml, notesLinkText } from '../lib/feed-notes';
 import { getLessons, lessonPath, shortTitle, type Lesson } from '../lib/lessons';
+import { getAllNotes, type LessonNotes } from '../lib/notes';
 import { LICENSE_URL, PODCAST_AUTHOR, PODCAST_DESCRIPTION, PODCAST_TITLE } from '../lib/podcast';
 import { SERIES_LABEL } from '../lib/series';
 
@@ -16,9 +18,9 @@ const CREDIT =
 export const GET: APIRoute = async ({ site }) => {
   if (!site) throw new Error('Set `site` in astro.config.ts: the feed needs absolute URLs.');
   const url = (path: string) => new URL(path, site).href;
-  const lessons = await getLessons();
+  const [lessons, notes] = await Promise.all([getLessons(), getAllNotes()]);
 
-  const items = lessons.map((lesson) => item(lesson, url)).join('\n');
+  const items = lessons.map((lesson) => item(lesson, notes.get(lesson.id), url)).join('\n');
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
   xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
@@ -46,13 +48,25 @@ ${items}
   return new Response(xml, { headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' } });
 };
 
-function item(lesson: Lesson, url: (path: string) => string): string {
+/**
+ * The episode notes: the intro, then the dialog (#90; Pronunciation 24's clips stay on the lesson
+ * page), a link to the page's cultural and pronunciation or grammar notes, and the credit. No notes
+ * tables: podcast apps show only basic HTML, and many cut notes off past about 4,000 characters.
+ */
+function item(lesson: Lesson, notes: LessonNotes | undefined, url: (path: string) => string): string {
   const { data } = lesson;
   const page = url(lessonPath(data));
   const number = String(data.number).padStart(2, '0');
-  const description = `${lesson.rendered?.html ?? ''}
-<p><a href="${page}">Lesson page, with the transcript</a></p>
-<p>${CREDIT}</p>`;
+  // TODO(#89): every lesson has notes once they're all written; until then the page keeps the PDF.
+  const linkText = notes ? notesLinkText(data.series) : 'Lesson page, with the transcript';
+  const description = [
+    lesson.rendered?.html ?? '',
+    notes?.dialog ? dialogHtml(notes.dialog) : '',
+    `<p><a href="${page}">${linkText}</a></p>`,
+    `<p>${CREDIT}</p>`,
+  ]
+    .filter(Boolean)
+    .join('\n');
   return `    <item>
       <title>${escape(episodeTitle(lesson))}</title>
       <link>${page}</link>
@@ -65,7 +79,6 @@ function item(lesson: Lesson, url: (path: string) => string): string {
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:explicit>false</itunes:explicit>
       <itunes:image href="${url(episodeCoverPath(data))}"/>
-      <podcast:transcript url="${escape(url(data.pdf.url))}" type="application/pdf"/>
     </item>`;
 }
 
