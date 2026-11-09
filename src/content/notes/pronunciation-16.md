@@ -1,5 +1,9 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-16.html
+highlights:
+  red: 'b as <span lang="pt-BR-fonipa">[b]</span>, never Spanish <span lang="es-fonipa">[β]</span>'
+  blue: 'd as <span lang="pt-BR-fonipa">[d]</span>, never Spanish <span lang="es-fonipa">[ð]</span>'
+  green: 'g as <span lang="pt-BR-fonipa">[g]</span>, never Spanish <span lang="es-fonipa">[ɣ]</span>'
 dialog:
   - speaker: Michelle
     pt: "Preciso comprar al<mark class=\"green\">g</mark>umas coisas lá pra casa. Tu<mark class=\"blue\">d</mark>o o que eu comprei na semana passa<mark class=\"blue\">d</mark>a já aca<mark>b</mark>ou."

@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-05.html
+highlights:
+  red: 'Unstressed a, reduced to <span lang="pt-BR-fonipa">[ə]</span>'
+  blue: 'A full <span lang="pt-BR-fonipa">[a]</span>'
 dialog:
   - speaker: Valdo
     pt: 'Ah, ess<mark>a</mark> fil<mark>a</mark> t<mark class="blue">á</mark> enorme!'

@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-12.html
+highlights:
+  red: 's sounds <span lang="pt-BR-fonipa">[z]</span>'
+  blue: 's sounds <span lang="pt-BR-fonipa">[s]</span>'
 dialog:
   - speaker: Valdo
     pt: "Acho que vou te vi<mark>s</mark>itar à noite. Não quero ficar em ca<mark>s</mark>a."

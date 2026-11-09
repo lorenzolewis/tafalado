@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-03.html
+highlights:
+  red: 'Closed e <span lang="pt-BR-fonipa">/ê/</span>'
+  blue: 'Open e <span lang="pt-BR-fonipa">/é/</span>'
 dialog:
   - speaker: Valdo
     pt: 'Voc<mark>ê</mark> já qu<mark>e</mark>brou o p<mark class="blue">é</mark>?'

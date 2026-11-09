@@ -1,0 +1,189 @@
+---
+// "Show: Spanish, English, Highlights" above a lesson's dialog or clips (#93), as toggle pills like
+// the sidebar's series pills (ink rule and a plus off, reversed out in ink with a tick on), and under them the legend of
+// what each highlight colour marks (src/lib/highlights.ts). The checkboxes drive the CSS on their own
+// (`:has`). The inline script sets them to the learner's stored choice before the dialog is painted,
+// so hidden lines don't flash; src/lib/dialog-view-ui.ts saves changes and keeps the choice for every
+// lesson. Only the controls the dialog needs are shown.
+import type { LegendEntry } from '../lib/highlights';
+import { DIALOG_VIEW_STORAGE } from '../lib/dialog-view';
+import { storageKey } from '../lib/storage';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** The dialog has Spanish and English lines. */
+  translations: boolean;
+  /** What each highlight colour in the dialog's lines marks; empty when there are none. */
+  legend: LegendEntry[];
+}
+const { translations, legend } = Astro.props;
+const marks = legend.length > 0;
+const toggles = [
+  ...(translations ? [{ view: 'es', name: 'Spanish' }, { view: 'en', name: 'English' }] : []),
+  ...(marks ? [{ view: 'marks', name: 'Highlights' }] : []),
+];
+const key = storageKey(DIALOG_VIEW_STORAGE);
+---
+
+{
+  toggles.length > 0 && (
+    <div class="dialog-view">
+      <fieldset>
+        <legend>Show</legend>
+        {toggles.map(({ view, name }) => (
+          <label>
+            <input type="checkbox" data-view={view} checked />
+            <Icon name="plus" class="off" />
+            <Icon name="check" class="on" />
+            {name}
+          </label>
+        ))}
+      </fieldset>
+      {marks && (
+        <ul class="key" aria-label="What the highlights mark">
+          {legend.map(({ colour, label }) => (
+            <li>
+              <mark class={colour === 'red' ? undefined : colour} aria-hidden="true">
+                Aa
+              </mark>
+              <span set:html={label} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+{
+  toggles.length > 0 && (
+    <script is:inline define:vars={{ key }}>
+      try {
+        const view = JSON.parse(localStorage.getItem(key) ?? '{}');
+        for (const box of document.currentScript.previousElementSibling.querySelectorAll('input[data-view]')) {
+          if (typeof view?.[box.dataset.view] === 'boolean') box.checked = view[box.dataset.view];
+        }
+      } catch {
+        // No storage: src/lib/dialog-view-ui.ts applies this visit's choice once loaded.
+      }
+    </script>
+  )
+}
+
+<script>
+  import '../lib/dialog-view-ui';
+</script>
+
+<style>
+  .dialog-view {
+    margin: 0 0 var(--space-16);
+    font-family: var(--font-sans);
+  }
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  legend {
+    float: inline-start;
+    margin-inline-end: var(--space-6);
+    padding: 0;
+    font: 700 var(--text-14) / 1.4 var(--font-sans);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* A pill per setting: stock with an ink rule and a plus when off, reversed out in ink with a tick when on. */
+  label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-block-size: 36px;
+    padding: 0 var(--space-12) 0 var(--space-8);
+    border-radius: var(--radius-control);
+    box-shadow: inset 0 0 0 2px var(--ink);
+    color: var(--ink);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+  label:has(:checked) {
+    background: var(--ink);
+    color: var(--surface);
+    box-shadow: none;
+  }
+  label:has(:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  label :global(.icon) {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+  }
+  label :global(.on),
+  label:has(:checked) :global(.off) {
+    display: none;
+  }
+  label:has(:checked) :global(.on) {
+    display: block;
+  }
+  /* The checkbox stays in the page for keyboards and screen readers, invisible over the whole pill,
+     which shows its state. */
+  input {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* The legend: a sample in each colour's own style (colour and underline), then what it marks. */
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-16);
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: var(--text-14);
+  }
+  .key li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-6);
+  }
+  .key mark {
+    font: 700 var(--text-16) / 1 var(--font-serif);
+  }
+  :global(.dialog:has([data-view='marks']:not(:checked))) .key {
+    display: none;
+  }
+
+  /* A language off: its lines are gone from every turn and clip until it is back on. */
+  :global(.dialog:has([data-view='es']:not(:checked)) .turn .es),
+  :global(.dialog:has([data-view='en']:not(:checked)) .turn .en) {
+    display: none;
+  }
+
+  /* Highlights off: the taught sounds in the lines read as plain text. A clip's heading and
+     observations keep theirs: they explain the highlights. */
+  :global(.dialog:has([data-view='marks']:not(:checked)) .turn mark) {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration-line: none;
+  }
+
+  /* A handout prints the dialog as chosen, and the legend, without the controls. */
+  @media print {
+    fieldset {
+      display: none;
+    }
+  }
+</style>

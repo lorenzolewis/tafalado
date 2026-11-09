@@ -26,6 +26,10 @@ const clip = z
   })
   .strict();
 
+// What each highlight colour in the dialog marks, for its legend (#93, src/lib/highlights.ts). Needed
+// once the dialog has blue or green; red alone defaults to what the series teaches.
+const highlights = z.object({ red: line.optional(), blue: line.optional(), green: line.optional() }).strict();
+
 // A lesson's dialog (or Pronunciation 24's clips). The file is named after its lesson, and the
 // Markdown body holds the rest. src/lib/notes.ts checks the markup, the lesson pairing and shared
 // dialogs when the collection loads.
@@ -40,6 +44,7 @@ export const notesSchema = z
       ),
     dialog: z.union([z.array(turn).min(1), sharedDialog]).optional(),
     clips: z.array(clip).min(1).optional(),
+    highlights: highlights.optional(),
   })
   .strict()
   // Not both. Neither is only for supplementary lessons, which have no dialog (src/lib/notes-check.ts).
@@ -51,4 +56,5 @@ export type Speaker = (typeof SPEAKERS)[number];
 export type Turn = z.infer<typeof turn>;
 export type SharedDialog = z.infer<typeof sharedDialog>;
 export type Clip = z.infer<typeof clip>;
+export type Highlights = z.infer<typeof highlights>;
 export type NotesData = z.infer<typeof notesSchema>;

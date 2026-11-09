@@ -39,6 +39,8 @@ export function checkNotes({ id, body = '', data }: NotesFile): void {
     const strings = [clip.heading, ...clip.lines, clip.translation?.es, clip.translation?.en, clip.observations];
     for (const s of strings) if (s !== undefined) check(s, `clip ${i + 1}`, true);
   });
+  for (const [colour, label] of Object.entries(data.highlights ?? {}))
+    if (label !== undefined) check(label, `highlights.${colour}`, true);
 }
 
 /**

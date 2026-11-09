@@ -1,10 +1,11 @@
 ---
 // A lesson page (#56): the lesson's print bleeds across the top of the pane, with the series and
 // number on a paper tab rising into its foot, as on the episode art (#61); then the title, the facts,
-// Play, the intro and a link down to the dialog and the study notes (#88), which follow. Portuguese and
+// Play, the intro and links down to each section of the dialog and study notes (#88, #93), which follow. Portuguese and
 // Spanish words in the intro and notes are marked as in docs/lesson-schema.md.
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
+import DialogViewControls from '../../components/DialogViewControls.astro';
 import Icon from '../../components/Icon.astro';
 import PlayButton from '../../components/PlayButton.astro';
 import Print from '../../components/Print.astro';
@@ -12,6 +13,7 @@ import Base from '../../layouts/Base.astro';
 import { ogImagePath } from '../../lib/artwork';
 import { formatDate, formatMinutes, isoDate, isoDuration } from '../../lib/format';
 import { getLessons, lessonPath, lessonTitle, type Lesson } from '../../lib/lessons';
+import type { IconName } from '../../lib/icons';
 import { getNotes } from '../../lib/notes';
 import { lessonDescription, podcastEpisodeLd } from '../../lib/seo';
 import { SERIES_LABEL } from '../../lib/series';
@@ -29,7 +31,28 @@ const { data } = lesson;
 const { Content } = await render(lesson);
 const description = lessonDescription(lesson.rendered?.html ?? '');
 const lessonNotes = await getNotes(lesson);
-const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNotes.entry)).Content };
+const rendered = lessonNotes && (await render(lessonNotes.entry));
+const notes = lessonNotes && rendered && { ...lessonNotes, Content: rendered.Content };
+// A link down to each section of the notes, each with its icon: the dialog (or clips), then the
+// body's own headings.
+const SECTION_ICONS: Record<string, IconName> = {
+  dialog: 'dialog',
+  clips: 'dialog',
+  'cultural-notes': 'globe',
+  'pronunciation-notes': 'wave',
+  'grammar-notes': 'book',
+};
+const sectionIcon = (slug: string): IconName => SECTION_ICONS[slug] ?? (slug.startsWith('chart-') ? 'table' : 'doc');
+const sections = [
+  ...(notes?.dialog ? [{ slug: 'dialog', text: 'Dialog' }] : []),
+  ...(notes?.clips ? [{ slug: 'clips', text: 'Clips' }] : []),
+  ...(rendered?.headings ?? []).filter((h) => h.depth === 2),
+].map(({ slug, text }) => ({ slug, text, icon: sectionIcon(slug) }));
+// The dialog's "Show" controls (#93) offer only what its lines have.
+const view = {
+  translations: Boolean(notes?.dialog || notes?.clips?.some((clip) => clip.translation)),
+  legend: notes?.legend ?? [],
+};
 ---
 
 <Base
@@ -59,12 +82,18 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
     </div>
     {
       notes && (
-        <p class="notes-link">
-          <a href="#notes">
-            <Icon name="doc" />
-            <span>{notes.dialog || notes.clips ? 'Dialog & notes ↓' : 'Notes ↓'}</span>
-          </a>
-        </p>
+        <nav class="notes-links" aria-label="Dialog and notes">
+          <ul>
+            {sections.map(({ slug, text, icon }) => (
+              <li>
+                <a href={`#${slug}`}>
+                  <Icon name={icon} />
+                  <span>{text} ↓</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
       )
     }
     {
@@ -73,6 +102,7 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
           {notes.dialog && (
             <section class="dialog" aria-labelledby="dialog">
               <h2 id="dialog">Dialog</h2>
+              <DialogViewControls {...view} />
               <ol>
                 {notes.dialog.map((turn) => (
                   <li class="turn">
@@ -88,6 +118,7 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
           {notes.clips && (
             <section class="dialog" aria-labelledby="clips">
               <h2 id="clips">Clips</h2>
+              <DialogViewControls {...view} />
               {notes.clips.map((clip) => (
                 <section class="clip">
                   <h3 set:html={clip.heading} />
@@ -202,6 +233,7 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
   .notes-body :global(h2) {
     margin: 48px 0 var(--space-16);
     font-size: var(--text-28);
+    scroll-margin-block-start: var(--space-24);
   }
   .dialog > h2 {
     margin-block-start: 0;
@@ -299,10 +331,20 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
     }
   }
 
-  .notes-link {
+  /* The links down to the notes' sections, each after its icon, wrapping as a row. The underline is
+     on the words only. */
+  .notes-links {
     margin: var(--space-32) 0 0;
   }
-  .notes-link a {
+  .notes-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .notes-links a {
     display: inline-flex;
     align-items: center;
     gap: var(--space-8);
@@ -310,7 +352,10 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
     color: var(--ink);
     font-size: var(--text-18);
     font-weight: 700;
-    text-decoration-color: var(--paper);
+    text-decoration: none;
+  }
+  .notes-links a span {
+    text-decoration: underline var(--paper);
     text-decoration-thickness: 4px;
     text-underline-offset: 4px;
   }

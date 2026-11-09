@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-gra11.html
+highlights:
+  red: 'The topic'
+  blue: 'The pronoun that repeats it'
 dialog:
   - speaker: Michelle
     pt: 'Você acredita que eu fiquei quase duas horas na fila do correio ontem? Lá no Brasil, <mark>as grávidas</mark>, <mark class="blue">elas</mark> têm preferência.'

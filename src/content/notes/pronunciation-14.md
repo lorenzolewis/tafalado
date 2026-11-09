@@ -1,5 +1,9 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-14.html
+highlights:
+  red: 'r ending a syllable: anything from the tap to rr, by region'
+  blue: 'rr, or r starting a word: like English <span lang="en-fonipa">[h]</span>'
+  green: 'A single r starting a syllable: the Spanish tap <span lang="es-fonipa">[ɾ]</span>'
 dialog:
   - speaker: Michelle
     pt: "Essa ca<mark>r</mark>ne e esse a<mark class=\"blue\">rr</mark>oz de fo<mark>r</mark>no estão de mata<mark>r</mark>!"

@@ -1,5 +1,8 @@
 ---
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-10.html
+highlights:
+  red: 't before an i sound: <span lang="pt-BR-fonipa">[tʃ]</span>'
+  blue: 'd before an i sound: <span lang="pt-BR-fonipa">[dʒ]</span>'
 dialog:
   - speaker: Valdo
     pt: "Um <mark class=\"blue\">di</mark>a desses minha <mark>ti</mark>a, que já é <mark class=\"blue\">de</mark> ida<mark class=\"blue\">de</mark>, veio me visitar aqui em Austin."
