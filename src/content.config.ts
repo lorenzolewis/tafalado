@@ -91,8 +91,9 @@ const notes = defineCollection({
         .optional(),
     })
     .strict()
-    .refine((n) => (n.dialog === undefined) !== (n.clips === undefined), {
-      message: 'Give a dialog or clips, not both and not neither',
+    // Not both. Neither is only for supplementary lessons, which have no dialog (src/lib/notes-check.ts).
+    .refine((n) => n.dialog === undefined || n.clips === undefined, {
+      message: 'Give a dialog or clips, not both',
     }),
 });
 
