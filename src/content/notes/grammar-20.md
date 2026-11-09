@@ -18,7 +18,7 @@ dialog:
     es: "A pesar de que en el Brasil los autobuses no tengan tantas adaptaciones, nadie va a reclamar porque el sistema de transporte público es bueno."
     en: "Although Brazil doesn't have busses that have such adaptations, nobody complains because the public transportation system is so good."
   - speaker: Michelle
-    pt: "Tá, <mark>mas</mark> deixa eu fazer uma <mark>fofoca</mark> que talvez você não se lembre: no Brasil não tem ar nos <mark>ônibus</mark>, a gente tem que abrir as <mark>janelas</mark> pra ventilarse."
+    pt: "Tá, <mark>mas</mark> deixa eu fazer uma <mark>fofoca</mark> que talvez você não se lembre: no Brasil não tem ar nos <mark>ônibus</mark>, a gente tem que abrir as <mark>janelas</mark> pra ventilar."
     es: "Sí, pero cuidado en no exagerar porque tal vez no te acuerdes pero en el Brasil no hay aire condicionado en los autobuses. Hay que abrir las ventanas para ventilar."
     en: "Right, but don't go too far with these stories because maybe you have forgotten that the buses in Brazil don't have air conditioning, you've got to open the window to get some air."
   - speaker: Valdo
@@ -40,7 +40,7 @@ There are plenty of words between Spanish and Portuguese that are identical, or 
 | Spanish                    | Portuguese          |
 | -------------------------- | ------------------- |
 | pantalla                   | tela                |
-| sin embargo                | por outro lado      |
+| sin embargo                | no entanto, contudo |
 | autobús                    | ônibus              |
 | aunque                     | embora              |
 | silla                      | cadeira             |
@@ -50,7 +50,7 @@ There are plenty of words between Spanish and Portuguese that are identical, or 
 | cerda                      | porca               |
 | hasta                      | até                 |
 | pensar, creer, creo que sí | achar, acho que sim |
-| así                        | ainda               |
+| todavía, aún               | ainda               |
 | a propósito                | aliás               |
 | aburrido                   | chato               |
 | con tal de que             | contanto que        |
@@ -60,7 +60,7 @@ There are plenty of words between Spanish and Portuguese that are identical, or 
 | periódico                  | jornal              |
 | pero                       | mas                 |
 | vivir                      | morar               |
-| el hombre                  | o cara              |
+| el tipo                    | o cara              |
 | manera                     | jeito               |
 | acostarse                  | deitar              |
 | chico                      | rapaz               |
@@ -71,7 +71,6 @@ There are plenty of words between Spanish and Portuguese that are identical, or 
 | prometido                  | noivo               |
 | mirar                      | olhar               |
 | edificio                   | prédio              |
-| chico                      | rapaz               |
 | ojalá                      | tomara              |
 | nos vamos                  | vamos embora        |
 | adiós                      | tchau               |

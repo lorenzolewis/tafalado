@@ -4,6 +4,8 @@ dialog:
   from: pronunciation-14
 ---
 
+Each line is read by Michelle or Valdo, then repeated by Vivian Flanzer (Rio de Janeiro).
+
 ## Cultural notes
 
 Besides the lessons in pronunciation, all of the dialogs key on some cultural issue that Valdo and Michelle have noticed as Brazilians living in the United States.

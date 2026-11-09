@@ -23,7 +23,7 @@ dialog:
     en: "That's true. And depending on the region in Brazil you can even have three. So you see that when Americans greet us, we're always expecting something more informal."
   - speaker: Valdo
     pt: "Nem espere! Aqui nos Estados Unidos as pessoas são bem mais formais do que no Brasil, muitas vezes elas nem <mark>vão te tocar</mark> e já estão dizendo: desculpa, com licença, por favor, sinto muito..."
-    es: "Ni lo esperes! Aquí en los Estados Unidos las personas son mucho más formales que en el Brasil, muchas veces ni siquiera te tocan y luego ya están diciendo: perdona, con permiso, por favor, siento mucho…"
+    es: "¡Ni lo esperes! Aquí en los Estados Unidos las personas son mucho más formales que en el Brasil, muchas veces ni siquiera te tocan y luego ya están diciendo: perdona, con permiso, por favor, siento mucho…"
     en: "Don't wait for that! Here in the United States people are much more formal than in Brazil, many times they barely even touch you and they are already saying: sorry, excuse me, please, I'm sorry…"
 ---
 

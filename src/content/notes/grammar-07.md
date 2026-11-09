@@ -31,7 +31,7 @@ dialog:
 
 Besides the lessons in pronunciation and grammar, all of the dialogs key on some cultural issue that Valdo and Michelle have noticed as Brazilians living in the United States.
 
-"What's a guy got to do to get a glass a water in this restaurant?" Well, in Brazil, you've got to ask! In Brazil waiters never automatically bring water to customers. They only bring what you order. Furthermore, if you want ice in your water, good luck.
+"What's a guy got to do to get a glass of water in this restaurant?" Well, in Brazil, you've got to ask! In Brazil waiters never automatically bring water to customers. They only bring what you order. Furthermore, if you want ice in your water, good luck.
 
 ## Grammar notes
 

@@ -3,7 +3,7 @@ source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-gra17.html
 dialog:
   - speaker: Valdo
     pt: "Esse fim de semana eu tive que renovar os livros que eu tomei emprestado da biblioteca."
-    es: "Este fin de semana yo tuve que renovar algunos libros que tomé emprestado de la biblioteca."
+    es: "Este fin de semana yo tuve que renovar algunos libros que tomé prestados de la biblioteca."
     en: "This weekend I had to renew some books that I borrowed from the library."
   - speaker: Michelle
     pt: "Que coincidência, eu renovei os meus <mark>também</mark>. Ainda bem que aqui a gente pode fazer isso online."
@@ -11,11 +11,11 @@ dialog:
     en: "What a coincidence, I renewed my books too. It's a good thing that here you can do that online."
   - speaker: Valdo
     pt: "É verdade! Aqui nos Estados Unidos as pessoas usam a Internet <mark>também</mark> pra pagar contas, comprar coisas, pedir filmes, fazer lista de presentes..."
-    es: "Es verdad! Aquí en los Estados Unidos las personas usan el Internet también para pagar las cuentas, comprar cosas, pedir películas, hacer listas de regalos..."
+    es: "¡Es verdad! Aquí en los Estados Unidos las personas usan el Internet también para pagar las cuentas, comprar cosas, pedir películas, hacer listas de regalos..."
     en: "It's true! Here in the United States people also use the Internet to pay bills, buy things, order movies, make gift lists..."
   - speaker: Michelle
     pt: "Mas infelizmente não consegui fazer minha matrícula para o próximo semestre porque o sistema estava fora do ar."
-    es: "Pero infelizmente no pude hacer la matrícula para el próximo semestre porque el sistema no estaba funcionando."
+    es: "Pero lamentablemente no pude hacer la matrícula para el próximo semestre porque el sistema no estaba funcionando."
     en: "But unfortunately I couldn't register for next semester's classes because the system wasn't working."
   - speaker: Valdo
     pt: "Que interessante, eu <mark>também não</mark> consegui. A hora que eu tentei estava fora do ar também."

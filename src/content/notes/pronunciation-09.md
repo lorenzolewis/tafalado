@@ -10,11 +10,11 @@ dialog:
     en: "Where can we park the car? I'm dying of hunger."
   - speaker: Michelle
     pt: 'M<mark>e</mark>nin<mark class="blue">o</mark>, com<mark class="blue">o</mark> é complicad<mark class="blue">o</mark> <mark>e</mark>stacionar aqui n<mark class="blue">o</mark>s <mark>E</mark>stad<mark class="blue">o</mark>s Unid<mark class="blue">o</mark>s, né?'
-    es: "Niño, Cómo es complicado estacionar aquí en los Estados Unidos, ¿no?"
+    es: "Niño, qué complicado es estacionar aquí en los Estados Unidos, ¿no?"
     en: "Man it is hard to park here in the United States, you know?"
   - speaker: Valdo
     pt: 'Já sei. Vam<mark class="blue">o</mark>s parar à <mark>e</mark>squerd<mark class="blue">a</mark> daquel<mark class="blue">e</mark> restaurant<mark class="blue">e</mark> p<mark>e</mark>quen<mark class="blue">o</mark>. Você tem m<mark>o</mark>ed<mark class="blue">a</mark>s?'
-    es: "Ya lo sé. Vamos a la izquierda de aquel restaurante pequeño? ¿Tiene usted las monedas?"
+    es: "Ya lo sé. ¿Vamos a la izquierda de aquel restaurante pequeño? ¿Tiene usted las monedas?"
     en: "I know. Let's park to the left of that little restaurant. Do you have change?"
   - speaker: Michelle
     pt: 'Tenh<mark class="blue">o</mark> sim. Quant<mark class="blue">o</mark> você pr<mark>e</mark>cis<mark class="blue">a</mark>?'
@@ -34,7 +34,7 @@ dialog:
 
 Besides the lessons in pronunciation, all of the dialogs key on some cultural issue that Valdo and Michelle have noticed as Brazilians living in the United States.
 
-In Brazilian parking on US streets is a problem because they aren't used to the idea of paying for a limited time. In Brazil parking on streets is always free, regardless of the time that you are parked. Now, it is true that Brazil has many parking lots where one pays, but the idea of a parking meter is harder to understand.
+For Brazilians, parking on US streets is a problem because they aren't used to the idea of paying for a limited time. In Brazil parking on streets is always free, regardless of the time that you are parked. Now, it is true that Brazil has many parking lots where one pays, but the idea of a parking meter is harder to understand.
 
 ## Pronunciation notes
 

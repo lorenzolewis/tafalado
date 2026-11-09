@@ -14,7 +14,7 @@ source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-suppl01.html
 | ɛ | h<mark>ea</mark>d, b<mark>e</mark>d, b<mark>e</mark>t | |
 | æ | h<mark>a</mark>d, h<mark>a</mark>t, b<mark>a</mark>d, b<mark>a</mark>t | |
 | ɑ | h<mark>o</mark>d, h<mark>o</mark>t, b<mark>o</mark>dy, b<mark>ou</mark>ght | |
-| ɔ | h<mark>aw</mark>ed, h<mark>o</mark>t, b<mark>ou</mark>ght | NE dialects only, otherwise same as <span lang="en-fonipa">[a]</span> |
+| ɔ | h<mark>aw</mark>ed, h<mark>o</mark>t, b<mark>ou</mark>ght | NE dialects only, otherwise same as <span lang="en-fonipa">[ɑ]</span> |
 | ow | h<mark>oe</mark>d, b<mark>o</mark>de, b<mark>oa</mark>t | always pronounced as a diphthong |
 | ʊ | h<mark>oo</mark>d, p<mark>u</mark>t | |
 | u | wh<mark>o</mark>'d, h<mark>oo</mark>t, b<mark>oo</mark>t | |

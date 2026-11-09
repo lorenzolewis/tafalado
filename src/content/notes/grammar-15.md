@@ -19,11 +19,11 @@ dialog:
     en: "Can you believe that I put my nickname on the computer instead of my first and last name?"
   - speaker: Valdo
     pt: "Ah, é que você ainda estava <mark>grávida</mark>! Você não ficou <mark>embaraçada</mark> em <mark>dirigir</mark> no dia do teste com aquele barrigão?"
-    es: "Y todavía estabas embarazada! ¿No te avergonzaste en manejar el día del examen con esa barriga?"
+    es: "¡Y todavía estabas embarazada! ¿No te avergonzaste en manejar el día del examen con esa barriga?"
     en: "Wow, and you were still pregnant! Weren't you embarrassed about driving for your test with that big stomach?"
   - speaker: Michelle
     pt: "Claro que não! Eu até <mark>freqüentei</mark> a universidade <mark>grávida</mark>."
-    es: "Claro que no! Yo también asistí a la universidad embarazada."
+    es: "¡Claro que no! Yo también asistí a la universidad embarazada."
     en: "Of course not! I even attended the university while pregnant."
 ---
 

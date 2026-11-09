@@ -15,8 +15,8 @@ dialog:
     en: "Yes and it gives people a reason to carry their bicycles in front of the bus so that they can sit down."
   - speaker: Valdo
     pt: "É verdade! Sempre <mark>acontecem coisas inesperadas</mark> quando se anda de bicicleta, por exemplo: chuva, o sol muito quente, ladeiras."
-    es: "Es verdad. Siempre nos suceden cosas inesperadas al andar en bicicleta, por ejemplo: la lluvia, el sol muy fuerte, escaleras."
-    en: "That's true. Unexpected things always happen when riding a bicycle, for example: rain, hot sun, ladders."
+    es: "Es verdad. Siempre nos suceden cosas inesperadas al andar en bicicleta, por ejemplo: la lluvia, el sol muy fuerte, cuestas."
+    en: "That's true. Unexpected things always happen when riding a bicycle, for example: rain, hot sun, hills."
   - speaker: Michelle
     pt: "De fato, sempre <mark>surge algum imprevisto</mark> que nos faz preferir o conforto do ar condicionado dos ônibus."
     es: "Además, siempre surge algo imprevisto que hace que se prefiera el confort del aire condicionado del autobús."

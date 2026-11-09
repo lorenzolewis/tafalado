@@ -20,10 +20,10 @@ dialog:
   - speaker: Valdo
     pt: "Pois é, eles fizeram <mark>uma análise</mark> equivocada do meu rosto. Acharam que eu tinha menos de 21 anos."
     es: "Pues, se equivocaron en el análisis de mi rostro. Pensaron que tenía menos de 21 años."
-    en: "Right, well they missed analyzed things based on my face. They thought I was less than 21 years old."
+    en: "Right, well they misjudged things based on my face. They thought I was less than 21 years old."
   - speaker: Michelle
     pt: "Mas isso é <mark>um</mark> bom <mark>sinal</mark>, Valdo. Acharam que você era de menor! Mas você sabe que independente da idade você sempre tem que mostrar a identidade para comprar álcool aqui."
-    es: "Pero eso es una buena señal Valdo. Pensaron que eras más joven! Y tú sabes que no importa la edad que tengas, hay que siempre mostrar la identificación para comprar alcohol aquí."
+    es: "Pero eso es una buena señal Valdo. ¡Pensaron que eras más joven! Y tú sabes que no importa la edad que tengas, hay que siempre mostrar la identificación para comprar alcohol aquí."
     en: "But that's a good sign Valdo. They thought you were younger! But you know that it doesn't matter how old you are, you always have to show ID to buy alcohol here."
 ---
 

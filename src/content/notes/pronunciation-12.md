@@ -14,7 +14,7 @@ dialog:
     en: "I've got two tickets to the movies that I have to use up before they expire."
   - speaker: Valdo
     pt: "<mark class=\"blue\">S</mark>abe que <mark class=\"blue\">s</mark>eria ma<mark class=\"blue\">ss</mark>a! <mark class=\"blue\">S</mark>aiu um filme que eu queria me<mark>s</mark>mo ver de<mark>s</mark>de a <mark class=\"blue\">s</mark>emana pa<mark class=\"blue\">ss</mark>ada."
-    es: "Sabes que sería chévere! Salió una película que quería ver desde la semana pasada."
+    es: "¡Sabes que sería chévere! Salió una película que quería ver desde la semana pasada."
     en: "You know what would be cool? There's a movie that just came out that I've wanted to see for a week now."
   - speaker: Michelle
     pt: "<mark class=\"blue\">S</mark>e você qui<mark>s</mark>er, a <mark class=\"blue\">s</mark>e<mark class=\"blue\">ss</mark>ão de hoje começa à<mark class=\"blue\">s</mark> <mark class=\"blue\">s</mark>ei<mark class=\"blue\">s</mark>. E podemo<mark class=\"blue\">s</mark> comer alguma coi<mark>s</mark>a lá."

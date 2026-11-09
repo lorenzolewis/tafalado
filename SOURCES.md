@@ -33,7 +33,7 @@ The dialogs and notes in `src/content/notes/` (lorenzolewis/tafalado#88, #89) co
 - **IPA.** Pronunciation 6, 8 and 9 and Supplementary 1 use an old SIL Doulos font with its own encoding, so extraction gives `[Dv]`, `Znv\` and the like. Every symbol was retyped as Unicode IPA from the rendered page. Supplementary 2 was already Unicode.
 - **Shared dialogs.** Pronunciation 11, 13 and 15 reuse the dialogs of 10, 12 and 14 (their PDFs match apart from the link), so the turns are stored once, in the first lesson.
 - **Layout.** The banner, footer and "These notes accompany…" line are left out. Charts became tables whose headers set the cells' language (`docs/lesson-schema.md`); some pattern lists became bullet lists, and `->` became `→`. Supplementary 1's three vowel charts are split into one table per section. Pronunciation 24 has no dialog: its six clips keep their transcripts and Observations, and the PDF's other prose is the body.
-- **Wording.** Clear spelling slips were fixed and are listed below. Awkward but correct wording and translations are kept as published, and so are the speaker labels and Grammar 20's word list (lorenzolewis/tafalado#92 checks them against the audio).
+- **Wording.** Clear spelling slips were fixed and are listed below. Awkward but correct wording and translations are kept as published, and so are the speaker labels. The audit in lorenzolewis/tafalado#92 checked the labels, Grammar 20's word list and other flagged lines against the audio and Wiktionary; the fixes approved in lorenzolewis/tafalado#97 are listed below.
 
 ### Changes from the original notes
 
@@ -115,6 +115,33 @@ Typos (lesson, where: before → after). "(and 11)": the alternate lesson repeat
 - Grammar 19, notes: (Marcos has been studying that book lately. → … lately.)
 - Grammar 20, dialog: reclamar por que el sistema → porque, los autobuses anda → andan (es); the buses en up → end up (en)
 - Grammar 20, notes: for it's handicapped citizens → for its; slopped curbs → sloped curbs
+
+Review fixes (lorenzolewis/tafalado#97: the #92 audit of the audio, plus a Wiktionary check). These go beyond typos; each says why.
+
+- Pronunciation 11, 13 and 15, notes: new first line naming the guest who repeats each line in the audio (Alfredo Barros; Vivian Flanzer, who also reads Michelle's part in 13's final run). The labels stay: the turns shown are Valdo's and Michelle's. The shared dialog has no field for a note, so it opens the body, below the dialog.
+- Grammar 20, word list: sin embargo → por outro lado becomes sin embargo → no entanto, contudo (*por outro lado* is *por otro lado*); así → ainda becomes todavía, aún → ainda (*así* is *assim*); el hombre → o cara becomes el tipo → o cara (*cara* is informal "guy"); the duplicate chico → rapaz (row 33, again after row 25) is dropped
+- Grammar 20, dialog (pt): pra ventilarse → pra ventilar (as Michelle says it; *ventilarse* is the Spanish reading)
+- Grammar 3, notes: sol → soles → sol → sóis (the Portuguese plural)
+- Grammar 3, dialog (es): las luces ascendidas → encendidas
+- Grammar 4, dialog (es): a final → al final; Tranquílate → Tranquilízate
+- Grammar 4, notes: t**rouxer** → **trouxer** (the highlight covers the whole stem, as in puser, vier)
+- Grammar 6, dialog (es): Me distrai → Me distraigo (present, as the Portuguese)
+- Grammar 7, notes: a glass a water → a glass of water
+- Grammar 9, dialog (en): look at her pants → look at his pants (*a calça dele*)
+- Grammar 13, dialog (en): they missed analyzed things → they misjudged things
+- Grammar 17, dialog (es): tomé emprestado → tomé prestados; infelizmente → lamentablemente (Portuguese words in the Spanish)
+- Grammar 18, dialog: escaleras → cuestas (es), ladders → hills (en) (*ladeira* is a steep street)
+- Pronunciation 3, dialog (es): no sabe como pesó → cómo; vea usted mismo como quedó → cómo (indirect questions)
+- Pronunciation 4, dialog (es): Vamos a correr → Vamos a correr.; Pronunciation 5, dialog (es): en el auto-servicio → en el auto-servicio. (final punctuation)
+- Pronunciation 6, notes: That is trick question → That is a trick question; made up a main vowel → made up of a main vowel
+- Pronunciation 9, dialog (es): Niño, Cómo es complicado estacionar → Niño, qué complicado es estacionar; Vamos a la izquierda … pequeño? → ¿Vamos a la izquierda … pequeño?
+- Pronunciation 9, notes: In Brazilian parking on US streets → For Brazilians, parking on US streets
+- Pronunciation 10 (and 11), dialog (pt): Por que? → Por quê? (stressed at the end, as in Pronunciation 3)
+- Pronunciation 14 (and 15), notes: Rule #2's ca**ra** → ca**r**a (only the tap *r* is marked, as in Sa**r**a, pa**r**a)
+- Pronunciation 24, notes: lesson on epenthetic vowels (lesson 23) → (lesson 22)
+- Supplementary 1, English vowel chart: ɔ "otherwise same as [a]" → [ɑ] (the chart has no [a])
+- Supplementary 2, chart: ɬ or w → ɫ or w (the row is the velarized lateral; ɬ is the voiceless lateral fricative)
+- Missing opening ¡ and ¿ (es), every dialog line checked: Grammar 12 (y ¡qué caro es!), Grammar 13 (¡Pensaron…!), Grammar 15 (¡Y todavía…!, ¡Claro que no!), Grammar 16 (¡Ni lo esperes!), Grammar 17 (¡Es verdad!), Pronunciation 10 and 11 (¡Qué cosa triste!, ¡Usted puede recibir una multa!), Pronunciation 12 and 13 (¡Sabes que sería chévere!), Pronunciation 14 and 15 (¡Señor, cuatro cervezas por favor!), Pronunciation 16 (¿No tienes nada más?)
 
 ## Pronunciation 13 and the "lower-bitrate file"
 

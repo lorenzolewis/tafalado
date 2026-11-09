@@ -10,7 +10,7 @@ dialog:
     en: "Have you ever had a broken foot?"
   - speaker: Michelle
     pt: 'Qu<mark>e</mark>brei a p<mark class="blue">e</mark>rna. E voc<mark>ê</mark> não sabe como p<mark>e</mark>sou no bolso.'
-    es: "Me quebré la pierna. Y usted no sabe como pesó en mi bolsillo."
+    es: "Me quebré la pierna. Y usted no sabe cómo pesó en mi bolsillo."
     en: "I broke my leg. And you can't imagine how hard it hit my wallet."
   - speaker: Valdo
     pt: "Por qu<mark>ê</mark>?"
@@ -26,7 +26,7 @@ dialog:
     en: "So you had to get a cast?"
   - speaker: Michelle
     pt: 'O m<mark class="blue">é</mark>dico achou que <mark>e</mark>ra m<mark>e</mark>lhor. D<mark>ê</mark> uma olhada aqui e v<mark>e</mark>ja voc<mark>ê</mark> m<mark>e</mark>smo como ficou.'
-    es: "El médico pensó que era mejor. Dé una mirada aquí y vea usted mismo como quedó."
+    es: "El médico pensó que era mejor. Dé una mirada aquí y vea usted mismo cómo quedó."
     en: "The doctor thought it would be better. Check it out yourself and see how it ended up."
 ---
 
