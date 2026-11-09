@@ -103,7 +103,7 @@ This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
 | `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
 | body | Markdown: `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`, in the PDF's order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
 
-A notes file has a `dialog` or `clips`, never both. Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
+A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"`; a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a shared dialog that can't be resolved; and, once `REQUIRE_NOTES_FOR_EVERY_LESSON` is on, a lesson with no notes. Until then a lesson without notes keeps its PDF link.
 
 ## Markup in notes
 

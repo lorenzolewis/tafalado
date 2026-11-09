@@ -34,6 +34,11 @@ describe('checkNotes', () => {
     expect(() => checkNotes(notes('pronunciation-10', {}, '<mark class="blue">t<mark>u</mark></mark>'))).toThrow(/pronunciation-10.*<mark>/);
   });
 
+  it('lets only supplementary lessons have neither a dialog nor clips', () => {
+    expect(() => checkNotes(notes('supplementary-01', { dialog: undefined }))).not.toThrow();
+    expect(() => checkNotes(notes('grammar-03', { dialog: undefined }))).toThrow(/grammar-03.*dialog or clips/);
+  });
+
   it('fails on an unbalanced <mark> in a dialog line, naming the turn', () => {
     expect(() => checkNotes(notes('pronunciation-01', { dialog: [turn('Valdo'), turn('Michelle', 'b<mark>ife')] }))).toThrow(
       /pronunciation-01.*turn 2.*<mark>/,
