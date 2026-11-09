@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_09.mp3
   durationSeconds: 659
   bytes: 7910144
-pdf:
-  url: /pdf/tafalado_09.pdf
-  bytes: 274343
 photo:
   url: /images/lesson_pic_09.jpg
   alt: "Parking Meters"

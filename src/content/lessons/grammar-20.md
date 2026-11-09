@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_20.mp3
   durationSeconds: 663
   bytes: 7961268
-pdf:
-  url: /pdf/tafalado_gra_20.pdf
-  bytes: 42101
 photo:
   url: /images/lesson_pic_gra_20.jpg
   alt: "Tá Falado gang"

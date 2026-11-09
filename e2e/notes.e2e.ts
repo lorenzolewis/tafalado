@@ -5,7 +5,6 @@ import { expect, test } from '@playwright/test';
 
 test('Pronunciation 1 shows its dialog and notes, in their languages', async ({ page }) => {
   await page.goto('/pronunciation/01');
-  await expect(page.getByRole('link', { name: /Read the transcript/ })).toHaveCount(0);
 
   await page.getByRole('link', { name: 'Dialog & notes ↓' }).click();
   await expect(page).toHaveURL(/\/pronunciation\/01#notes$/);

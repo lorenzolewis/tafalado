@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_11.mp3
   durationSeconds: 721
   bytes: 8658268
-pdf:
-  url: /pdf/tafalado_gra_11.pdf
-  bytes: 148474
 photo:
   url: /images/lesson_pic_gra_11.jpg
   alt: "Privileges for elderly and pregnant women"

@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_13.mp3
   durationSeconds: 693
   bytes: 8317213
-pdf:
-  url: /pdf/tafalado_gra_13.pdf
-  bytes: 149082
 photo:
   url: /images/lesson_pic_gra_13.jpg
   alt: "Minimum age to buy alcohol in Brazil"

@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_06.mp3
   durationSeconds: 742
   bytes: 8906663
-pdf:
-  url: /pdf/tafalado_06.pdf
-  bytes: 390347
 photo:
   url: /images/lesson_pic_06.jpg
   alt: "Going to the Pharmacy"

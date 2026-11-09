@@ -19,7 +19,7 @@ The lessons, audio, transcripts and photos on this site come from the original w
 - **Original:** <https://www.coerll.utexas.edu/brazilpod/tafalado/> (archived on March 2, 2026, and no longer updated)
 - **Copyright:** © 2025, University of Texas at Austin
 - **License:** [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
-- **Changes:** modified: re-hosted and re-presented. The MP3s, PDF transcripts and photos are served unchanged, and the lesson titles and intros keep their original wording; this site gives them new pages, a new player and a new podcast feed.
+- **Changes:** modified: re-hosted and re-presented. The MP3s and photos are served unchanged, and the lesson titles and intros keep their original wording. The PDF transcripts were converted into each lesson's dialog and notes, with clear typos fixed (listed in SOURCES.md). This site gives them new pages, a new player and a new podcast feed.
 
 <!--
 The copyright line is the original feed's <copyright> element, as published. The original site

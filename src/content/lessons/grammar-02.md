@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_02.mp3
   durationSeconds: 740
   bytes: 8880670
-pdf:
-  url: /pdf/tafalado_gra_02.pdf
-  bytes: 172250
 photo:
   url: /images/lesson_pic_gra_02.jpg
   alt: "Getting change from a machine"

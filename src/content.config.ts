@@ -28,10 +28,6 @@ const lessons = defineCollection({
         durationSeconds: z.number().int().positive(),
         bytes: z.number().int().positive(),
       }),
-      pdf: z.object({
-        url: mediaUrl,
-        bytes: z.number().int().positive(),
-      }),
       photo: z
         .object({
           url: mediaUrl,

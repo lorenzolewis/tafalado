@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_01.mp3
   durationSeconds: 632
   bytes: 7590390
-pdf:
-  url: /pdf/tafalado_01.pdf
-  bytes: 154732
 photo:
   url: /images/lesson_pic_01.jpg
   alt: "Getting the Check at a Restaurant"

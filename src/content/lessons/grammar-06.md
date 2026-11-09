@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_06.mp3
   durationSeconds: 671
   bytes: 8054841
-pdf:
-  url: /pdf/tafalado_gra_06.pdf
-  bytes: 149339
 photo:
   url: /images/lesson_pic_gra_06.jpg
   alt: "Studying in cafés"

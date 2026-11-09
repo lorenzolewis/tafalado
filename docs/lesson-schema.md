@@ -14,9 +14,6 @@ audio:
   url: /mp3/tafalado_01.mp3
   durationSeconds: 632
   bytes: 7590390
-pdf:
-  url: /pdf/tafalado_01.pdf
-  bytes: 154732
 photo: # optional
   url: /images/lesson_pic_01.jpg
   alt: Two people at a restaurant table
@@ -36,8 +33,6 @@ There's only one Lesson #1. …
 | `audio.url` | Opaque: a root-relative path (`/mp3/…`) or an absolute `http(s)` URL. Code never parses it, so moving media is a data change. |
 | `audio.durationSeconds` | Integer seconds (`10:32` → 632). |
 | `audio.bytes` | The MP3's exact size in bytes (the feed's enclosure `length`). |
-| `pdf.url` | Same rules as `audio.url`. |
-| `pdf.bytes` | The PDF's exact size in bytes, shown beside the transcript link ("PDF, 151 KB"). |
 | `photo` | Optional. `url` (same rules) and `alt`, which must be non-empty. |
 | body | The intro, in Markdown. Must not be empty. |
 
@@ -70,11 +65,11 @@ sentence it is quoted from (`<i lang="es">esquisito</i>` in Spanish means exquis
 
 ## Fixtures
 
-The three entries on `main` before the extraction (#3) are fixtures. `pronunciation-01.md` is the real Lesson 1. `grammar-01.md` and `supplementary-01.md` have their real title, date and intro, but point at Lesson 1's MP3 and PDF. The extraction replaces all three.
+The three entries on `main` before the extraction (#3) are fixtures. `pronunciation-01.md` is the real Lesson 1. `grammar-01.md` and `supplementary-01.md` have their real title, date and intro, but point at Lesson 1's MP3. The extraction replaces all three.
 
 # Notes schema
 
-A lesson's study notes (#88: the dialog and teaching notes the original PDFs held) are one Markdown file in `src/content/notes/`, named like its lesson (`pronunciation-01.md`). The frontmatter is checked by the Zod schema in `src/content.config.ts`; the body holds the notes. The lesson page shows **Dialog** (or **Clips**), then the body, then "Original lesson on COERLL".
+A lesson's study notes (#88: the dialog and teaching notes the original PDFs held, converted in #89; the PDFs were removed in #91) are one Markdown file in `src/content/notes/`, named like its lesson (`pronunciation-01.md`). The frontmatter is checked by the Zod schema in `src/content.config.ts`; the body holds the notes. The lesson page shows **Dialog** (or **Clips**), then the body, then "Original lesson on COERLL".
 
 ```md
 ---

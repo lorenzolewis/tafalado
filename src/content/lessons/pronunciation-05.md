@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_05.mp3
   durationSeconds: 571
   bytes: 6849364
-pdf:
-  url: /pdf/tafalado_05.pdf
-  bytes: 155038
 photo:
   url: /images/lesson_pic_05.jpg
   alt: "Self-Checkout"

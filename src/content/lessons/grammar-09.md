@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_09.mp3
   durationSeconds: 749
   bytes: 8988038
-pdf:
-  url: /pdf/tafalado_gra_09.pdf
-  bytes: 163768
 photo:
   url: /images/lesson_pic_gra_09.jpg
   alt: "How to dress like an American"

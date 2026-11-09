@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_02.mp3
   durationSeconds: 567
   bytes: 6805776
-pdf:
-  url: /pdf/tafalado_02.pdf
-  bytes: 154684
 photo:
   url: /images/lesson_pic_02.jpg
   alt: "Not Slamming Car Doors"

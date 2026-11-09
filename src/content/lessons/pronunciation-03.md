@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_03.mp3
   durationSeconds: 525
   bytes: 6300463
-pdf:
-  url: /pdf/tafalado_03.pdf
-  bytes: 157069
 photo:
   url: /images/lesson_pic_03.jpg
   alt: "Personal Health Insurance"

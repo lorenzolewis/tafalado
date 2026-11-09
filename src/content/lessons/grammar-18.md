@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_18.mp3
   durationSeconds: 656
   bytes: 7872244
-pdf:
-  url: /pdf/tafalado_gra_18.pdf
-  bytes: 31737
 photo:
   url: /images/lesson_pic_gra_18.jpg
   alt: "Mike Heidenreich puts lavalier mic on José Luis Montiel"

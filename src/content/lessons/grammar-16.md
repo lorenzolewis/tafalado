@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_16.mp3
   durationSeconds: 753
   bytes: 9033649
-pdf:
-  url: /pdf/tafalado_gra_16.pdf
-  bytes: 152752
 photo:
   url: /images/lesson_pic_gra_16.jpg
   alt: "Greeting friends"
