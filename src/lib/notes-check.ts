@@ -41,9 +41,20 @@ export function checkNotes({ id, body = '', data }: NotesEntry): void {
   });
 }
 
+/**
+ * A `<mark>` is the PDFs' red. Some lessons contrast a second and third set in blue and green
+ * (Pronunciation 10: red ti/te, blue di/de), kept as `<mark class="blue">` / `<mark class="green">`.
+ */
+export const MARK_CLASSES = new Set(['blue', 'green']);
+
 function markProblem(text: string): string | undefined {
+  for (const [tag, attrs] of text.matchAll(/<mark\b([^>]*)>/g)) {
+    const cls = attrs.match(/^\s+class="([^"]*)"\s*$/)?.[1];
+    if (attrs.trim() && !(cls && MARK_CLASSES.has(cls)))
+      return `${tag} isn't allowed. Use <mark>, <mark class="blue"> or <mark class="green">.`;
+  }
   let open = false;
-  for (const [, close] of text.matchAll(/<(\/?)mark\s*>/g)) {
+  for (const [, close] of text.matchAll(/<(\/?)mark\b[^>]*>/g)) {
     if (open === !close) return close ? 'a </mark> closes no open <mark>' : 'a <mark> opens inside another <mark>';
     open = !close;
   }

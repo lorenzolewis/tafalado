@@ -188,6 +188,16 @@ mark {
   text-decoration: var(--mark-line);
   text-underline-offset: 0.12em;
 }
+/* PLACEHOLDER: the second and third contrast sets (blue and green in the PDFs) must read apart
+   from the plain <mark> and from each other, also in grayscale print. */
+mark.blue {
+  background: none;
+  text-decoration: underline 0.12em;
+}
+mark.green {
+  background: none;
+  text-decoration: underline dotted 0.12em;
+}
 
 /* Inline SVG icons (src/components/Icon.astro): a 24px grid, 2.5px square strokes, solid shapes. */
 .icon {

@@ -27,6 +27,13 @@ describe('checkNotes', () => {
     expect(() => checkNotes(notes('grammar-02', {}, '<mark>a<mark>b</mark></mark>'))).toThrow(/grammar-02.*<mark>/);
   });
 
+  it('allows <mark class="blue"> and <mark class="green"> but no other <mark> attributes', () => {
+    expect(() => checkNotes(notes('pronunciation-10', {}, 'ga<mark>t</mark>o, <mark class="blue">d</mark>ia, <mark class="green">x</mark>'))).not.toThrow();
+    expect(() => checkNotes(notes('pronunciation-10', {}, '<mark class="red">t</mark>'))).toThrow(/pronunciation-10.*<mark class="red">/);
+    expect(() => checkNotes(notes('pronunciation-10', {}, '<mark style="x">t</mark>'))).toThrow(/pronunciation-10.*<mark/);
+    expect(() => checkNotes(notes('pronunciation-10', {}, '<mark class="blue">t<mark>u</mark></mark>'))).toThrow(/pronunciation-10.*<mark>/);
+  });
+
   it('fails on an unbalanced <mark> in a dialog line, naming the turn', () => {
     expect(() => checkNotes(notes('pronunciation-01', { dialog: [turn('Valdo'), turn('Michelle', 'b<mark>ife')] }))).toThrow(
       /pronunciation-01.*turn 2.*<mark>/,
