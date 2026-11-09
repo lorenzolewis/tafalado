@@ -1,7 +1,15 @@
 // A lesson's dialog and study notes on its page (#88): "Dialog & notes ↓" jumps to them; each turn
 // gives the speaker, then Portuguese, Spanish and English, each with its lang; the notes follow, with
-// the taught sounds highlighted, and a link to the original lesson on COERLL.
-import { expect, test } from '@playwright/test';
+// the taught sounds highlighted, and a link to the original lesson on COERLL. The learner can hide the
+// Spanish, the English and the highlights (#93).
+import { expect, test, type Locator } from '@playwright/test';
+
+/** A highlight with the highlighting off: the colour and weight of the line around it. */
+const looksPlain = (mark: Locator) =>
+  mark.evaluate((m) => {
+    const [own, line] = [m, m.closest('p')!].map((el) => getComputedStyle(el));
+    return own.color === line.color && own.fontWeight === line.fontWeight;
+  });
 
 test('Pronunciation 1 shows its dialog and notes, in their languages', async ({ page }) => {
   await page.goto('/pronunciation/01');
@@ -35,6 +43,36 @@ test('Pronunciation 1 shows its dialog and notes, in their languages', async ({ 
     'href',
     'https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-01.html',
   );
+});
+
+test('the learner can hide the translations and the highlights, on every lesson, and reveal one line', async ({
+  page,
+}) => {
+  await page.goto('/pronunciation/01');
+  const dialog = page.getByRole('region', { name: 'Dialog', exact: true });
+  const show = dialog.getByRole('group', { name: 'Show' });
+  const first = dialog.getByRole('listitem').first();
+
+  await show.getByRole('checkbox', { name: 'Spanish' }).uncheck();
+  await show.getByRole('checkbox', { name: 'Highlights' }).uncheck();
+  await expect(dialog.locator('[lang="es"]')).toHaveCount(6);
+  for (const line of await dialog.locator('[lang="es"]').all()) await expect(line).toBeHidden();
+  await expect(first.locator('[lang="en"]')).toBeVisible();
+  expect(await looksPlain(first.locator('mark').first())).toBe(true);
+
+  // A hidden line reveals on tap, that line only.
+  await first.getByRole('button', { name: 'Show Spanish' }).click();
+  await expect(first.locator('[lang="es"]')).toBeVisible();
+  await expect(first.locator('[lang="es"]')).toBeFocused();
+  await expect(dialog.getByRole('listitem').nth(1).locator('[lang="es"]')).toBeHidden();
+
+  // The choice is kept on this device and applies to the next lesson.
+  await page.goto('/pronunciation/02');
+  const next = page.getByRole('region', { name: 'Dialog', exact: true });
+  await expect(next.getByRole('checkbox', { name: 'Spanish' })).not.toBeChecked();
+  await expect(next.getByRole('checkbox', { name: 'English' })).toBeChecked();
+  await expect(next.locator('[lang="es"]').first()).toBeHidden();
+  expect(await looksPlain(next.locator('mark').first())).toBe(true);
 });
 
 test('highlights print in the PDF red even when the OS is in dark mode', async ({ page }) => {

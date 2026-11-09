@@ -1,0 +1,52 @@
+---
+// A Spanish or English line of a dialog turn or clip (#88), and the "Show Spanish" button that
+// stands in for it while the learner has that language hidden (#93, src/components/DialogViewControls.astro).
+// The button reveals this line only (src/lib/dialog-view-ui.ts).
+interface Props {
+  lang: 'es' | 'en';
+  /** The line, as stored in the notes (may hold `<mark>`, `<i>`, `<em>`, `<span>`). */
+  html: string;
+}
+const { lang, html } = Astro.props;
+const name = lang === 'es' ? 'Spanish' : 'English';
+---
+
+<button type="button" class="reveal" data-reveal={lang}>Show {name}</button>
+<p class={lang} lang={lang} tabindex="-1" set:html={html} />
+
+<style>
+  .reveal {
+    display: none;
+    align-items: center;
+    min-block-size: 44px;
+    /* A 44px target that takes only a line's height between its neighbours. */
+    margin-block: -10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: var(--text-14) / 1.4 var(--font-sans);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  p:focus {
+    outline: none;
+  }
+
+  /* That language hidden: the line gives way to its button until revealed (`hidden` on the button). */
+  :global(.dialog:has([data-view='es']:not(:checked))) .reveal[data-reveal='es']:not([hidden]),
+  :global(.dialog:has([data-view='en']:not(:checked))) .reveal[data-reveal='en']:not([hidden]) {
+    display: flex;
+  }
+  :global(.dialog:has([data-view='es']:not(:checked))) .reveal[data-reveal='es']:not([hidden]) + p,
+  :global(.dialog:has([data-view='en']:not(:checked))) .reveal[data-reveal='en']:not([hidden]) + p {
+    display: none;
+  }
+
+  @media print {
+    .reveal {
+      display: none !important;
+    }
+  }
+</style>

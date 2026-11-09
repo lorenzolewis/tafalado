@@ -1,0 +1,85 @@
+---
+// "Show: Spanish, English, Highlights" above a lesson's dialog or clips (#93). The checkboxes drive
+// the CSS on their own (`:has`); src/lib/dialog-view-ui.ts restores the learner's choice and keeps it
+// on the device for every lesson. Only the controls the dialog needs are shown.
+interface Props {
+  /** The dialog has Spanish and English lines. */
+  translations: boolean;
+  /** The dialog has `<mark>` highlights. */
+  marks: boolean;
+}
+const { translations, marks } = Astro.props;
+---
+
+{
+  (translations || marks) && (
+    <fieldset class="dialog-view">
+      <legend>Show</legend>
+      {translations && (
+        <label>
+          <input type="checkbox" data-view="es" checked /> Spanish
+        </label>
+      )}
+      {translations && (
+        <label>
+          <input type="checkbox" data-view="en" checked /> English
+        </label>
+      )}
+      {marks && (
+        <label>
+          <input type="checkbox" data-view="marks" checked /> Highlights
+        </label>
+      )}
+    </fieldset>
+  )
+}
+
+<script>
+  import '../lib/dialog-view-ui';
+</script>
+
+<style>
+  .dialog-view {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-16);
+    margin: 0 0 var(--space-8);
+    padding: 0;
+    border: 0;
+    font: var(--text-16) / 1.4 var(--font-sans);
+  }
+  legend {
+    float: inline-start;
+    margin-inline-end: var(--space-4);
+    padding: 0;
+    font-weight: 700;
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    min-block-size: 44px;
+    cursor: pointer;
+  }
+  input {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    margin: 0;
+    accent-color: var(--control);
+  }
+
+  /* Highlights off: the taught sounds read as plain text. */
+  :global(.dialog:has([data-view='marks']:not(:checked)) mark) {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration-line: none;
+  }
+
+  /* A handout prints the dialog as chosen, without the controls. */
+  @media print {
+    .dialog-view {
+      display: none;
+    }
+  }
+</style>

@@ -5,9 +5,11 @@
 // Spanish words in the intro and notes are marked as in docs/lesson-schema.md.
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
+import DialogViewControls from '../../components/DialogViewControls.astro';
 import Icon from '../../components/Icon.astro';
 import PlayButton from '../../components/PlayButton.astro';
 import Print from '../../components/Print.astro';
+import Translation from '../../components/Translation.astro';
 import Base from '../../layouts/Base.astro';
 import { ogImagePath } from '../../lib/artwork';
 import { formatDate, formatMinutes, isoDate, isoDuration } from '../../lib/format';
@@ -30,6 +32,12 @@ const { Content } = await render(lesson);
 const description = lessonDescription(lesson.rendered?.html ?? '');
 const lessonNotes = await getNotes(lesson);
 const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNotes.entry)).Content };
+// The dialog's "Show" controls (#93) offer only what the dialog has.
+const dialogStrings = JSON.stringify(notes?.dialog ?? notes?.clips ?? []);
+const view = {
+  translations: Boolean(notes?.dialog || notes?.clips?.some((clip) => clip.translation)),
+  marks: dialogStrings.includes('<mark'),
+};
 ---
 
 <Base
@@ -73,13 +81,14 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
           {notes.dialog && (
             <section class="dialog" aria-labelledby="dialog">
               <h2 id="dialog">Dialog</h2>
+              <DialogViewControls {...view} />
               <ol>
                 {notes.dialog.map((turn) => (
                   <li class="turn">
                     <p class="speaker">{turn.speaker}</p>
                     <p class="pt" lang="pt-BR" set:html={turn.pt} />
-                    <p class="es" lang="es" set:html={turn.es} />
-                    <p class="en" lang="en" set:html={turn.en} />
+                    <Translation lang="es" html={turn.es} />
+                    <Translation lang="en" html={turn.en} />
                   </li>
                 ))}
               </ol>
@@ -88,6 +97,7 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
           {notes.clips && (
             <section class="dialog" aria-labelledby="clips">
               <h2 id="clips">Clips</h2>
+              <DialogViewControls {...view} />
               {notes.clips.map((clip) => (
                 <section class="clip">
                   <h3 set:html={clip.heading} />
@@ -96,8 +106,8 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
                     {clip.lines.map((line) => (
                       <p class="pt" lang="pt-BR" set:html={line} />
                     ))}
-                    {clip.translation && <p class="es" lang="es" set:html={clip.translation.es} />}
-                    {clip.translation && <p class="en" lang="en" set:html={clip.translation.en} />}
+                    {clip.translation && <Translation lang="es" html={clip.translation.es} />}
+                    {clip.translation && <Translation lang="en" html={clip.translation.en} />}
                   </div>
                   <p class="observations">
                     <b>Observations:</b> <Fragment set:html={clip.observations} />
@@ -230,7 +240,7 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
     border-block-start: 1px solid var(--line);
     break-inside: avoid;
   }
-  .turn p {
+  .turn :global(p) {
     margin: 0;
   }
   .speaker {
@@ -243,10 +253,10 @@ const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNote
     font-size: var(--text-21);
     font-weight: 500;
   }
-  .turn .es {
+  .turn :global(.es) {
     font-style: italic;
   }
-  .turn .en {
+  .turn :global(.en) {
     color: var(--muted);
   }
   .observations {
