@@ -2,11 +2,11 @@
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-04.html
 dialog:
   - speaker: Valdo
-    pt: "Lá vem o n<mark class=\"blue\">o</mark>sso <mark>ô</mark>nibus! Vamos c<mark>o</mark>rrer!"
+    pt: 'Lá vem o n<mark class="blue">o</mark>sso <mark>ô</mark>nibus! Vamos c<mark>o</mark>rrer!'
     es: "Ahí viene nuestro autobús. Vamos a correr"
     en: "Here comes our bus. Let's run."
   - speaker: Michelle
-    pt: "C<mark class=\"blue\">o</mark>rre, s<mark class=\"blue\">o</mark>be l<mark class=\"blue\">o</mark>go!"
+    pt: 'C<mark class="blue">o</mark>rre, s<mark class="blue">o</mark>be l<mark class="blue">o</mark>go!'
     es: "Corre, súbete luego."
     en: "Run, let's get on up."
   - speaker: Valdo
@@ -14,7 +14,7 @@ dialog:
     es: "¿Dónde está el colector? ¿Cómo podemos pagar?"
     en: "Where's the fare collector? How do you pay?"
   - speaker: Michelle
-    pt: "Aqui s<mark class=\"blue\">ó</mark> se p<mark class=\"blue\">o</mark>de pagar passando um cartão ou c<mark>o</mark>l<mark>o</mark>cando dinheiro na máquina."
+    pt: 'Aqui s<mark class="blue">ó</mark> se p<mark class="blue">o</mark>de pagar passando um cartão ou c<mark>o</mark>l<mark>o</mark>cando dinheiro na máquina.'
     es: "Aquí sólo se puede pagar pasando una tarjeta o poniendo dinero en la máquina."
     en: "Here you just pay by inserting your card or by putting the bills or coins in the machine."
   - speaker: Valdo

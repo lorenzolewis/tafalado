@@ -2,11 +2,11 @@
 source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-03.html
 dialog:
   - speaker: Valdo
-    pt: "Voc<mark>ê</mark> já qu<mark>e</mark>brou o p<mark class=\"blue\">é</mark>?"
+    pt: 'Voc<mark>ê</mark> já qu<mark>e</mark>brou o p<mark class="blue">é</mark>?'
     es: "¿Usted se ha quebrado el pie?"
     en: "Have you ever had a broken foot?"
   - speaker: Michelle
-    pt: "Qu<mark>e</mark>brei a p<mark class=\"blue\">e</mark>rna. E voc<mark>ê</mark> não sabe como p<mark>e</mark>sou no bolso."
+    pt: 'Qu<mark>e</mark>brei a p<mark class="blue">e</mark>rna. E voc<mark>ê</mark> não sabe como p<mark>e</mark>sou no bolso.'
     es: "Me quebré la pierna. Y usted no sabe como pesó en mi bolsillo."
     en: "I broke my leg. And you can't imagine how hard it hit my wallet."
   - speaker: Valdo
@@ -14,15 +14,15 @@ dialog:
     es: "¿Por qué?"
     en: "Why?"
   - speaker: Michelle
-    pt: "Porqu<mark>e</mark> paguei uma nota p<mark>e</mark>lo g<mark>e</mark>sso. At<mark class=\"blue\">é</mark> m<mark>e</mark>smo com s<mark>e</mark>guro-saúde o pr<mark>e</mark>ço <mark class=\"blue\">é</mark> <mark>e</mark>l<mark>e</mark>vado."
+    pt: 'Porqu<mark>e</mark> paguei uma nota p<mark>e</mark>lo g<mark>e</mark>sso. At<mark class="blue">é</mark> m<mark>e</mark>smo com s<mark>e</mark>guro-saúde o pr<mark>e</mark>ço <mark class="blue">é</mark> <mark>e</mark>l<mark>e</mark>vado.'
     es: "Porque pagué mucha plata por el yeso. Así mismo con el seguro médico, el precio es elevado."
     en: "Because I paid a lot for my cast. Even with insurance the price was high."
   - speaker: Valdo
-    pt: "T<mark>e</mark>ve que eng<mark>e</mark>ssar, <mark class=\"blue\">é</mark>?"
+    pt: 'T<mark>e</mark>ve que eng<mark>e</mark>ssar, <mark class="blue">é</mark>?'
     es: "Tuviste que enyesarlo, ¿verdad?"
     en: "So you had to get a cast?"
   - speaker: Michelle
-    pt: "O m<mark class=\"blue\">é</mark>dico achou que <mark>e</mark>ra m<mark>e</mark>lhor. D<mark>ê</mark> uma olhada aqui e v<mark>e</mark>ja voc<mark>ê</mark> m<mark>e</mark>smo como ficou."
+    pt: 'O m<mark class="blue">é</mark>dico achou que <mark>e</mark>ra m<mark>e</mark>lhor. D<mark>ê</mark> uma olhada aqui e v<mark>e</mark>ja voc<mark>ê</mark> m<mark>e</mark>smo como ficou.'
     es: "El médico pensó que era mejor. Dé una mirada aquí y vea usted mismo como quedó."
     en: "The doctor thought it would be better. Check it out yourself and see how it ended up."
 ---
