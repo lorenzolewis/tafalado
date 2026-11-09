@@ -58,4 +58,8 @@ export default defineConfig({
 	// headers (src/lib/table-lang.ts, docs/lesson-schema.md).
 	markdown: { processor: satteri({ hastPlugins: [tableLang] }) },
 	experimental: { incrementalBuild: true },
+	// `astro dev` on 4321 or not at all: Vite otherwise moves to the next free port, so the preview
+	// (.claude/launch.json) would open a stale server from another worktree.
+	server: { port: 4321 },
+	vite: { server: { strictPort: true } },
 });
