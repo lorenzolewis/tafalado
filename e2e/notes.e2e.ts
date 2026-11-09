@@ -65,6 +65,10 @@ test('the learner can hide the translations and the highlights, on every lesson,
   await expect(first.locator('[lang="es"]')).toBeVisible();
   await expect(first.locator('[lang="es"]')).toBeFocused();
   await expect(dialog.getByRole('listitem').nth(1).locator('[lang="es"]')).toBeHidden();
+  // Changing another setting leaves it revealed.
+  await show.getByRole('checkbox', { name: 'Highlights' }).check();
+  await expect(first.locator('[lang="es"]')).toBeVisible();
+  await show.getByRole('checkbox', { name: 'Highlights' }).uncheck();
 
   // The choice is kept on this device and applies to the next lesson.
   await page.goto('/pronunciation/02');
@@ -73,6 +77,12 @@ test('the learner can hide the translations and the highlights, on every lesson,
   await expect(next.getByRole('checkbox', { name: 'English' })).toBeChecked();
   await expect(next.locator('[lang="es"]').first()).toBeHidden();
   expect(await looksPlain(next.locator('mark').first())).toBe(true);
+
+  // Pronunciation 24's clips: the lines lose their highlights, the observations explaining them don't.
+  await page.goto('/pronunciation/24');
+  const clips = page.getByRole('region', { name: 'Clips', exact: true });
+  expect(await looksPlain(clips.locator('.turn mark').first())).toBe(true);
+  expect(await looksPlain(clips.locator('.observations mark').first())).toBe(false);
 });
 
 test('highlights print in the PDF red even when the OS is in dark mode', async ({ page }) => {

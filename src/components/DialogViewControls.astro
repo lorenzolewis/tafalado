@@ -1,14 +1,19 @@
 ---
 // "Show: Spanish, English, Highlights" above a lesson's dialog or clips (#93). The checkboxes drive
-// the CSS on their own (`:has`); src/lib/dialog-view-ui.ts restores the learner's choice and keeps it
-// on the device for every lesson. Only the controls the dialog needs are shown.
+// the CSS on their own (`:has`). The inline script sets them to the learner's stored choice before
+// the dialog is painted, so hidden lines don't flash; src/lib/dialog-view-ui.ts saves changes and
+// keeps the choice for every lesson. Only the controls the dialog needs are shown.
+import { DIALOG_VIEW_STORAGE } from '../lib/dialog-view';
+import { storageKey } from '../lib/storage';
+
 interface Props {
   /** The dialog has Spanish and English lines. */
   translations: boolean;
-  /** The dialog has `<mark>` highlights. */
+  /** The dialog's lines have `<mark>` highlights. */
   marks: boolean;
 }
 const { translations, marks } = Astro.props;
+const key = storageKey(DIALOG_VIEW_STORAGE);
 ---
 
 {
@@ -31,6 +36,20 @@ const { translations, marks } = Astro.props;
         </label>
       )}
     </fieldset>
+  )
+}
+{
+  (translations || marks) && (
+    <script is:inline define:vars={{ key }}>
+      try {
+        const view = JSON.parse(localStorage.getItem(key) ?? '{}');
+        for (const box of document.currentScript.previousElementSibling.querySelectorAll('input[data-view]')) {
+          if (typeof view?.[box.dataset.view] === 'boolean') box.checked = view[box.dataset.view];
+        }
+      } catch {
+        // No storage: src/lib/dialog-view-ui.ts applies this visit's choice once loaded.
+      }
+    </script>
   )
 }
 
@@ -69,8 +88,9 @@ const { translations, marks } = Astro.props;
     accent-color: var(--control);
   }
 
-  /* Highlights off: the taught sounds read as plain text. */
-  :global(.dialog:has([data-view='marks']:not(:checked)) mark) {
+  /* Highlights off: the taught sounds in the lines read as plain text. A clip's heading and
+     observations keep theirs: they explain the highlights. */
+  :global(.dialog:has([data-view='marks']:not(:checked)) .turn mark) {
     color: inherit;
     font-weight: inherit;
     text-decoration-line: none;

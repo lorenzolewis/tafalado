@@ -1,18 +1,15 @@
 // Connects the dialog's "Show" checkboxes (src/components/DialogViewControls.astro) to the learner's
 // stored choice (src/lib/dialog-view.ts, #93). The CSS hides lines and highlights from the checkboxes
-// alone; this restores them on each page, saves changes, and handles "Show Spanish" on one line.
-import { dialogView, setDialogView, type DialogView } from './dialog-view';
+// alone, and an inline script sets them before paint; this saves changes, re-applies the choice where
+// localStorage is unavailable (the in-memory copy), and handles "Show Spanish" on one line.
+import { dialogView, isDialogViewKey, setDialogView, type DialogView } from './dialog-view';
 
-const isKey = (value: string | undefined): value is keyof DialogView =>
-  value === 'es' || value === 'en' || value === 'marks';
-
-/** Sets every "Show" checkbox on the page to `view`, and hides again any line revealed by tap. */
+/** Sets every "Show" checkbox on the page to `view`. */
 function apply(view: DialogView) {
   for (const box of document.querySelectorAll<HTMLInputElement>('input[data-view]')) {
     const key = box.dataset.view;
-    if (isKey(key)) box.checked = view[key];
+    if (isDialogViewKey(key)) box.checked = view[key];
   }
-  for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-reveal]')) button.hidden = false;
 }
 
 function bind(signal: AbortSignal) {
@@ -20,8 +17,12 @@ function bind(signal: AbortSignal) {
     'change',
     (event) => {
       const box = event.target;
-      if (!(box instanceof HTMLInputElement) || !isKey(box.dataset.view)) return;
-      apply(setDialogView({ [box.dataset.view]: box.checked }));
+      const key = box instanceof HTMLInputElement ? box.dataset.view : undefined;
+      if (!isDialogViewKey(key)) return;
+      apply(setDialogView({ [key]: (box as HTMLInputElement).checked }));
+      // Lines of that language revealed by tap are hidden again with the rest.
+      for (const button of document.querySelectorAll<HTMLButtonElement>(`button[data-reveal="${key}"]`))
+        button.hidden = false;
     },
     { signal },
   );
@@ -37,9 +38,6 @@ function bind(signal: AbortSignal) {
     { signal },
   );
 }
-
-// Before the new page is painted on client-side navigation (ADR 0001), so it doesn't flash.
-document.addEventListener('astro:after-swap', () => apply(dialogView()));
 
 let page: AbortController | undefined;
 document.addEventListener('astro:page-load', () => {

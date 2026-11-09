@@ -32,11 +32,14 @@ const { Content } = await render(lesson);
 const description = lessonDescription(lesson.rendered?.html ?? '');
 const lessonNotes = await getNotes(lesson);
 const notes = lessonNotes && { ...lessonNotes, Content: (await render(lessonNotes.entry)).Content };
-// The dialog's "Show" controls (#93) offer only what the dialog has.
-const dialogStrings = JSON.stringify(notes?.dialog ?? notes?.clips ?? []);
+// The dialog's "Show" controls (#93) offer only what its lines have.
+const lines = [
+  ...(notes?.dialog ?? []).flatMap((turn) => [turn.pt, turn.es, turn.en]),
+  ...(notes?.clips ?? []).flatMap((clip) => [...clip.lines, clip.translation?.es ?? '', clip.translation?.en ?? '']),
+];
 const view = {
   translations: Boolean(notes?.dialog || notes?.clips?.some((clip) => clip.translation)),
-  marks: dialogStrings.includes('<mark'),
+  marks: lines.some((line) => line.includes('<mark')),
 };
 ---
 

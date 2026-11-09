@@ -26,4 +26,10 @@ describe('dialog view', () => {
     storage.write('dialog', { es: 'no', en: true, marks: true });
     expect(dialogView()).toEqual({ es: true, en: true, marks: true });
   });
+
+  it('keeps a stored choice that predates a setting, giving that setting its default', async () => {
+    const { dialogView, storage } = await load();
+    storage.write('dialog', { en: false });
+    expect(dialogView()).toEqual({ es: true, en: false, marks: true });
+  });
 });

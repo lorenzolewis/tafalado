@@ -14,19 +14,28 @@ export interface DialogView {
 
 export const DEFAULT_DIALOG_VIEW: Readonly<DialogView> = { es: true, en: true, marks: true };
 
-const KEYS = Object.keys(DEFAULT_DIALOG_VIEW) as (keyof DialogView)[];
+/** Where the choice is stored (src/lib/storage.ts). */
+export const DIALOG_VIEW_STORAGE = 'dialog';
 
-const isDialogView = (value: unknown): value is DialogView =>
+export const isDialogViewKey = (value: unknown): value is keyof DialogView =>
+  typeof value === 'string' && Object.hasOwn(DEFAULT_DIALOG_VIEW, value);
+
+/** A stored choice may lack a setting added since it was saved; that one takes its default. */
+const isStoredView = (value: unknown): value is Partial<DialogView> =>
   typeof value === 'object' &&
   value !== null &&
-  KEYS.every((key) => typeof (value as Record<string, unknown>)[key] === 'boolean');
+  !Array.isArray(value) &&
+  Object.entries(value).every(([key, on]) => !isDialogViewKey(key) || typeof on === 'boolean');
 
 export function dialogView(): DialogView {
-  return { ...DEFAULT_DIALOG_VIEW, ...read('dialog', isDialogView) };
+  const stored = read(DIALOG_VIEW_STORAGE, isStoredView) ?? {};
+  const view = { ...DEFAULT_DIALOG_VIEW };
+  for (const key of Object.keys(view) as (keyof DialogView)[]) view[key] = stored[key] ?? view[key];
+  return view;
 }
 
 export function setDialogView(change: Partial<DialogView>): DialogView {
   const view = { ...dialogView(), ...change };
-  write('dialog', view);
+  write(DIALOG_VIEW_STORAGE, view);
   return view;
 }

@@ -30,10 +30,6 @@ const name = lang === 'es' ? 'Spanish' : 'English';
     text-underline-offset: 3px;
     cursor: pointer;
   }
-  p:focus {
-    outline: none;
-  }
-
   /* That language hidden: the line gives way to its button until revealed (`hidden` on the button). */
   :global(.dialog:has([data-view='es']:not(:checked))) .reveal[data-reveal='es']:not([hidden]),
   :global(.dialog:has([data-view='en']:not(:checked))) .reveal[data-reveal='en']:not([hidden]) {

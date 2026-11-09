@@ -6,6 +6,9 @@
 export const SCHEMA_VERSION = 1;
 const PREFIX = `tafalado:v${SCHEMA_VERSION}:`;
 
+/** The localStorage key for `name`, for an inline script that must read it before first paint. */
+export const storageKey = (name: string): string => PREFIX + name;
+
 const memory = new Map<string, string>();
 
 function local(): globalThis.Storage | undefined {
@@ -18,7 +21,7 @@ function local(): globalThis.Storage | undefined {
 
 /** The stored value, or undefined when missing, unreadable or rejected by `isValid`. */
 export function read<T>(name: string, isValid: (value: unknown) => value is T): T | undefined {
-  const key = PREFIX + name;
+  const key = storageKey(name);
   // Memory first: it holds this visit's latest writes even when localStorage refused them.
   let raw = memory.get(key);
   if (raw === undefined) {
@@ -38,7 +41,7 @@ export function read<T>(name: string, isValid: (value: unknown) => value is T): 
 }
 
 export function write(name: string, value: unknown): void {
-  const key = PREFIX + name;
+  const key = storageKey(name);
   const raw = JSON.stringify(value);
   memory.set(key, raw);
   try {
