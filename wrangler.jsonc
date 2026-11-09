@@ -17,6 +17,9 @@
     // Only /mp3/* invokes the Worker; every other path stays a free static-asset request.
     "run_worker_first": ["/mp3/*"]
   },
+  // Rough MP3 download counts per episode (#8, worker/downloads.ts). Created on the first write;
+  // read with the Analytics Engine SQL API (see README).
+  "analytics_engine_datasets": [{ "binding": "DOWNLOADS", "dataset": "tafalado_downloads" }],
   // Workers Builds runs `wrangler preview` for non-production branches, which needs this block.
   "previews": {}
 }

@@ -7,6 +7,7 @@ import Player from '../components/Player.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { APPLE_TOUCH_ICON_PATH, FAVICON_PATH, FAVICON_SIZES, OG_HEIGHT, OG_WIDTH, SITE_OG_PATH } from '../lib/artwork';
 import { LESSONS_ID, pagePath, seriesOf, viewOf } from '../lib/nav';
+import { webAnalyticsBeacon } from '../lib/analytics';
 import { INK, PAPER } from '../lib/print';
 import { PODCAST_TITLE } from '../lib/podcast';
 import { jsonLdScript, SITE_DESCRIPTION, THEME_COLOUR } from '../lib/seo';
@@ -48,6 +49,7 @@ const printColours = [
   ...Object.entries(PAPER).map(([series, colour]) => `--paper-${series}: ${colour}`),
   `--print-ink: ${INK}`,
 ].join('; ');
+const beacon = webAnalyticsBeacon();
 ---
 
 <!doctype html>
@@ -89,6 +91,8 @@ const printColours = [
     <Font cssVariable="--font-serif" preload={[{ weight: 700, style: 'normal' }]} />
     <Font cssVariable="--font-sans" preload={[{ weight: 400 }, { weight: 500 }, { weight: 700 }]} />
     <ClientRouter />
+    {/* In <head>, so the ClientRouter keeps it across navigations; it counts those itself (pushState). */}
+    {beacon && <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={beacon} />}
     <!-- Without JavaScript the phone can't switch views, so it shows the lessons below the page. -->
     <noscript><style>@media (max-width: 51.99rem) { .app .side { display: flex !important; order: 1; } }</style></noscript>
   </head>
