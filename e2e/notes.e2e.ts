@@ -37,10 +37,3 @@ test('Pronunciation 1 shows its dialog and notes, in their languages', async ({ 
     'https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-01.html',
   );
 });
-
-test('a lesson whose notes are not written yet keeps its PDF link', async ({ page }) => {
-  // TODO(#89): remove once every lesson has notes.
-  await page.goto('/grammar/02');
-  await expect(page.getByRole('link', { name: /Read the transcript/ })).toBeVisible();
-  await expect(page.locator('#notes')).toHaveCount(0);
-});
