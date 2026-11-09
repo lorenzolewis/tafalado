@@ -18,6 +18,11 @@ describe('dialogHtml', () => {
         '<p><b>Michelle:</b> <span lang="pt-BR">É isso aí.</span><br><i lang="es">Eso es.</i><br><span lang="en">You go for <em>it</em>.</span></p>',
     );
   });
+
+  it('drops the blue and green highlights too', () => {
+    const turn = { speaker: 'Vivian', pt: 'ga<mark>t</mark>o, <mark class="blue">d</mark>ia', es: 'gato, día', en: 'cat, day' };
+    expect(dialogHtml([turn])).toContain('<span lang="pt-BR">gato, dia</span>');
+  });
 });
 
 describe('notesLinkText', () => {

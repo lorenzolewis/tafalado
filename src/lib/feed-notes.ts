@@ -7,7 +7,7 @@ import type { Series } from './series.ts';
 
 /**
  * One paragraph per turn: the speaker, then Portuguese, Spanish and English, each with its lang.
- * Podcast apps show only basic HTML, so the highlights (`<mark>`) go and their text stays.
+ * Podcast apps show only basic HTML, so the highlights (`<mark>`, any class) go and their text stays.
  */
 export function dialogHtml(turns: readonly Turn[]): string {
   return turns
@@ -58,5 +58,5 @@ export function checkDescription(
 }
 
 function stripMark(html: string): string {
-  return html.replace(/<\/?mark\s*>/g, '');
+  return html.replace(/<\/?mark\b[^>]*>/g, '');
 }
