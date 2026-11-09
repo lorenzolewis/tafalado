@@ -14,9 +14,6 @@ audio:
   url: /mp3/tafalado_01.mp3
   durationSeconds: 632
   bytes: 7590390
-pdf:
-  url: /pdf/tafalado_01.pdf
-  bytes: 154732
 photo: # optional
   url: /images/lesson_pic_01.jpg
   alt: Two people at a restaurant table
@@ -36,8 +33,6 @@ There's only one Lesson #1. …
 | `audio.url` | Opaque: a root-relative path (`/mp3/…`) or an absolute `http(s)` URL. Code never parses it, so moving media is a data change. |
 | `audio.durationSeconds` | Integer seconds (`10:32` → 632). |
 | `audio.bytes` | The MP3's exact size in bytes (the feed's enclosure `length`). |
-| `pdf.url` | Same rules as `audio.url`. |
-| `pdf.bytes` | The PDF's exact size in bytes, shown beside the transcript link ("PDF, 151 KB"). |
 | `photo` | Optional. `url` (same rules) and `alt`, which must be non-empty. |
 | body | The intro, in Markdown. Must not be empty. |
 
@@ -66,8 +61,68 @@ sentence it is quoted from (`<i lang="es">esquisito</i>` in Spanish means exquis
 
 ## Helpers
 
-`src/lib/lessons.ts`: `getLessons()` (all, episode order), `lessonsBySeries(series)`, `getLesson(series, number)`, `nextLesson(lesson)` (next by episode, across series) and `lessonPath({ series, number })`.
+`src/lib/notes.ts`: `getAllNotes()`, `getNotes(lesson)` (its notes with any shared dialog resolved). `src/lib/lessons.ts`: `getLessons()` (all, episode order), `lessonsBySeries(series)`, `getLesson(series, number)`, `nextLesson(lesson)` (next by episode, across series) and `lessonPath({ series, number })`.
 
 ## Fixtures
 
-The three entries on `main` before the extraction (#3) are fixtures. `pronunciation-01.md` is the real Lesson 1. `grammar-01.md` and `supplementary-01.md` have their real title, date and intro, but point at Lesson 1's MP3 and PDF. The extraction replaces all three.
+The three entries on `main` before the extraction (#3) are fixtures. `pronunciation-01.md` is the real Lesson 1. `grammar-01.md` and `supplementary-01.md` have their real title, date and intro, but point at Lesson 1's MP3. The extraction replaces all three.
+
+# Notes schema
+
+A lesson's study notes (#88: the dialog and teaching notes the original PDFs held, converted in #89; the PDFs were removed in #91) are one Markdown file in `src/content/notes/`, named like its lesson (`pronunciation-01.md`). The frontmatter is checked by the Zod schema in `src/content.config.ts`; the body holds the notes. The lesson page shows **Dialog** (or **Clips**), then the body, then "Original lesson on COERLL".
+
+```md
+---
+source: https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-01.html
+dialog:
+  - speaker: Valdo
+    pt: "Qu<mark>e</mark> b<mark>i</mark>f<mark>e</mark> gostoso."
+    es: "Qué biftec sabroso."
+    en: "What a tasty steak."
+---
+
+## Cultural notes
+
+In many restaurants in the US …
+
+## Pronunciation notes
+
+This dialog focuses on the sound <span lang="pt-BR-fonipa">/i/</span> …
+```
+
+| Field | Rule |
+| --- | --- |
+| `source` | The episode's lesson page on COERLL, as in SOURCES.md (`lesson-01.html`, `lesson-gra02.html`, `lesson-suppl01.html`). The page, not the PDF. |
+| `dialog` | A list of turns: `speaker` (one of `SPEAKERS` in `src/lib/notes-schema.ts`: Valdo, Michelle, Vivian, Orlando, José Luis; add names there), `pt`, `es`, `en`, none empty. |
+| `dialog` (shared) | Instead of turns, `{ from: <notes id>, speakers?: [...] }`: the dialog stored in another lesson's notes (the alternate takes 10/11, 12/13, 14/15 store it once, in the first). `speakers`, if given, recasts it with one speaker per turn (Pronunciation 13's guest Vivian). The named notes must have turns of their own. |
+| `clips` | Pronunciation 24 only, instead of `dialog`: a list of `{ heading, speakers: [...], lines: [pt, …], translation?: { es, en }, observations }`. |
+| body | Markdown, following the PDF's sections in its order. Must not be empty. Leave out the PDFs' banner, footer and "These notes accompany…" line. |
+
+The body's sections are the PDF's. Most lessons have `## Cultural notes`, then `## Pronunciation notes` or `## Grammar notes`: that's the norm, not a rule. The supplementary lessons hold charts under their own headings (`## Chart #1: Major vowel sounds in English`, with `###` subheadings), and Pronunciation 24 has no Cultural notes, only `## Pronunciation notes` after its clips.
+
+A notes file has a `dialog` or `clips`, never both. Only supplementary lessons, which have no dialog, may have neither; their page links down with "Notes ↓". Unknown fields are rejected. `getAllNotes()` in `src/lib/notes.ts` (shape in `src/lib/notes-schema.ts`, checks in `src/lib/notes-check.ts`) fails the build, naming the file, on: unbalanced `<mark>`, or a `<mark>` with any attribute but `class="blue"` / `class="green"` (single quotes work too, for double-quoted YAML strings); a `lang` outside the rules below; any tag but `<mark>`, `<i>`, `<em>` and `<span>` in dialog or clip strings; notes with no lesson; a lesson with no notes; and a shared dialog that can't be resolved.
+
+## Markup in notes
+
+- **Highlights.** The sounds or forms a lesson teaches (red in the PDFs) are `<mark>`, in dialog strings and the body: `b<mark>i</mark>f<mark>e</mark>`. Some lessons contrast a second or third set in blue or green (Pronunciation 10: red ti/te, blue di/de): write those as `<mark class="blue">` and `<mark class="green">`, so the contrast survives. No other `<mark>` attributes are allowed. Their style is in one block in `src/styles/base.css`.
+- **Words** follow the intro rules above: `<i lang="pt-BR">`, `<i lang="es">`, `*…*` for English.
+- **IPA** is `<span lang="pt-BR-fonipa">[ej]</span>`, or `es-fonipa` / `en-fonipa` when the symbol is about Spanish or English sounds.
+- **English and Italian inside another language.** `<span lang="en">` marks English where the surrounding text is Portuguese or Spanish: the glosses in a Portuguese or Spanish table cell (Grammar 15: `sobrenome <span lang="en">(last name)</span>`) and the English turns in Pronunciation 24's clips. `<i lang="it">` marks the Italian words Pronunciation 20 compares.
+- Those seven values (`pt-BR`, `es`, `en`, `it` and the three `-fonipa`) are the only `lang` allowed in notes. Dialog lines get `pt-BR`, `es` and `en` from the page.
+
+## Tables
+
+Ordinary GFM tables. Each column header sets the `lang` of every cell below it (`src/lib/table-lang.ts`, a Sätteri hast plugin in `astro.config.ts`). Headers are matched ignoring case:
+
+| Header | Cells get |
+| --- | --- |
+| `Portuguese`, `Preposition + article` | `pt-BR` |
+| `Spanish` | `es` |
+| `English` | `en` |
+| `Symbol`, `Symbol (Portuguese)` | `pt-BR-fonipa` |
+| `Symbol (Spanish)` | `es-fonipa` |
+| `Symbol (English)` | `en-fonipa` |
+| `Notes`, `Examples` | Nothing: mixed content, marked inline with `<i lang>` / `<span lang>` |
+| `Form` | Nothing: English labels such as "Masc & Sing" (Grammar 9) |
+
+Any other header fails the build with the file name, so no table ships untagged. Add a header to `COLUMN_LANG` only with its language.

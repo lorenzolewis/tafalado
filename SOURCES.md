@@ -1,6 +1,6 @@
 # Sources
 
-The lesson data in `src/content/lessons/` and the media in `public/mp3/`, `public/pdf/` and `public/images/` were extracted once, on **2026-11-04**, from the archived Tá Falado site (lorenzolewis/tafalado#3). The original is © the University of Texas at Austin / COERLL, licensed [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/); see `CREDITS.md`. No extraction script is kept: this file records what was fetched and how the data was derived.
+The lesson data in `src/content/lessons/` and the media in `public/mp3/` and `public/images/` were extracted once, on **2026-11-04**, from the archived Tá Falado site (lorenzolewis/tafalado#3). The original is © the University of Texas at Austin / COERLL, licensed [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/); see `CREDITS.md`. No extraction script is kept: this file records what was fetched and how the data was derived. The lessons' PDF transcripts were fetched too, converted into the study notes and then removed ([Study notes](#study-notes)).
 
 ## Source URLs
 
@@ -9,7 +9,8 @@ The lesson data in `src/content/lessons/` and the media in `public/mp3/`, `publi
 - Lesson pages: `https://www.coerll.utexas.edu/brazilpod/tafalado/lesson-NN.html` (01–24), `lesson-suppl01.html`, `lesson-suppl02.html`, `lesson-graNN.html` (01–20)
 - Feed: https://www.coerll.utexas.edu/brazilpod/tafalado/rss.php
 - Credits: https://www.coerll.utexas.edu/brazilpod/tafalado/about.html
-- Media: `https://www.coerll.utexas.edu/brazilpod/tafalado/mp3/<file>`, `https://www.coerll.utexas.edu/brazilpod/tafalado/pdf/<file>`, `https://www.coerll.utexas.edu/brazilpod/tafalado/images/<file>`, with the file names unchanged
+- Media: `https://www.coerll.utexas.edu/brazilpod/tafalado/mp3/<file>` and `https://www.coerll.utexas.edu/brazilpod/tafalado/images/<file>`, with the file names unchanged
+- PDF transcripts (converted and removed): `https://www.coerll.utexas.edu/brazilpod/tafalado/pdf/<file>`
 
 ## How each field was derived
 
@@ -23,6 +24,97 @@ The lesson data in `src/content/lessons/` and the media in `public/mp3/`, `publi
 | `audio.bytes`            | The file's size on disk. Every value matches the feed's enclosure `length`.                                                                                                                                                                                                                                                                              |
 | `photo.url`, `photo.alt` | The `<img>` inside the lesson intro and its original `alt` text. The supplementary lessons have no photo. See [Lesson photos](#lesson-photos) for their licensing.                                                                                                                                                                                       |
 | body                     | The lesson page's intro paragraph; `<i>`/`<b>` became Markdown emphasis. The feed's dialogue text was not imported.                                                                                                                                                                                                                                      |
+
+## Study notes
+
+The dialogs and notes in `src/content/notes/` (lorenzolewis/tafalado#88, #89) come from the lessons' PDF transcripts, `https://www.coerll.utexas.edu/brazilpod/tafalado/pdf/<file>`: `tafalado_NN.pdf` (pronunciation), `tafalado_gra_NN.pdf` (grammar) and `tafalado_suppl_NN.pdf` (supplementary). They were in `public/pdf/` until the notes replaced them, then removed (lorenzolewis/tafalado#91): the site no longer serves or links them. The Wayback Machine (https://web.archive.org/) has copies at those URLs, and their checksums are below. Their text was extracted once with a throwaway pdfplumber script, not kept, and then checked by hand, lesson by lesson, against the rendered PDF pages. There was no native-speaker proofread: that pass is the proofread.
+
+- **Highlights.** The PDFs' red becomes `<mark>`; the blue and green some lessons contrast with it become `<mark class="blue">` and `<mark class="green">`. Most PDFs carry the colour in their character data. In Pronunciation 6–9 and Supplementary 1 it only shows when rendered, so those were marked by eye.
+- **IPA.** Pronunciation 6, 8 and 9 and Supplementary 1 use an old SIL Doulos font with its own encoding, so extraction gives `[Dv]`, `Znv\` and the like. Every symbol was retyped as Unicode IPA from the rendered page. Supplementary 2 was already Unicode.
+- **Shared dialogs.** Pronunciation 11, 13 and 15 reuse the dialogs of 10, 12 and 14 (their PDFs match apart from the link), so the turns are stored once, in the first lesson.
+- **Layout.** The banner, footer and "These notes accompany…" line are left out. Charts became tables whose headers set the cells' language (`docs/lesson-schema.md`); some pattern lists became bullet lists, and `->` became `→`. Supplementary 1's three vowel charts are split into one table per section. Pronunciation 24 has no dialog: its six clips keep their transcripts and Observations, and the PDF's other prose is the body.
+- **Wording.** Clear spelling slips were fixed and are listed below. Awkward but correct wording and translations are kept as published, and so are the speaker labels and Grammar 20's word list (lorenzolewis/tafalado#92 checks them against the audio).
+
+### Changes from the original notes
+
+Notation, not typos:
+
+- Pronunciation 5 types ASCII stand-ins `[@]`, `[E]`, `[O]` in its normal font; they are `[ə]`, `[ɛ]`, `[ɔ]` here. Pronunciation 6 `[ha.'pajs]` and Pronunciation 16 `['awa]` use a straight apostrophe for the stress mark; it is `ˈ` here.
+- Pronunciation 6, 8, 9 and Supplementary 1: the legacy Doulos IPA is retyped as Unicode (above).
+- Supplementary 2: the font's `lj` is the rendered `lʲ`.
+- Grammar 19: three `(cid:31)` extraction artifacts are dropped.
+- Pronunciation 24: the paragraph that introduces clips 3–6 now follows them, so "below" is dropped and "The next four clips" reads "Clips 3 to 6".
+
+Typos (lesson, where: before → after). "(and 11)": the alternate lesson repeats the notes.
+
+- Pronunciation 1, dialog (es): pída-lo → pídelo
+- Pronunciation 3, dialog (es): pié → pie
+- Pronunciation 3 and 4, notes: If the syllable is stress → If the syllable is stressed
+- Pronunciation 4, dialog (es): ¿Como podemos pagar? → ¿Cómo podemos pagar?
+- Pronunciation 4, notes: with the"open "o" → with the open "o"
+- Pronunciation 5, dialog (es): esa cossa → esa cosa
+- Pronunciation 7, notes: eg., → e.g.,
+- Pronunciation 8, dialog: ¿En que sección → ¿En qué sección (es); vegtables → vegetables, mellons → melons, our mom's → our moms (en)
+- Pronunciation 8, notes: This nasal diphthong in also heard → is also heard
+- Pronunciation 9, dialog (en): I'm dieing of hunger → I'm dying of hunger; the United State → the United States
+- Pronunciation 9, notes: more complicated that the 5 → more complicated than the 5; the 3 vowels sounds → the 3 vowel sounds
+- Pronunciation 10 (and 11), notes: these word end → these words end; ma[ch]ure.). → ma[ch]ure.)
+- Pronunciation 12 (and 13), dialog (es): Salío una película → Salió
+- Pronunciation 12 (and 13), notes: the American moving going experience → movie going experience; vocal chords → vocal cords (twice); e.g, liv.ros → e.g., liv.ros
+- Pronunciation 14 (and 15), dialog (es): el diez porciento ya está incluído → por ciento, incluido
+- Pronunciation 14 (and 15), notes: oven-backed rice → oven-baked rice; at only at restaurants → and only at restaurants; tipping costumes → tipping customs; gorgeta → gorjeta (as in the dialog); disappear all together → disappear altogether
+- Pronunciation 16, dialog (es): el água → el agua; el impuesto incluído → incluido
+- Pronunciation 16, notes: an avacado → an avocado
+- Pronunciation 17, notes: I going to keep on using → I'm going to; straight forward → straightforward
+- Pronunciation 18, dialog: That true. → That's true. (en); acojedores → acogedores (es)
+- Pronunciation 19, dialog (es): vengo en la mañanas → en las mañanas; lavar e secar → lavar y secar
+- Pronunciation 20, dialog (es): mojaba la hojas → las hojas
+- Pronunciation 21, dialog (es): revelé la mías → las mías
+- Pronunciation 21, notes: prints for you pictures → for your pictures; Brazil, fatal, local, ideal, sol → Brasil, … (Portuguese examples)
+- Pronunciation 22, dialog (es): digna de los dióses → dioses; nuestra ritmo de vida → nuestro ritmo
+- Pronunciation 23, dialog (es): a outros → a otros; forma diminutivo → forma diminutiva; no serúa → no sería; "Liz para Elizabeth → "Liz" para Elizabeth
+- Pronunciation 23, dialog (en): the person hás → the person has; "Liz for Elizabeth → "Liz" for Elizabeth
+- Pronunciation 24, notes: exlamations → exclamations; but do worry too much → but don't worry too much; This clips offers a chance to here → This clip offers a chance to hear
+- Pronunciation 24, clips: como sabe ingles → inglês (clip 3, as its Observations quote it); no Brazil não → no Brasil não (clip 6); Jose Luis → José Luis (the speakers of clips 4–6, as in clip 3)
+- Supplementary 2, chart: gata, agua → gata, água; approximate → approximant (ɲ and ɫ rows)
+- Grammar 1, dialog: les gustan os libros → los libros, Te gusta sentarte … estudiar? → ¿Te gusta … (es); the United State → the United States (en)
+- Grammar 1, notes: a "regular verb → a "regular" verb; Voce gosta de estudar? → Você gosta de estudar?
+- Grammar 2, dialog (en): Wating in line → Waiting in line
+- Grammar 2, charts 1 and 2: em + essa, em + essas, de + essa, de + essas (for nesta, nestas, desta, destas) → em + esta, em + estas, de + esta, de + estas (the rows repeated the esse/essa inputs)
+- Grammar 3, dialog (es): No! Vamos a dejar → ¡No! Vamos a dejar
+- Grammar 3, notes: help costumers → help customers; fossil -> fósseis → fóssil → fósseis
+- Grammar 4, dialog (es): Claro que no! → ¡Claro que no!; Si Diós quiere → Si Dios quiere
+- Grammar 4, notes: We don't have this is Spanish → this in Spanish; Os que qusierem → Os que quiserem
+- Grammar 5, dialog: Sit down hear → Sit down here (en); descúlpaame → discúlpame (es)
+- Grammar 6, dialog (pt): exatamente por isso.. → exatamente por isso.
+- Grammar 7, dialog (es): Y nada de agua! → ¡Y nada de agua!
+- Grammar 7, notes: dando agua → dando água (Portuguese); les está dando água → dando agua (Spanish, twice); English → English: (as Spanish: and Portuguese:)
+- Grammar 8, dialog: But be care that → But be careful that, different then in Brazil → different than (en); compra luego un carro nuevo! → ¡compra … (es)
+- Grammar 8, notes: end in 'aõ' → end in 'ão'; as nãções → as nações
+- Grammar 9, dialog: What wrong with her purse? I looks like → What's wrong … It looks like, that in from their perspective → that from their perspective (en); Es verdad! … vaqueros con chinelas! → ¡Es verdad! … ¡vaqueros con chinelas! (es)
+- Grammar 9, charts 3 and 4 (es): su libros, su casas → sus libros, sus casas
+- Grammar 9, chart notes: Some speakers could seu and sua → could use seu and sua (and sua and suas); chart 6's second "o livro delas" → os livros delas (the plural)
+- Grammar 9, notes: su casa could mean you, his → your, his
+- Grammar 10, dialog (es): No, eso no es cierto! → ¡No, eso no es cierto!
+- Grammar 11, dialog (es): en el Brazil → en el Brasil (twice)
+- Grammar 12, dialog: past the vestibular → pass the vestibular (en); en el Brazil → en el Brasil (es)
+- Grammar 12, notes: that the can go without → that they can go without; There is not need for a details decription → There is no need for a detailed description; I is good → It is good; Future Subjuntive → Future Subjunctive (twice)
+- Grammar 13, dialog: ¿Pero como así? → ¿Pero cómo así?, la edade → la edad (es); 21 years old.. → 21 years old., to by alcohol → to buy alcohol (en)
+- Grammar 13, notes: el Puente → el puente; el arbol → el árbol; a agua – el água → a água – el agua
+- Grammar 14, dialog: with every thing in it → with everything in it (en); Por que? Você não gosta → Por quê? (pt)
+- Grammar 14, notes: a strange site indeed → a strange sight indeed
+- Grammar 15, dialog: my first and last name.? → my first and last name? (en); embarassada → embaraçada (pt)
+- Grammar 15, word list: esquisito (exquisite) → exquisito, assistir (to attend) → asistir (es); longo (long → longo (long)
+- Grammar 16, dialog: Eloas andan besándonos → Ellas (es); the region in Brasil → in Brazil (en)
+- Grammar 16, notes: two kisses on the check → on the cheek
+- Grammar 17, dialog: Que bueno que aquí → Qué bueno, el peeaje → el peaje (es); weren't working either.. → either. (en)
+- Grammar 17, notes: Eu gosto da comida.. → Eu gosto da comida.
+- Grammar 18, dialog: the United State → the United States, it give people → it gives people (en); eso les dá → eso les da (es)
+- Grammar 18, notes: follow a patter of → a pattern of; líderes do contresso → do congresso
+- Grammar 19, dialog: Sí, Recientemente → Sí, recientemente (es); have used the a system → have used a system (en)
+- Grammar 19, notes: (Marcos has been studying that book lately. → … lately.)
+- Grammar 20, dialog: reclamar por que el sistema → porque, los autobuses anda → andan (es); the buses en up → end up (en)
+- Grammar 20, notes: for it's handicapped citizens → for its; slopped curbs → sloped curbs
 
 ## Pronunciation 13 and the "lower-bitrate file"
 
@@ -41,6 +133,8 @@ The original site has no photo credits anywhere, so this is an assumption, not a
 If a rights holder objects to a photo, drop it from that lesson (`photo` is optional; the lesson then shows no photo) and record it here. The generated podcast artwork never uses lesson photos (lorenzolewis/tafalado#17).
 
 ## Checksums (SHA-256)
+
+The `pdf/` rows are the removed PDF transcripts, as fetched (now only at their original URLs and in the Wayback Machine).
 
 | File                                  |    Bytes | SHA-256                                                            |
 | ------------------------------------- | -------: | ------------------------------------------------------------------ |
@@ -90,52 +184,52 @@ If a rights holder objects to a photo, drop it from that lesson (`photo` is opti
 | `public/mp3/tafalado_gra_20.mp3`      |  7961268 | `85bcd4e23f45c8b40f2ac0e182179d71253b589607293290cdce6b2c80c7d3bf` |
 | `public/mp3/tafalado_suppl_01.mp3`    |  6786981 | `31a32e2eab0effd4ea02cb735dcb38944b126e0f1394177ad3745dcfe33bb4ba` |
 | `public/mp3/tafalado_suppl_02.mp3`    |  3997119 | `6198541ef9633bd83d18464406885c12e5c367754ec0ff836d53a983d8f6cf0e` |
-| `public/pdf/tafalado_01.pdf`          |   154732 | `1c3e49b18d480f88946de54df9a8ee60047e02f2372d55f46cdef9cab5d2579f` |
-| `public/pdf/tafalado_02.pdf`          |   154684 | `bbbc537e672c08a287a71f032b56f88a1a2394da4c3e393fd7f01d6f058d21cc` |
-| `public/pdf/tafalado_03.pdf`          |   157069 | `c605fc1aa044de62fa13fb26dc9a192350847e03dddd47f40d779976016a223f` |
-| `public/pdf/tafalado_04.pdf`          |   156607 | `1105467718fc0d43aef2864d4ceb4295e23590b9efa91d11e7b5841a7e02afa3` |
-| `public/pdf/tafalado_05.pdf`          |   155038 | `f21ced7ad978c38f87f8b4dee1e89579814a305db1b94153826cceaea3d8ad18` |
-| `public/pdf/tafalado_06.pdf`          |   390347 | `4426b045568ca347680334c90d8bf5cfb6bf88c8f9c47001c3c301a925f0453d` |
-| `public/pdf/tafalado_07.pdf`          |   368718 | `7836e1d3b187845acc4246ad083edcb722b1c5401ff9323fcc071cd37bda8548` |
-| `public/pdf/tafalado_08.pdf`          |   274631 | `ea5a1d90300db4645ea3ee29164e5f8f5af938e56ce95254790e62098267541b` |
-| `public/pdf/tafalado_09.pdf`          |   274343 | `96a37951b84fa440d7d2405234aa8ddfd042dc34ab8e3a41e1510196d6422691` |
-| `public/pdf/tafalado_10.pdf`          |   159389 | `1d9ed486e1349d236dabd1095324201ac587b855e2f3dcc88f7e75f44f7475be` |
-| `public/pdf/tafalado_11.pdf`          |   159389 | `01ac9c06e3117ab74440ff945b4c46bfc0db38bfaf997d2446e6f359de86965a` |
-| `public/pdf/tafalado_12.pdf`          |   160169 | `9b10d77c1d0f66b8524596c7bc6338fb32de9b59a82a8966fc110dcc7999c5c2` |
-| `public/pdf/tafalado_13.pdf`          |   160170 | `6089ba42573e9960ac3cba16b8d04d541100da896e79ed2a1555d99933480c23` |
-| `public/pdf/tafalado_14.pdf`          |   159256 | `67de5ac3c6ff9356f204115e125af1c7e2de6ada8c1951753bc7d3980e79aa39` |
-| `public/pdf/tafalado_15.pdf`          |   159257 | `dcfc63c83da357af896f83768b9f92a7112cda2df0513bf9c78198c17a8a3916` |
-| `public/pdf/tafalado_16.pdf`          |   147940 | `0445da6f08ba62f59496729658b7f280217275193b380115e38abe65e11a68b7` |
-| `public/pdf/tafalado_17.pdf`          |   149537 | `487fe115391ed310eae5a459fa5800bc30bee4bc520987375fb5926fefbcdf9c` |
-| `public/pdf/tafalado_18.pdf`          |   148128 | `8d4c6c0f4afc5c7961a697f785ed8236dfa7b88a1da5d7a2adaa42c06cc8b106` |
-| `public/pdf/tafalado_19.pdf`          |   148226 | `2bbcd006ec449d14b68860b6abb521b50b07db203e558e1373ba4306fa04dee1` |
-| `public/pdf/tafalado_20.pdf`          |   147090 | `410d58dd21e545a2c3e63ec51f7fb59ea5328afa43230603f6c4dcf91bf76d69` |
-| `public/pdf/tafalado_21.pdf`          |   148515 | `688f2cae19fdf54820136fa5c033cb84d31a5f73dd4da07744691f7787a255c1` |
-| `public/pdf/tafalado_22.pdf`          |   150720 | `68e2f1165d467ec5f8cfb93a7552a3ffbeadc75a96fdeeac27bcb3431613e1ae` |
-| `public/pdf/tafalado_23.pdf`          |   157021 | `a340880d0bc64a736c003f61e6868df253a62df77a5e9e1f920ee72360929fc8` |
-| `public/pdf/tafalado_24.pdf`          |   623642 | `1305901f9a1ecca56f77f8b1171555afb661bbc85b775024ce31cd6a97e210b7` |
-| `public/pdf/tafalado_gra_01.pdf`      |   151122 | `103f686282fc8a680cff626f3f794d56f38ef993ede2e8ad805e25b7f47f0516` |
-| `public/pdf/tafalado_gra_02.pdf`      |   172250 | `2e69eee869b1373de5fe9a93331ec15f582342f8f3355301fc72924a6db8fd37` |
-| `public/pdf/tafalado_gra_03.pdf`      |   148989 | `4c5c84eb4a2120ecc86cbd216222551e48ab8ecaf9999a6ec432c747e3b8edb5` |
-| `public/pdf/tafalado_gra_04.pdf`      |   154632 | `5e7bb1951f7a896821e30ca3d87e5e4694e4b3792f841b26062c5caa911122a0` |
-| `public/pdf/tafalado_gra_05.pdf`      |   147868 | `73f5ef2078dbaae691d911c6fb8f52e23773a6167eae58f1cb883a7b503945c7` |
-| `public/pdf/tafalado_gra_06.pdf`      |   149339 | `cc72fe7769f83a0a962d8b08a8ac513402fbd83c1431e3adcbec218f873116f6` |
-| `public/pdf/tafalado_gra_07.pdf`      |   150769 | `94cf0b3c9ca11e7e886421609aca40be6678000876358c08d2e70f074825fdf2` |
-| `public/pdf/tafalado_gra_08.pdf`      |   148836 | `d8a1319810e963f60c6c67f40e6ffa85945b5f6081b37e99263d522aee3ea8eb` |
-| `public/pdf/tafalado_gra_09.pdf`      |   163768 | `e8b6c34d4b11af412a5eb0973ee89f98eba0592de3225def39c06c3a260f0779` |
-| `public/pdf/tafalado_gra_10.pdf`      |   147684 | `e294e85e18e1ec0ba0c65b40e71a96b754e74da44d71aabfcc9c71fec7494bd8` |
-| `public/pdf/tafalado_gra_11.pdf`      |   148474 | `176cf431f16fcfbb04f1d76d5b462d991e90c7f6d28874488c75262db41734aa` |
-| `public/pdf/tafalado_gra_12.pdf`      |   150703 | `1b87e11c2e4e652404376671df4823468d9d6224bc6587fb7245434385214b03` |
-| `public/pdf/tafalado_gra_13.pdf`      |   149082 | `efb609dc471b912844d5ddecc018830db81c716a3b8e9dec756debfbf678fc91` |
-| `public/pdf/tafalado_gra_14.pdf`      |   149619 | `c5c22c57723a59e8be01ed3f21728fd965a619a41f846700be65274329021ca6` |
-| `public/pdf/tafalado_gra_15.pdf`      |   149446 | `315411321ca0ff2426cb6b1d4cc37547839a64ea51ae88240d8e5c85fd13116e` |
-| `public/pdf/tafalado_gra_16.pdf`      |   152752 | `9fdb72215faff9f335561c919ac1712e47b4d0c2fbd3e10de7c1481060cfe5c5` |
-| `public/pdf/tafalado_gra_17.pdf`      |   150171 | `2e457315145f03b92beddf1a3f3e0ab47781defaf317b8e6651246a2e939e844` |
-| `public/pdf/tafalado_gra_18.pdf`      |    31737 | `2959991e068f7d57811ea131d1d3bac45ee869e8514a22b60ac4dd8cfe025044` |
-| `public/pdf/tafalado_gra_19.pdf`      |    32156 | `9df501a43ab5f09b71f47d2f4fb5ccacdd1a1ae0114505ffcd5f51af11e10d6d` |
-| `public/pdf/tafalado_gra_20.pdf`      |    42101 | `bab17e997600aab7ec8c0f0e860bb33d18d06870fe02da9871a82a24d270180d` |
-| `public/pdf/tafalado_suppl_01.pdf`    |   380258 | `994432027dc3c78ec57182383f2790c115c0fc4c07a1fa93dac0ca49197761bc` |
-| `public/pdf/tafalado_suppl_02.pdf`    |   273563 | `7078ccd3bc31be95e260d3d2e7fc0b53a4c212212f8430b24de33bb4631a67cb` |
+| `pdf/tafalado_01.pdf`          |   154732 | `1c3e49b18d480f88946de54df9a8ee60047e02f2372d55f46cdef9cab5d2579f` |
+| `pdf/tafalado_02.pdf`          |   154684 | `bbbc537e672c08a287a71f032b56f88a1a2394da4c3e393fd7f01d6f058d21cc` |
+| `pdf/tafalado_03.pdf`          |   157069 | `c605fc1aa044de62fa13fb26dc9a192350847e03dddd47f40d779976016a223f` |
+| `pdf/tafalado_04.pdf`          |   156607 | `1105467718fc0d43aef2864d4ceb4295e23590b9efa91d11e7b5841a7e02afa3` |
+| `pdf/tafalado_05.pdf`          |   155038 | `f21ced7ad978c38f87f8b4dee1e89579814a305db1b94153826cceaea3d8ad18` |
+| `pdf/tafalado_06.pdf`          |   390347 | `4426b045568ca347680334c90d8bf5cfb6bf88c8f9c47001c3c301a925f0453d` |
+| `pdf/tafalado_07.pdf`          |   368718 | `7836e1d3b187845acc4246ad083edcb722b1c5401ff9323fcc071cd37bda8548` |
+| `pdf/tafalado_08.pdf`          |   274631 | `ea5a1d90300db4645ea3ee29164e5f8f5af938e56ce95254790e62098267541b` |
+| `pdf/tafalado_09.pdf`          |   274343 | `96a37951b84fa440d7d2405234aa8ddfd042dc34ab8e3a41e1510196d6422691` |
+| `pdf/tafalado_10.pdf`          |   159389 | `1d9ed486e1349d236dabd1095324201ac587b855e2f3dcc88f7e75f44f7475be` |
+| `pdf/tafalado_11.pdf`          |   159389 | `01ac9c06e3117ab74440ff945b4c46bfc0db38bfaf997d2446e6f359de86965a` |
+| `pdf/tafalado_12.pdf`          |   160169 | `9b10d77c1d0f66b8524596c7bc6338fb32de9b59a82a8966fc110dcc7999c5c2` |
+| `pdf/tafalado_13.pdf`          |   160170 | `6089ba42573e9960ac3cba16b8d04d541100da896e79ed2a1555d99933480c23` |
+| `pdf/tafalado_14.pdf`          |   159256 | `67de5ac3c6ff9356f204115e125af1c7e2de6ada8c1951753bc7d3980e79aa39` |
+| `pdf/tafalado_15.pdf`          |   159257 | `dcfc63c83da357af896f83768b9f92a7112cda2df0513bf9c78198c17a8a3916` |
+| `pdf/tafalado_16.pdf`          |   147940 | `0445da6f08ba62f59496729658b7f280217275193b380115e38abe65e11a68b7` |
+| `pdf/tafalado_17.pdf`          |   149537 | `487fe115391ed310eae5a459fa5800bc30bee4bc520987375fb5926fefbcdf9c` |
+| `pdf/tafalado_18.pdf`          |   148128 | `8d4c6c0f4afc5c7961a697f785ed8236dfa7b88a1da5d7a2adaa42c06cc8b106` |
+| `pdf/tafalado_19.pdf`          |   148226 | `2bbcd006ec449d14b68860b6abb521b50b07db203e558e1373ba4306fa04dee1` |
+| `pdf/tafalado_20.pdf`          |   147090 | `410d58dd21e545a2c3e63ec51f7fb59ea5328afa43230603f6c4dcf91bf76d69` |
+| `pdf/tafalado_21.pdf`          |   148515 | `688f2cae19fdf54820136fa5c033cb84d31a5f73dd4da07744691f7787a255c1` |
+| `pdf/tafalado_22.pdf`          |   150720 | `68e2f1165d467ec5f8cfb93a7552a3ffbeadc75a96fdeeac27bcb3431613e1ae` |
+| `pdf/tafalado_23.pdf`          |   157021 | `a340880d0bc64a736c003f61e6868df253a62df77a5e9e1f920ee72360929fc8` |
+| `pdf/tafalado_24.pdf`          |   623642 | `1305901f9a1ecca56f77f8b1171555afb661bbc85b775024ce31cd6a97e210b7` |
+| `pdf/tafalado_gra_01.pdf`      |   151122 | `103f686282fc8a680cff626f3f794d56f38ef993ede2e8ad805e25b7f47f0516` |
+| `pdf/tafalado_gra_02.pdf`      |   172250 | `2e69eee869b1373de5fe9a93331ec15f582342f8f3355301fc72924a6db8fd37` |
+| `pdf/tafalado_gra_03.pdf`      |   148989 | `4c5c84eb4a2120ecc86cbd216222551e48ab8ecaf9999a6ec432c747e3b8edb5` |
+| `pdf/tafalado_gra_04.pdf`      |   154632 | `5e7bb1951f7a896821e30ca3d87e5e4694e4b3792f841b26062c5caa911122a0` |
+| `pdf/tafalado_gra_05.pdf`      |   147868 | `73f5ef2078dbaae691d911c6fb8f52e23773a6167eae58f1cb883a7b503945c7` |
+| `pdf/tafalado_gra_06.pdf`      |   149339 | `cc72fe7769f83a0a962d8b08a8ac513402fbd83c1431e3adcbec218f873116f6` |
+| `pdf/tafalado_gra_07.pdf`      |   150769 | `94cf0b3c9ca11e7e886421609aca40be6678000876358c08d2e70f074825fdf2` |
+| `pdf/tafalado_gra_08.pdf`      |   148836 | `d8a1319810e963f60c6c67f40e6ffa85945b5f6081b37e99263d522aee3ea8eb` |
+| `pdf/tafalado_gra_09.pdf`      |   163768 | `e8b6c34d4b11af412a5eb0973ee89f98eba0592de3225def39c06c3a260f0779` |
+| `pdf/tafalado_gra_10.pdf`      |   147684 | `e294e85e18e1ec0ba0c65b40e71a96b754e74da44d71aabfcc9c71fec7494bd8` |
+| `pdf/tafalado_gra_11.pdf`      |   148474 | `176cf431f16fcfbb04f1d76d5b462d991e90c7f6d28874488c75262db41734aa` |
+| `pdf/tafalado_gra_12.pdf`      |   150703 | `1b87e11c2e4e652404376671df4823468d9d6224bc6587fb7245434385214b03` |
+| `pdf/tafalado_gra_13.pdf`      |   149082 | `efb609dc471b912844d5ddecc018830db81c716a3b8e9dec756debfbf678fc91` |
+| `pdf/tafalado_gra_14.pdf`      |   149619 | `c5c22c57723a59e8be01ed3f21728fd965a619a41f846700be65274329021ca6` |
+| `pdf/tafalado_gra_15.pdf`      |   149446 | `315411321ca0ff2426cb6b1d4cc37547839a64ea51ae88240d8e5c85fd13116e` |
+| `pdf/tafalado_gra_16.pdf`      |   152752 | `9fdb72215faff9f335561c919ac1712e47b4d0c2fbd3e10de7c1481060cfe5c5` |
+| `pdf/tafalado_gra_17.pdf`      |   150171 | `2e457315145f03b92beddf1a3f3e0ab47781defaf317b8e6651246a2e939e844` |
+| `pdf/tafalado_gra_18.pdf`      |    31737 | `2959991e068f7d57811ea131d1d3bac45ee869e8514a22b60ac4dd8cfe025044` |
+| `pdf/tafalado_gra_19.pdf`      |    32156 | `9df501a43ab5f09b71f47d2f4fb5ccacdd1a1ae0114505ffcd5f51af11e10d6d` |
+| `pdf/tafalado_gra_20.pdf`      |    42101 | `bab17e997600aab7ec8c0f0e860bb33d18d06870fe02da9871a82a24d270180d` |
+| `pdf/tafalado_suppl_01.pdf`    |   380258 | `994432027dc3c78ec57182383f2790c115c0fc4c07a1fa93dac0ca49197761bc` |
+| `pdf/tafalado_suppl_02.pdf`    |   273563 | `7078ccd3bc31be95e260d3d2e7fc0b53a4c212212f8430b24de33bb4631a67cb` |
 | `public/images/lesson_pic_01.jpg`     |    17692 | `721a61fbceb4fb7ebd74f9c95e9cd5b0e3e0cf4e6cf530bbc96efe7ea788de00` |
 | `public/images/lesson_pic_02.jpg`     |    19751 | `016a54287b53c839f2cc5660306c589b3afd060bdded8f9600afc752847f155d` |
 | `public/images/lesson_pic_03.jpg`     |    22415 | `f3d2f945da1f68cdbb69d88aff300474020ed3644d5924ee74ae8a88d1a66c54` |

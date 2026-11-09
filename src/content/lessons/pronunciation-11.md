@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_11.mp3
   durationSeconds: 496
   bytes: 5954409
-pdf:
-  url: /pdf/tafalado_11.pdf
-  bytes: 159389
 photo:
   url: /images/lesson_pic_11.jpg
   alt: "Cell phones and driving"

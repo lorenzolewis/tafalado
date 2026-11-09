@@ -1,18 +1,45 @@
 // Validates the built podcast feed (dist/feed.xml): well-formed XML, the RSS 2.0 required
 // elements, Apple's required iTunes tags, ADR 0003, the permanent feed URL, and every
-// enclosure length against the file on disk. Run after `pnpm build`: `pnpm validate:feed`.
-// Exits non-zero on any error.
+// enclosure length against the file on disk, and the dialog in each episode's notes (#90) against
+// src/content/notes/. Run after `pnpm build`: `pnpm validate:feed`. Exits non-zero on any error.
 
-import { readFileSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { parse as parseYaml } from 'yaml';
+import { checkDescription } from '../src/lib/feed-notes.ts';
+import { resolveDialog, type NotesFile } from '../src/lib/notes-check.ts';
+import { notesSchema } from '../src/lib/notes-schema.ts';
 
 const DIST = new URL('../dist/', import.meta.url);
 const EPISODES = 46;
 const FEED_URL = 'https://tafalado.lorenzo.soy/feed.xml';
 
+const NOTES = new URL('../src/content/notes/', import.meta.url);
+
 const xml = readFileSync(new URL('feed.xml', DIST), 'utf8');
 const errors: string[] = [];
 const fail = (message: string) => errors.push(message);
+const warnings: string[] = [];
+
+// Each lesson's dialog, by lesson id (`pronunciation-01`), from the notes' frontmatter, parsed with
+// the collection's own schema (Astro's loader needs the Astro runtime, so the files are read here).
+// Undefined for a lesson whose notes have no `dialog`, whose item must then hold none.
+const notesFiles: NotesFile[] = readdirSync(NOTES)
+  .filter((file) => file.endsWith('.md'))
+  .map((file) => {
+    const frontmatter = readFileSync(new URL(file, NOTES), 'utf8').match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+    const parsed = notesSchema.safeParse(parseYaml(frontmatter));
+    if (!parsed.success) {
+      console.error(`✗ src/content/notes/${file}: ${parsed.error.message}`);
+      process.exit(1);
+    }
+    return { id: file.replace(/\.md$/, ''), data: parsed.data };
+  });
+const notesById = new Map(notesFiles.map((notes) => [notes.id, notes]));
+const dialogs = new Map(notesFiles.map((notes) => [notes.id, resolveDialog(notes, notesById)]));
+
+// The dialog is only part of the episode, so the feed must not promise a transcript (#90).
+if (xml.includes('podcast:transcript')) fail('feed has <podcast:transcript>: the notes hold the dialog, not a transcript');
 
 const wellFormed = XMLValidator.validate(xml);
 if (wellFormed !== true) {
@@ -79,11 +106,16 @@ items.forEach((item, index) => {
   if (!item['itunes:image']?.['@href']) fail(`${where}: missing <itunes:image href>`);
   requireOnSite(text(item.link), `${where} <link>`);
   requireOnSite(item['itunes:image']?.['@href'], `${where} <itunes:image>`);
-  requireOnSite(item['podcast:transcript']?.['@url'], `${where} <podcast:transcript>`);
 
   const description = text(item.description);
   if (!description.includes('CC BY 3.0')) fail(`${where}: description lacks the CC BY 3.0 credit`);
   if (!description.includes(`href="${text(item.link)}"`)) fail(`${where}: description lacks a link to the lesson page`);
+  const lessonId = text(item.guid).replace(/^tafalado-/, '');
+  if (!notesById.has(lessonId)) fail(`${where}: no notes in src/content/notes/${lessonId}.md`);
+  // Its dialog iff its notes have one, every turn in every language; none otherwise.
+  const notesCheck = checkDescription(description, dialogs.get(lessonId));
+  for (const error of notesCheck.errors) fail(`${where}: description ${error}`);
+  for (const warning of notesCheck.warnings) warnings.push(`${where}: description ${warning}`);
 
   const guid = text(item.guid);
   if (guids.has(guid)) fail(`${where}: duplicate guid ${guid}`);
@@ -106,6 +138,11 @@ items.forEach((item, index) => {
 });
 if (!/^Pronunciation 1 · /.test(text(items[0]?.title))) fail('the first item must be Pronunciation 1 (Lesson 1)');
 
+const withDialog = items.filter((item) => dialogs.get(text(item.guid).replace(/^tafalado-/, ''))).length;
+const withNotes = [...dialogs.values()].filter(Boolean).length;
+if (withDialog !== withNotes) fail(`${withNotes} lessons have a dialog in their notes, but ${withDialog} feed items match them`);
+
+for (const warning of warnings) console.warn(`⚠ ${warning}`);
 if (errors.length) {
   for (const error of errors) console.error(`✗ ${error}`);
   console.error(`\n${errors.length} problem(s) in dist/feed.xml`);
@@ -113,7 +150,8 @@ if (errors.length) {
 }
 console.log('✓ RSS 2.0 required elements (channel title, link, description; item title, guid)');
 console.log('✓ Apple required tags (itunes:image, itunes:category, itunes:explicit, language, enclosure)');
-console.log(`✓ atom:link self is ${FEED_URL}; links, images, enclosures and transcripts on ${site.origin}`);
+console.log(`✓ atom:link self is ${FEED_URL}; links, images and enclosures on ${site.origin}`);
 console.log('✓ ADR 0003: itunes:type serial, itunes:episode 1–46 in order, no itunes:season, series in titles');
 console.log(`✓ ${items.length} enclosures, every length matches the file size in dist/`);
+console.log(`✓ ${withDialog} descriptions hold their lesson's dialog in pt-BR, es and en; no <mark>, no podcast:transcript`);
 console.log(`✓ first episode: ${text(items[0].title)}`);

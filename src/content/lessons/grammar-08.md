@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_08.mp3
   durationSeconds: 802
   bytes: 9627515
-pdf:
-  url: /pdf/tafalado_gra_08.pdf
-  bytes: 148836
 photo:
   url: /images/lesson_pic_gra_08.jpg
   alt: "Car insurance"

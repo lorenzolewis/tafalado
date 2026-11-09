@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { notesSchema } from './lib/notes-schema';
 import { SERIES, SERIES_SIZE } from './lib/series';
 
 // See docs/lesson-schema.md. Uniqueness across entries (episode, series + number)
@@ -28,10 +29,6 @@ const lessons = defineCollection({
         durationSeconds: z.number().int().positive(),
         bytes: z.number().int().positive(),
       }),
-      pdf: z.object({
-        url: mediaUrl,
-        bytes: z.number().int().positive(),
-      }),
       photo: z
         .object({
           url: mediaUrl,
@@ -46,4 +43,11 @@ const lessons = defineCollection({
     }),
 });
 
-export const collections = { lessons };
+// A lesson's study notes (#88), one file per lesson named after it. Their frontmatter's shape is
+// src/lib/notes-schema.ts, shared with the checks and the feed validator.
+const notes = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/notes' }),
+  schema: notesSchema,
+});
+
+export const collections = { lessons, notes };

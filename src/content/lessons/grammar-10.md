@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_10.mp3
   durationSeconds: 685
   bytes: 8217530
-pdf:
-  url: /pdf/tafalado_gra_10.pdf
-  bytes: 147684
 photo:
   url: /images/lesson_pic_gra_10.jpg
   alt: "Who pays for parties"

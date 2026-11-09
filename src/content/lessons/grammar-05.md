@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_05.mp3
   durationSeconds: 579
   bytes: 6954877
-pdf:
-  url: /pdf/tafalado_gra_05.pdf
-  bytes: 147868
 photo:
   url: /images/lesson_pic_gra_05.jpg
   alt: "Use of coupons"

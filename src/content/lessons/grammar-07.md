@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_07.mp3
   durationSeconds: 743
   bytes: 8920957
-pdf:
-  url: /pdf/tafalado_gra_07.pdf
-  bytes: 150769
 photo:
   url: /images/lesson_pic_gra_07.jpg
   alt: "Serving ice water at restaurants"

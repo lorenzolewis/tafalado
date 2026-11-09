@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_04.mp3
   durationSeconds: 621
   bytes: 7449971
-pdf:
-  url: /pdf/tafalado_04.pdf
-  bytes: 156607
 photo:
   url: /images/lesson_pic_04.jpg
   alt: "Riding a Bus"

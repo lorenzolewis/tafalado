@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_03.mp3
   durationSeconds: 795
   bytes: 9538328
-pdf:
-  url: /pdf/tafalado_gra_03.pdf
-  bytes: 148989
 photo:
   url: /images/lesson_pic_gra_03.jpg
   alt: "Gas stations"

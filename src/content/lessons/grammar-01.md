@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_01.mp3
   durationSeconds: 649
   bytes: 7793244
-pdf:
-  url: /pdf/tafalado_gra_01.pdf
-  bytes: 151122
 photo:
   url: /images/lesson_pic_gra_01.jpg
   alt: "Sitting on the grass"

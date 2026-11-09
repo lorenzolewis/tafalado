@@ -160,6 +160,48 @@ a {
   outline-offset: 2px;
 }
 
+/* Highlights (#88): the sounds and forms a lesson teaches, in the PDFs' own colours and bold.
+   Red is <mark>; some lessons contrast a second and third set in blue and green (<mark class>,
+   docs/lesson-schema.md). Blue and green also carry a dashed and a dotted underline, so the sets
+   stay apart for readers who can't tell the colours apart and on a grayscale printer, where red
+   gets a solid underline too. Lighter tints in dark mode keep the contrast, on screen only: paper
+   is light, so print keeps these colours whatever the OS scheme. */
+:root {
+  --mark-red: #c62828;
+  --mark-blue: #1565c0;
+  --mark-green: #2e7d32;
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --mark-red: #ff8a80;
+    --mark-blue: #82b1ff;
+    --mark-green: #81c784;
+  }
+}
+mark {
+  background: none;
+  color: var(--mark-red);
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.08em;
+  print-color-adjust: exact;
+}
+mark.blue {
+  color: var(--mark-blue);
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+}
+mark.green {
+  color: var(--mark-green);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+}
+@media print {
+  mark:not([class]) {
+    text-decoration-line: underline;
+  }
+}
+
 /* Inline SVG icons (src/components/Icon.astro): a 24px grid, 2.5px square strokes, solid shapes. */
 .icon {
   inline-size: 1.5rem;

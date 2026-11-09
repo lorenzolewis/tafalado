@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_23.mp3
   durationSeconds: 551
   bytes: 6615202
-pdf:
-  url: /pdf/tafalado_23.pdf
-  bytes: 157021
 photo:
   url: /images/lesson_pic_23.jpg
   alt: "Nicknames"

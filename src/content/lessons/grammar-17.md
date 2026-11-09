@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_17.mp3
   durationSeconds: 584
   bytes: 7015533
-pdf:
-  url: /pdf/tafalado_gra_17.pdf
-  bytes: 150171
 photo:
   url: /images/lesson_pic_gra_17.jpg
   alt: "Online activities"

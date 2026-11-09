@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_14.mp3
   durationSeconds: 787
   bytes: 4723571
-pdf:
-  url: /pdf/tafalado_14.pdf
-  bytes: 159256
 photo:
   url: /images/lesson_pic_14.jpg
   alt: "Good Tippers"

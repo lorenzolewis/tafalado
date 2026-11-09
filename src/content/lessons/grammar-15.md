@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_15.mp3
   durationSeconds: 650
   bytes: 7803908
-pdf:
-  url: /pdf/tafalado_gra_15.pdf
-  bytes: 149446
 photo:
   url: /images/lesson_pic_gra_15.jpg
   alt: "Driver's license"

@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_12.mp3
   durationSeconds: 909
   bytes: 10913808
-pdf:
-  url: /pdf/tafalado_12.pdf
-  bytes: 160169
 photo:
   url: /images/lesson_pic_12.jpg
   alt: "Eating at movie theaters"

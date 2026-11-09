@@ -24,8 +24,3 @@ export function isoDate(date: Date): string {
 export function formatMinutes(seconds: number): string {
   return `${Math.max(1, Math.round(seconds / 60))} min`;
 }
-
-/** A file size in kilobytes (1024 bytes), for a download link: 150171 → "147 KB". */
-export function formatKilobytes(bytes: number): string {
-  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-}

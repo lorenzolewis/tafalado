@@ -9,9 +9,6 @@ audio:
   url: /mp3/tafalado_gra_14.mp3
   durationSeconds: 624
   bytes: 7493573
-pdf:
-  url: /pdf/tafalado_gra_14.pdf
-  bytes: 149619
 photo:
   url: /images/lesson_pic_gra_14.jpg
   alt: "Mobile homes"
