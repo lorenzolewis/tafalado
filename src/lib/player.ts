@@ -38,6 +38,8 @@ export interface PlayerState {
   muted: boolean;
   /** True when the audio failed to load. */
   error: boolean;
+  /** The browser says there's no connection (`navigator.onLine`): audio needs one (#9, ADR 0006). */
+  offline: boolean;
   /** Enough audio is buffered to play on (readyState ≥ HAVE_FUTURE_DATA); false while loading or stalled. */
   ready: boolean;
 }
@@ -65,6 +67,13 @@ class Player extends EventTarget {
       audio.addEventListener(type, changed);
     }
     audio.addEventListener('ended', () => this.dispatchEvent(new Event('ended')));
+    // For `offline`. The window lasts the visit too (<ClientRouter /> swaps the page, not the window).
+    // Back online, audio that failed or stalled meanwhile loads again, paused: nothing starts by itself.
+    addEventListener('offline', changed);
+    addEventListener('online', () => {
+      if (this.#track && !this.#playable) this.#reload();
+      changed();
+    });
     return audio;
   }
 
@@ -79,6 +88,7 @@ class Player extends EventTarget {
       rate: audio.playbackRate,
       muted: audio.muted,
       error: audio.error !== null,
+      offline: !navigator.onLine,
       ready: audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA,
     };
   }
@@ -103,8 +113,24 @@ class Player extends EventTarget {
       this.dispatchEvent(new Event('change'));
     }
     if (!this.#track) return;
+    // Offline, only what's already buffered can play; otherwise the player just says it's offline.
+    if (!navigator.onLine && !this.#playable) return;
+    if (this.audio.error) this.#reload();
     // Rejects if the browser blocks playback; the paused state already says so.
     this.audio.play().catch(() => {});
+  }
+
+  /** Enough audio is here to play on, with or without a connection. */
+  get #playable(): boolean {
+    return !this.audio.error && this.audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA;
+  }
+
+  /** After a failed load the element won't try again by itself: loads the lesson again where it was. */
+  #reload(): void {
+    const { currentTime, playbackRate } = this.audio;
+    this.audio.load();
+    this.audio.defaultPlaybackRate = this.audio.playbackRate = playbackRate;
+    this.audio.currentTime = currentTime;
   }
 
   pause(): void {

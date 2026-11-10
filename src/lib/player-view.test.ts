@@ -19,6 +19,7 @@ const state = (patch: Partial<PlayerState> = {}): PlayerState => ({
   rate: 1,
   muted: false,
   error: false,
+  offline: false,
   ready: true,
   ...patch,
 });
@@ -39,6 +40,16 @@ describe('playerStatus', () => {
   });
   it('is error when the audio failed, even while asked to play', () => {
     expect(playerStatus(state({ error: true, paused: false, ready: false }))).toBe('error');
+  });
+  it('is offline, not error, when the audio failed with no connection', () => {
+    expect(playerStatus(state({ offline: true, error: true }))).toBe('offline');
+  });
+  it('is offline, not loading or playing, while asked to play with no connection', () => {
+    expect(playerStatus(state({ offline: true, paused: false, ready: false }))).toBe('offline');
+    expect(playerStatus(state({ offline: true, paused: false }))).toBe('offline');
+  });
+  it('is idle, not offline, with no lesson loaded', () => {
+    expect(playerStatus(state({ offline: true, track: null }))).toBe('idle');
   });
 });
 

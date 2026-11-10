@@ -113,7 +113,9 @@ function bindMiniPlayer(root: HTMLElement) {
     }
     for (const el of currents) setText(el, time(state.currentTime));
     for (const el of durations) setText(el, time(state.duration));
-    const message = state.error ? 'The audio could not be loaded.' : '';
+    const message = state.offline
+      ? "You're offline. Audio needs a connection."
+      : state.error ? 'The audio could not be loaded.' : '';
     for (const status of statuses) setText(status, message);
   });
 }

@@ -4,11 +4,15 @@ import { formatDuration } from './format';
 import type { PlayerState, Track } from './player';
 import { resumeAt, timeLeft as minutesLeft, type LessonProgress } from './progress';
 
-/** idle: nothing loaded (the player is hidden). loading: asked to play, but not enough audio yet. */
-export type PlayerStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'error';
+/**
+ * idle: nothing loaded (the player is hidden). loading: asked to play, but not enough audio yet.
+ * offline: no connection, so no audio (ADR 0006); it says why rather than showing an error.
+ */
+export type PlayerStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'error' | 'offline';
 
 export function playerStatus(state: PlayerState): PlayerStatus {
   if (!state.track) return 'idle';
+  if (state.offline) return 'offline';
   if (state.error) return 'error';
   if (state.paused) return 'paused';
   return state.ready ? 'playing' : 'loading';
