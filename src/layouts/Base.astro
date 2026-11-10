@@ -114,6 +114,16 @@ const printColours = [
     <script>
       import '../lib/motion';
     </script>
+    <script>
+      // Offline browsing (#9, ADR 0006): dist/sw.js saves the pages and transcripts. Production only,
+      // so `astro dev` never has one; once per visit (bundled scripts run once under <ClientRouter />),
+      // after load so it doesn't compete with the page. A failure just means no offline copy.
+      if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+        const register = () => navigator.serviceWorker.register('/sw.js').catch(() => {});
+        if (document.readyState === 'complete') register();
+        else addEventListener('load', register, { once: true });
+      }
+    </script>
   </body>
 </html>
 

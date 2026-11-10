@@ -34,7 +34,7 @@ class FakeSession {
 
 /** Stands in for the player: records calls, and lets the test drive its state. */
 class FakePlayer extends EventTarget implements MediaSessionPlayer {
-  state: PlayerState = { track: null, paused: true, currentTime: 0, duration: 0, rate: 1, muted: false, error: false, ready: true };
+  state: PlayerState = { track: null, paused: true, currentTime: 0, duration: 0, rate: 1, muted: false, error: false, offline: false, ready: true };
   calls: unknown[][] = [];
   play = (t?: Track) => void this.calls.push(['play', t?.id]);
   pause = () => void this.calls.push(['pause']);

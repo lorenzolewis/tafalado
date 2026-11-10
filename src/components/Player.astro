@@ -75,7 +75,7 @@ const tracks = JSON.stringify(
     </div>
   </div>
 
-  <!-- The one live region for the error line: the phone's visible copy is inside a button, whose
+  <!-- The one live region for the error or offline line: the phone's visible copy is inside a button, whose
        content screen readers don't announce, so both visible copies are hidden from them. -->
   <p class="visually-hidden" role="status" data-status></p>
 
@@ -189,14 +189,15 @@ const tracks = JSON.stringify(
     font-size: var(--text-14);
     font-variant-numeric: tabular-nums;
   }
-  /* The error line takes the place of the time left. */
+  /* The error or offline line takes the place of the time left. */
   .status {
     color: var(--plate-accent);
     font-size: var(--text-14);
     font-weight: 500;
   }
   .status:empty,
-  [data-state='error'] .open .meta {
+  [data-state='error'] .open .meta,
+  [data-state='offline'] .open .meta {
     display: none;
   }
 

@@ -6,8 +6,8 @@ import { SITE_DESCRIPTION, THEME_COLOUR } from '../lib/seo';
 
 // The web app manifest: what the site is called and looks like once it's added to a home screen
 // or installed. It opens standalone, with no browser bar, so it feels like an app; the player keeps
-// playing across pages there just as in the browser (ADR 0001). The splash screen (Android) is the
-// icon on its own paper.
+// playing across pages there just as in the browser (ADR 0001), and its pages open offline too
+// (dist/sw.js, ADR 0006). The splash screen (Android) is the icon on its own paper.
 export const GET: APIRoute = () => {
   const manifest = {
     id: '/',
