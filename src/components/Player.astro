@@ -4,16 +4,26 @@
 // focus) across navigations. The audio itself lives in src/lib/player.ts; src/lib/player-ui.ts wires
 // this markup to it.
 //
-// Phone (below 52rem): a slim bar with back 10s and play, which opens a modal sheet with everything.
+// Phone (below 80rem): a slim bar with back 10s and play, which opens a modal sheet with everything.
 // Desktop: one full row, with no sheet. Some controls appear twice (in the bar and in the sheet);
 // player-ui.ts binds and updates every copy. The sheet's copies are hidden while it is closed, and
 // the row's desktop-only copies on a phone, so each name is on one visible control at a time.
 import Icon from './Icon.astro';
+import TranscriptPanel from './TranscriptPanel.astro';
+import TranscriptToggle from './TranscriptToggle.astro';
 import { getLessons, toTrack } from '../lib/lessons';
 import { RATES } from '../lib/player';
+import { getAllTranscripts, transcriptJsonPath } from '../lib/transcripts';
 
-// Every lesson in episode order, for autoplay-next and the Continue card (src/lib/progress-ui.ts).
-const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<', '\\u003c');
+// Every lesson in episode order, for autoplay-next and the Continue card (src/lib/progress-ui.ts),
+// with where its transcript is, for the transcript panel (#99, src/lib/transcript-ui.ts).
+const transcripts = await getAllTranscripts();
+const tracks = JSON.stringify(
+  (await getLessons()).map((lesson) => ({
+    ...toTrack(lesson),
+    ...(transcripts.has(lesson.id) && { transcript: transcriptJsonPath(lesson.id) }),
+  })),
+).replaceAll('<', '\\u003c');
 ---
 
 <section class="player" aria-label="Audio player" data-player data-state="idle" hidden transition:persist="player">
@@ -58,6 +68,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
         </select>
         <Icon name="chevron" />
       </span>
+      <TranscriptToggle />
       <button type="button" class="ctl" data-action="mute" aria-label="Mute" aria-pressed="false" aria-keyshortcuts="M">
         <Icon name="volume" class="i-volume" /><Icon name="mute" class="i-mute" />
       </button>
@@ -73,6 +84,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     <img class="art big" alt="" decoding="async" width="288" height="288" data-art />
     <p class="sheet-title"><a data-title href="/"></a></p>
     <p class="meta" data-text="series"></p>
+    <TranscriptPanel />
     <div class="sheet-seek">
       <input type="range" aria-label="Seek" min="0" max="0" step="1" value="0" data-seek />
       <span data-current>0:00</span>
@@ -92,6 +104,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
         </select>
         <Icon name="chevron" />
       </span>
+      <TranscriptToggle />
       <button type="button" class="ctl" data-action="mute" aria-label="Mute" aria-pressed="false">
         <Icon name="volume" class="i-volume" /><Icon name="mute" class="i-mute" />
       </button>
@@ -346,7 +359,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     align-items: center;
     gap: var(--space-4);
   }
-  /* Shown from 52rem (below); the later rules there win over this one. */
+  /* Shown from 80rem (below); the later rules there win over this one. */
   .desktop {
     display: none;
   }
@@ -354,10 +367,11 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
   /* ── Phone sheet ── */
   .sheet {
     inset-block: auto 0;
-    inline-size: 100%;
+    /* The phone layout runs up to 80rem, so on wider screens the sheet keeps a phone's measure. */
+    inline-size: min(100%, 36rem);
     max-inline-size: 100%;
     max-block-size: calc(100dvh - max(2rem, env(safe-area-inset-top)));
-    margin: 0;
+    margin: 0 auto;
     padding: var(--space-8) max(var(--space-24), env(safe-area-inset-left)) calc(var(--space-32) + env(safe-area-inset-bottom));
     border: 0;
     border-radius: 0;
@@ -436,11 +450,48 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     inline-size: 30px;
     block-size: 30px;
   }
+  /* Speed, the transcript's toggle and mute, spread across one row. */
   .sheet-extras {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: var(--space-4);
     inline-size: 100%;
     margin-block-start: var(--space-8);
+  }
+
+  /* The transcript (#99): in place of the art while open, between the title and the controls, with
+     the sheet the full height. src/lib/transcript-ui.ts sets data-transcript-open on <html>, and
+     animates between the two layouts. */
+  .sheet :global([data-transcript-panel]) {
+    display: none;
+  }
+  :global(html[data-transcript-open]) .sheet[open] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    block-size: calc(100dvh - max(2rem, env(safe-area-inset-top)));
+  }
+  :global(html[data-transcript-open]) .sheet .close {
+    align-self: flex-start;
+  }
+  /* It keeps room for a few lines even on a short phone; past that the sheet scrolls. */
+  :global(html[data-transcript-open]) .sheet :global([data-transcript-panel]) {
+    --transcript-fade: 1rem;
+    --transcript-now-room: 0px;
+    display: flex;
+    min-block-size: 7rem;
+    margin-block: var(--space-8);
+  }
+  /* The art folds away to nothing, its gap in the column taken back. */
+  :global(html[data-transcript-open]) .art.big {
+    visibility: hidden;
+    inline-size: 0;
+    margin-block-end: calc(-1 * var(--space-12));
+    opacity: 0;
+  }
+  :global(html[data-transcript-open]) .sheet-title {
+    font-size: var(--text-18);
   }
 
   /* The inverted print: a stock plate would glare at the foot of a dark page, so the plate is the
@@ -453,8 +504,8 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     }
   }
 
-  /* ── Desktop row, from 52rem: everything in one row, no sheet ── */
-  @media (min-width: 52rem) {
+  /* ── Desktop row, from 80rem: everything in one row, no sheet ── */
+  @media (min-width: 80rem) {
     /* Laid over the foot of the window; the page runs on behind it (src/layouts/Base.astro). */
     .player {
       position: fixed;

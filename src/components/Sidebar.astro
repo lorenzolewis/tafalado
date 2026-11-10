@@ -404,7 +404,7 @@ const current = (on: boolean) => (on ? 'page' : undefined);
   }
 
   /* Desktop: the list scrolls inside the sidebar, and the footer stays pinned to its foot. */
-  @media (min-width: 52rem) {
+  @media (min-width: 80rem) {
     .side {
       min-block-size: 0;
       overflow: hidden;
@@ -421,7 +421,7 @@ const current = (on: boolean) => (on ? 'page' : undefined);
 
   /* Phone: the whole view scrolls, so the heading row and pills stick to the top, as they stay put
      above the list on desktop. */
-  @media (max-width: 51.99rem) {
+  @media (max-width: 79.99rem) {
     .lessons-top {
       position: sticky;
       inset-block-start: env(safe-area-inset-top, 0px);

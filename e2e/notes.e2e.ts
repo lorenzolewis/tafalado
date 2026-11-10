@@ -62,7 +62,7 @@ test('the learner can hide the translations and the highlights, on every lesson'
   await expect(dialog.locator('[lang="es"]')).toHaveCount(6);
   for (const line of await dialog.locator('[lang="es"]').all()) await expect(line).toBeHidden();
   await expect(first.locator('[lang="en"]')).toBeVisible();
-  await expect(first.getByRole('button')).toHaveCount(0);
+  await expect(first.locator('p[lang]').getByRole('button')).toHaveCount(0);
   expect(await looksPlain(first.locator('mark').first())).toBe(true);
 
   // The choice is kept on this device and applies to the next lesson.

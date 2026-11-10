@@ -1,0 +1,33 @@
+---
+// The desktop bar on the right that holds the transcript (#99), opened by the toggle on the player
+// row. Outside <main> and persisted like the player, so it lasts across pages (ADR 0001); it holds
+// the same panel as the phone sheet. While open, src/layouts/Base.astro narrows the page beside it.
+import TranscriptPanel from './TranscriptPanel.astro';
+---
+
+<aside class="bar" aria-label="Transcript" data-transcript-bar hidden transition:persist="transcript">
+  <TranscriptPanel />
+</aside>
+
+<script>
+  import '../lib/transcript-ui';
+</script>
+
+<style>
+  .bar {
+    display: none;
+  }
+  @media (min-width: 80rem) {
+    .bar:not([hidden]) {
+      position: fixed;
+      z-index: 4;
+      inset-block: var(--panel-gap) var(--player-block-size, 0px);
+      inset-inline-end: var(--panel-gap);
+      display: flex;
+      flex-direction: column;
+      inline-size: var(--transcript-bar);
+      background: var(--surface);
+      color: var(--ink);
+    }
+  }
+</style>

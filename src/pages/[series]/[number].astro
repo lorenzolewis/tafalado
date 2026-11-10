@@ -15,6 +15,8 @@ import { formatDate, formatMinutes, isoDate, isoDuration } from '../../lib/forma
 import { getLessons, lessonPath, lessonTitle, type Lesson } from '../../lib/lessons';
 import type { IconName } from '../../lib/icons';
 import { getNotes } from '../../lib/notes';
+import { getTranscript } from '../../lib/transcripts';
+import { stamp } from '../../lib/transcript-view';
 import { lessonDescription, podcastEpisodeLd } from '../../lib/seo';
 import { SERIES_LABEL } from '../../lib/series';
 
@@ -33,6 +35,10 @@ const description = lessonDescription(lesson.rendered?.html ?? '');
 const lessonNotes = await getNotes(lesson);
 const rendered = lessonNotes && (await render(lessonNotes.entry));
 const notes = lessonNotes && rendered && { ...lessonNotes, Content: rendered.Content };
+// Each dialog turn's readings in the episode (#94), for its play button and read-along
+// (src/lib/transcript-ui.ts). The build has already failed if a turn has none.
+const readings = (await getTranscript(lesson))?.readings;
+const trackId = lessonPath(data);
 // A link down to each section of the notes, each with its icon: the dialog (or clips), then the
 // body's own headings.
 const SECTION_ICONS: Record<string, IconName> = {
@@ -103,15 +109,27 @@ const view = {
             <section class="dialog" aria-labelledby="dialog">
               <h2 id="dialog">Dialog</h2>
               <DialogViewControls {...view} />
-              <ol>
-                {notes.dialog.map((turn) => (
-                  <li class="turn">
-                    <p class="speaker">{turn.speaker}</p>
+              <ol data-turns-of={readings && trackId}>
+                {notes.dialog.map((turn, i) => {
+                  const first = readings?.[i]?.[0];
+                  return (
+                  <li class="turn" data-readings={readings && JSON.stringify(readings[i])}>
+                    <div class="speaker-line">
+                      <p class="speaker">{turn.speaker}</p>
+                      {first && (
+                        <button type="button" class="turn-play" data-seek-to={first.start} aria-label={`Play this turn, from ${stamp(first.start)}`}>
+                          <Icon name="play" />
+                          {stamp(first.start)}
+                        </button>
+                      )}
+                      {readings?.[i] && readings[i].length > 1 && <span class="turn-count">read {readings[i].length}×</span>}
+                    </div>
                     <p class="pt" lang="pt-BR" set:html={turn.pt} />
                     <p class="es" lang="es" set:html={turn.es} />
                     <p class="en" lang="en" set:html={turn.en} />
                   </li>
-                ))}
+                  );
+                })}
               </ol>
             </section>
           )}
@@ -271,6 +289,49 @@ const view = {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
+  /* The speaker, then its play button (#94): to the turn's first reading, the normal-speed one. */
+  .speaker-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+  }
+  .turn-play {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-block-size: 28px;
+    padding: 0 var(--space-8) 0 var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: inherit;
+    font: 700 0.75rem / 1 var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .turn-play:hover {
+    border-color: currentColor;
+  }
+  .turn-play :global(.icon) {
+    inline-size: 14px;
+    block-size: 14px;
+  }
+  .turn-count {
+    color: var(--muted);
+    font: var(--text-14) / 1.4 var(--font-sans);
+  }
+  /* Lit while any of its readings plays, like the transcript's playing line. */
+  .turn[data-reading] {
+    margin-inline: calc(-1 * var(--space-12));
+    padding-inline: calc(var(--space-12) - 3px) var(--space-12);
+    border-inline-start: 3px solid var(--print-ink);
+    background: var(--paper);
+    color: var(--print-ink);
+  }
+  .turn[data-reading] :is(.en, .turn-count) {
+    color: inherit;
+  }
   .turn .pt {
     font-size: var(--text-21);
     font-weight: 500;
@@ -315,6 +376,10 @@ const view = {
 
   /* Print: the notes as a handout, tables whole, no turn or row split across pages. */
   @media print {
+    .turn-play,
+    .turn-count {
+      display: none;
+    }
     .notes-body :global(table) {
       display: table;
       overflow: visible;
@@ -361,7 +426,7 @@ const view = {
   }
 
   /* Phone: the print bleeds to the pane's top, under the pinned "‹ Lessons" button. */
-  @media (max-width: 51.99rem) {
+  @media (max-width: 79.99rem) {
     :global(.pane):has(> .lesson) {
       padding-block-start: var(--bleed-y);
     }
@@ -373,7 +438,7 @@ const view = {
 
   /* Desktop: at the pane's full width 27:14 would still be tall, so the height is capped and the
      photo crops wider. The text stays within 44rem. */
-  @media (min-width: 52rem) {
+  @media (min-width: 80rem) {
     .lesson {
       --bleed-x: 48px;
       --bleed-y: 40px;

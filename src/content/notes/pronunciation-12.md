@@ -13,7 +13,7 @@ dialog:
     es: "Tengo dos boletos para el cine que tengo que usar antes de que se venzan."
     en: "I've got two tickets to the movies that I have to use up before they expire."
   - speaker: Valdo
-    pt: "<mark class=\"blue\">S</mark>abe que <mark class=\"blue\">s</mark>eria ma<mark class=\"blue\">ss</mark>a! <mark class=\"blue\">S</mark>aiu um filme que eu queria me<mark>s</mark>mo ver de<mark>s</mark>de a <mark class=\"blue\">s</mark>emana pa<mark class=\"blue\">ss</mark>ada."
+    pt: "<mark class=\"blue\">S</mark>abe o que <mark class=\"blue\">s</mark>eria ma<mark class=\"blue\">ss</mark>a! <mark class=\"blue\">S</mark>aiu um filme que eu queria me<mark>s</mark>mo ver de<mark>s</mark>de a <mark class=\"blue\">s</mark>emana pa<mark class=\"blue\">ss</mark>ada."
     es: "¡Sabes que sería chévere! Salió una película que quería ver desde la semana pasada."
     en: "You know what would be cool? There's a movie that just came out that I've wanted to see for a week now."
   - speaker: Michelle

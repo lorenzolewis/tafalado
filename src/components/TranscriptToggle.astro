@@ -1,0 +1,60 @@
+---
+// "Show transcript" / "Hide transcript" (#99): the same button on the desktop player row and in the
+// phone sheet (src/components/Player.astro), with one open state; src/lib/transcript-ui.ts keeps
+// every copy in step and hides them while the playing lesson has no transcript. Styled as the
+// player's other controls: ruled like the Speed select, reversed out in the plate's accent (as Play
+// is) while open.
+import Icon from './Icon.astro';
+---
+
+<button type="button" class="toggle" data-transcript-toggle aria-expanded="false" hidden>
+  <Icon name="doc" />
+  <span data-transcript-label>Show transcript</span>
+</button>
+
+<style>
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-block-size: 48px;
+    padding: 0 var(--space-16) 0 var(--space-12);
+    border: 2px solid currentColor;
+    border-radius: var(--radius-control);
+    background: none;
+    color: inherit;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .toggle[hidden] {
+    display: none;
+  }
+  /* Not on touch screens, where a tap would leave it looking pressed. */
+  @media (hover: hover) {
+    .toggle:hover {
+      background: var(--plate-track);
+    }
+  }
+  .toggle:focus-visible {
+    outline-color: var(--plate-accent);
+  }
+  .toggle[aria-expanded='true'] {
+    border-color: var(--plate-accent);
+    background: var(--plate-accent);
+    color: var(--on-plate-accent);
+  }
+  .toggle :global(.icon) {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+  /* The narrowest phones fit it beside Speed and mute by dropping the icon. */
+  @media (max-width: 23rem) {
+    .toggle {
+      padding-inline: var(--space-12);
+    }
+    .toggle :global(.icon) {
+      display: none;
+    }
+  }
+</style>
