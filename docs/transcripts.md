@@ -4,7 +4,7 @@ Each episode gets a transcript: one WebVTT file per lesson in `public/transcript
 
 The podcast feed links each one from its `<item>` with `<podcast:transcript url="…" type="text/vtt"/>`, so Apple Podcasts and other players can show it. An episode without a file gets no tag. Apple only shows a provided transcript once the show is set to **Display transcripts I provide** in Apple Podcasts Connect, and only if it is complete and correctly spelled: it must cover the whole episode, not just the dialog. Lesson pages don't show the transcripts yet (issue #99).
 
-`pnpm validate:feed` checks that each linked transcript is the lesson's own file, on the site, in `dist/`, and follows the format below. It lists the episodes that don't have one yet as a warning. `src/lib/transcript-check.test.ts` checks the committed files too.
+`pnpm validate:feed` checks that each linked transcript is the lesson's own file, on the site, in `dist/`, and follows the format below. An episode without one fails the check. `src/lib/transcript-check.test.ts` checks the committed files too.
 
 ## Format
 
