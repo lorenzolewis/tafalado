@@ -1,0 +1,15 @@
+---
+// PROTOTYPE (#99, #94): throwaway, dev only (src/layouts/Base.astro). The desktop bar on the right,
+// persisted like the player so it lasts across pages (ADR 0001). It holds the same panel as the
+// phone sheet (TranscriptPanelProto.astro), opened by the same toggle on the player row.
+import TranscriptPanelProto from './TranscriptPanelProto.astro';
+import '../styles/transcript-proto.css';
+---
+
+<aside class="proto-dock" aria-label="Transcript" data-proto-dock-el hidden transition:persist="proto-dock">
+  <TranscriptPanelProto />
+</aside>
+
+<script>
+  import '../lib/transcript-proto-ui';
+</script>

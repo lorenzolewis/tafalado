@@ -9,6 +9,8 @@ import DialogViewControls from '../../components/DialogViewControls.astro';
 import Icon from '../../components/Icon.astro';
 import PlayButton from '../../components/PlayButton.astro';
 import Print from '../../components/Print.astro';
+import TranscriptProto from '../../components/TranscriptProto.astro';
+import { PROTO_LESSONS } from '../../lib/transcript-proto';
 import Base from '../../layouts/Base.astro';
 import { ogImagePath } from '../../lib/artwork';
 import { formatDate, formatMinutes, isoDate, isoDuration } from '../../lib/format';
@@ -42,6 +44,7 @@ const SECTION_ICONS: Record<string, IconName> = {
   'pronunciation-notes': 'wave',
   'grammar-notes': 'book',
 };
+const protoTranscript = import.meta.env.DEV && PROTO_LESSONS.includes(lesson.id) && Boolean(notes);
 const sectionIcon = (slug: string): IconName => SECTION_ICONS[slug] ?? (slug.startsWith('chart-') ? 'table' : 'doc');
 const sections = [
   ...(notes?.dialog ? [{ slug: 'dialog', text: 'Dialog' }] : []),
@@ -140,6 +143,7 @@ const view = {
           <div class="notes-body">
             <notes.Content />
           </div>
+          {protoTranscript && <TranscriptProto id={lesson.id} trackId={lessonPath(data)} dialog={notes.dialog ?? []} />}
           <p class="source">
             <a href={notes.entry.data.source}>Original lesson on COERLL</a>
           </p>

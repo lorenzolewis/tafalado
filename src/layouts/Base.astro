@@ -5,6 +5,7 @@ import Credit from '../components/Credit.astro';
 import Icon from '../components/Icon.astro';
 import Player from '../components/Player.astro';
 import Sidebar from '../components/Sidebar.astro';
+import TranscriptProtoShell from '../components/TranscriptProtoShell.astro';
 import { APPLE_TOUCH_ICON_PATH, FAVICON_PATH, FAVICON_SIZES, OG_HEIGHT, OG_WIDTH, SITE_OG_PATH } from '../lib/artwork';
 import { LESSONS_ID, pagePath, seriesOf, viewOf } from '../lib/nav';
 import { INK, PAPER } from '../lib/print';
@@ -109,6 +110,7 @@ const printColours = [
     </div>
     <!-- Outside <main>, and on every page, so it is kept across navigations (ADR 0001). -->
     <Player />
+    {import.meta.env.DEV && <TranscriptProtoShell />}
     <script>
       import '../lib/motion';
     </script>

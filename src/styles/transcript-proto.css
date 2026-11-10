@@ -1,0 +1,211 @@
+/* PROTOTYPE (#99, #94): throwaway, dev only. The transcript in the desktop bar on the right and in
+   the phone sheet, both behind "Show transcript", keyed on <html data-proto-tx-open> set by
+   src/lib/transcript-proto-ui.ts. */
+
+/* ── A line: one button, the whole line jumps there ── */
+.proto-cues {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.proto-cue:not([data-repeat]) {
+  margin-block-start: var(--space-12);
+}
+.proto-line {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  column-gap: var(--space-12);
+  inline-size: 100%;
+  padding: 3px var(--space-8) 3px 0;
+  border: 0;
+  border-inline-start: 3px solid transparent;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.proto-line:hover {
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+.proto-time {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  justify-self: end;
+  opacity: 0.62;
+  font: 500 var(--text-14) / 1.75 var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.proto-who {
+  grid-column: 2;
+  padding-block-start: 3px;
+  font: 700 0.75rem / 1.4 var(--font-sans);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.proto-text {
+  grid-column: 2;
+}
+.proto-text i[lang='pt-BR'] {
+  font-style: normal;
+  font-weight: 700;
+  text-decoration: underline var(--paper);
+  text-decoration-thickness: 0.14em;
+  text-underline-offset: 0.14em;
+}
+.proto-text i[lang='es'] {
+  font-style: italic;
+}
+/* The line playing: the lesson's paper, in ink, wherever the panel is. */
+.proto-cue[aria-current] .proto-line {
+  border-inline-start-color: var(--print-ink);
+  background: var(--paper);
+  color: var(--print-ink);
+}
+.proto-cue[aria-current] .proto-text i[lang='pt-BR'] {
+  text-decoration-color: currentColor;
+}
+.proto-cue[aria-current] .proto-time {
+  opacity: 1;
+}
+
+/* ── Dialog turns (#94): a play button, and lit while a reading plays ── */
+.proto-turn-play {
+  margin-inline-start: var(--space-8);
+  padding: 2px var(--space-8);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: inherit;
+  font: 700 0.75rem / 1.4 var(--font-sans);
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.proto-turn-count,
+.proto-turn-miss {
+  margin-inline-start: var(--space-8);
+  color: var(--muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.proto-turn-miss {
+  color: var(--mark-red);
+}
+.dialog .turn[data-proto-reading] {
+  margin-inline: calc(-1 * var(--space-12));
+  padding-inline: calc(var(--space-12) - 3px) var(--space-12);
+  border-inline-start: 3px solid var(--paper);
+  background: color-mix(in srgb, var(--paper) 22%, transparent);
+}
+
+/* ── The panel: the same in the phone sheet and the desktop bar. It takes the colours around it
+   (the sheet's plate, the bar's page), and its top and bottom fade into them. ── */
+.proto-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-block-size: 0;
+  inline-size: 100%;
+}
+.proto-scroll {
+  --fade: 2.5rem;
+  flex: 1 1 0;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--fade) var(--space-12) calc(var(--fade) + 40px) 0;
+  text-align: start;
+  font: var(--text-16) / 1.45 var(--font-sans);
+  mask-image: linear-gradient(transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+}
+.proto-empty {
+  margin: var(--space-16);
+  opacity: 0.7;
+}
+.proto-now {
+  position: absolute;
+  inset-block-end: var(--space-16);
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  min-block-size: 36px;
+  padding: 0 var(--space-16);
+  border: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--print-ink);
+  font: 700 var(--text-14) / 1 var(--font-sans);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
+  cursor: pointer;
+}
+.proto-now[hidden] {
+  display: none;
+}
+
+/* ── The toggle: the same on the desktop row and in the sheet ── */
+.proto-toggle {
+  min-block-size: 40px;
+  padding: 0 var(--space-16);
+  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: 700 var(--text-14) / 1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.proto-toggle[aria-expanded='true'] {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--print-ink);
+}
+
+/* ── The phone sheet: the panel between the art and the controls while open ── */
+.sheet .proto-panel {
+  display: none;
+}
+html[data-proto-tx-open='true'] .sheet[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  block-size: calc(100dvh - max(2rem, env(safe-area-inset-top)));
+}
+html[data-proto-tx-open='true'] .sheet[open] > .close {
+  align-self: flex-start;
+}
+html[data-proto-tx-open='true'] .sheet .proto-panel {
+  display: flex;
+  margin-block: var(--space-8);
+}
+html[data-proto-tx-open='true'] .sheet .art.big {
+  inline-size: min(36vw, 8rem, 16dvh);
+}
+html[data-proto-tx-open='true'] .sheet .sheet-title {
+  font-size: var(--text-18);
+}
+
+/* ── The desktop bar on the right, which pushes the page narrower ── */
+.proto-dock {
+  position: fixed;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--ink);
+}
+.proto-dock[hidden] {
+  display: none;
+}
+@media (min-width: 52rem) {
+  .proto-dock {
+    inset-block: var(--panel-gap) var(--player-block-size, 0px);
+    inset-inline-end: var(--panel-gap);
+    inline-size: 22rem;
+  }
+  html[data-proto-tx-open='true'] .app {
+    padding-inline-end: calc(22rem + 2 * var(--panel-gap));
+  }
+}

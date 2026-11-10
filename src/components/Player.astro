@@ -9,10 +9,15 @@
 // player-ui.ts binds and updates every copy. The sheet's copies are hidden while it is closed, and
 // the row's desktop-only copies on a phone, so each name is on one visible control at a time.
 import Icon from './Icon.astro';
+import TranscriptPanelProto from './TranscriptPanelProto.astro';
+import TranscriptToggleProto from './TranscriptToggleProto.astro';
 import { getLessons, toTrack } from '../lib/lessons';
 import { RATES } from '../lib/player';
 
 // Every lesson in episode order, for autoplay-next and the Continue card (src/lib/progress-ui.ts).
+// PROTOTYPE (#99): the transcript's toggle on the desktop row and in the sheet, and its panel in the
+// sheet, dev only.
+const proto = import.meta.env.DEV;
 const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<', '\\u003c');
 ---
 
@@ -58,6 +63,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
         </select>
         <Icon name="chevron" />
       </span>
+      {proto && <TranscriptToggleProto />}
       <button type="button" class="ctl" data-action="mute" aria-label="Mute" aria-pressed="false" aria-keyshortcuts="M">
         <Icon name="volume" class="i-volume" /><Icon name="mute" class="i-mute" />
       </button>
@@ -73,6 +79,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     <img class="art big" alt="" decoding="async" width="288" height="288" data-art />
     <p class="sheet-title"><a data-title href="/"></a></p>
     <p class="meta" data-text="series"></p>
+    {proto && <TranscriptPanelProto />}
     <div class="sheet-seek">
       <input type="range" aria-label="Seek" min="0" max="0" step="1" value="0" data-seek />
       <span data-current>0:00</span>
@@ -85,6 +92,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
       </button>
       <button type="button" class="ctl" data-action="forward" aria-label="Forward 30 seconds"><Icon name="forward30" /></button>
     </div>
+    {proto && <TranscriptToggleProto />}
     <div class="sheet-extras">
       <span class="speed">
         <select data-rate aria-label="Speed">
