@@ -471,12 +471,20 @@ const tracks = JSON.stringify(
   :global(html[data-transcript-open]) .sheet .close {
     align-self: flex-start;
   }
+  /* It keeps room for a few lines even on a short phone; past that the sheet scrolls. */
   :global(html[data-transcript-open]) .sheet :global([data-transcript-panel]) {
+    --transcript-fade: 1rem;
+    --transcript-now-room: 0px;
     display: flex;
+    min-block-size: 7rem;
     margin-block: var(--space-8);
   }
   :global(html[data-transcript-open]) .art.big {
-    inline-size: min(36vw, 8rem, 16dvh);
+    inline-size: min(30vw, 6rem, 10dvh);
+  }
+  :global(html[data-transcript-open]) .play.big {
+    inline-size: 56px;
+    block-size: 56px;
   }
   :global(html[data-transcript-open]) .sheet-title {
     font-size: var(--text-18);

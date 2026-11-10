@@ -1,20 +1,29 @@
 ---
-// "Show transcript" / "Hide transcript" (#99): the same pill on the desktop player row and in the
+// "Show transcript" / "Hide transcript" (#99): the same button on the desktop player row and in the
 // phone sheet (src/components/Player.astro), with one open state; src/lib/transcript-ui.ts keeps
-// every copy in step and hides them while the playing lesson has no transcript.
+// every copy in step and hides them while the playing lesson has no transcript. Styled as the
+// player's other controls: ruled like the Speed select, reversed out in the plate's accent (as Play
+// is) while open.
+import Icon from './Icon.astro';
 ---
 
-<button type="button" class="toggle" data-transcript-toggle aria-expanded="false" hidden>Show transcript</button>
+<button type="button" class="toggle" data-transcript-toggle aria-expanded="false" hidden>
+  <Icon name="doc" />
+  <span data-transcript-label>Show transcript</span>
+</button>
 
 <style>
   .toggle {
-    min-block-size: 40px;
-    padding: 0 var(--space-16);
-    border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-block-size: 48px;
+    padding: 0 var(--space-16) 0 var(--space-12);
+    border: 2px solid currentColor;
+    border-radius: var(--radius-control);
     background: none;
     color: inherit;
-    font: 700 var(--text-14) / 1 var(--font-sans);
+    font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
   }
@@ -22,11 +31,18 @@
     display: none;
   }
   .toggle:hover {
-    border-color: currentColor;
+    background: var(--plate-track);
+  }
+  .toggle:focus-visible {
+    outline-color: var(--plate-accent);
   }
   .toggle[aria-expanded='true'] {
-    border-color: var(--paper);
-    background: var(--paper);
-    color: var(--print-ink);
+    border-color: var(--plate-accent);
+    background: var(--plate-accent);
+    color: var(--on-plate-accent);
+  }
+  .toggle :global(.icon) {
+    inline-size: 20px;
+    block-size: 20px;
   }
 </style>

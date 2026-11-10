@@ -42,10 +42,78 @@ function apply() {
   for (const toggle of document.querySelectorAll<HTMLButtonElement>('[data-transcript-toggle]')) {
     toggle.hidden = !available;
     toggle.setAttribute('aria-expanded', String(shown));
-    toggle.textContent = shown ? 'Hide transcript' : 'Show transcript';
+    toggle.querySelector('[data-transcript-label]')!.textContent = shown ? 'Hide transcript' : 'Show transcript';
   }
   // Whatever just appeared starts at the playing line.
   requestAnimationFrame(() => followAll(true));
+}
+
+// ── The phone sheet's change of layout ──
+
+/** As the sheet itself slides up (src/components/Player.astro). */
+const SHEET_MOTION: KeyframeAnimationOptions = { duration: 280, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' };
+let sheetMotion: Animation[] = [];
+
+/**
+ * Runs `change` (which opens or closes the transcript) and, in the open phone sheet, animates
+ * between the two layouts: the sheet grows or shrinks from its foot, the art and Play shrink or grow, and
+ * the panel fades in or out between them. Both ends run in the open layout, a flex column whose panel
+ * takes the space left, so the controls below it ride along with the sheet's height; closing swaps
+ * to the closed layout once the motion ends.
+ */
+function animateSheet(change: () => void) {
+  for (const a of sheetMotion) a.cancel();
+  sheetMotion = [];
+  const sheet = document.querySelector<HTMLDialogElement>('[data-sheet-dialog]');
+  const art = sheet?.querySelector<HTMLElement>('.art.big');
+  const title = sheet?.querySelector<HTMLElement>('.sheet-title');
+  const panel = sheet?.querySelector<HTMLElement>('[data-transcript-panel]');
+  const play = sheet?.querySelector<HTMLElement>('.play.big');
+  if (!sheet?.open || !art || !title || !panel || !play || DESKTOP.matches || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    change();
+    return;
+  }
+  const root = document.documentElement.dataset;
+  const measure = () => {
+    const style = getComputedStyle(panel);
+    return {
+      height: sheet.offsetHeight,
+      art: art.offsetWidth,
+      play: play.offsetWidth,
+      title: getComputedStyle(title).fontSize,
+      margin: [style.marginTop, style.marginBottom],
+      gap: getComputedStyle(sheet).rowGap,
+    };
+  };
+  const before = measure();
+  change();
+  const after = measure();
+  const opening = 'transcriptOpen' in root;
+  if (before.height === after.height && before.art === after.art) return;
+
+  const [from, to] = opening ? [before, after] : [after, before];
+  // The panel shown, and with no room: no margin, and its gap in the column taken back.
+  const shown = { opacity: 1, marginTop: to.margin[0], marginBottom: to.margin[1] };
+  const shut = { opacity: 0, marginTop: '0px', marginBottom: `-${to.gap}` };
+  if (!opening) root.transcriptOpen = ''; // close in the open layout, then swap
+  const run = (el: Element, keyframes: Keyframe[]) =>
+    sheetMotion.push(el.animate(opening ? keyframes : [...keyframes].reverse(), SHEET_MOTION));
+  run(sheet, [{ height: `${from.height}px` }, { height: `${to.height}px` }]);
+  run(art, [{ width: `${from.art}px` }, { width: `${to.art}px` }]);
+  run(title, [{ fontSize: from.title }, { fontSize: to.title }]);
+  run(play, [
+    { width: `${from.play}px`, height: `${from.play}px` },
+    { width: `${to.play}px`, height: `${to.play}px` },
+  ]);
+  run(panel, [shut, shown]);
+  const mine = sheetMotion;
+  Promise.all(mine.map((a) => a.finished)).then(
+    () => {
+      if (!opening && !open) delete root.transcriptOpen;
+      followAll(true);
+    },
+    () => {}, // cancelled by the next toggle, which sets the state itself
+  );
 }
 
 // ── The playing episode's transcript ──
@@ -206,7 +274,7 @@ document.addEventListener('astro:page-load', () => {
     document.querySelector('[data-player]')?.addEventListener('click', (event) => {
       if (!(event.target as Element).closest('[data-transcript-toggle]')) return;
       open = !open;
-      apply();
+      animateSheet(apply);
     });
     // The sheet starts at the playing line each time it opens.
     document.querySelector('[data-sheet-dialog]')?.addEventListener('toggle', () => requestAnimationFrame(() => followAll(true)));

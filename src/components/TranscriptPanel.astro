@@ -27,6 +27,9 @@
     flex-direction: column;
     min-block-size: 0;
     inline-size: 100%;
+    /* Squeezed while the phone sheet opens or closes (src/lib/transcript-ui.ts), it keeps its lines
+       inside. */
+    overflow: clip;
     text-align: start;
   }
   .key {
@@ -43,12 +46,14 @@
     gap: var(--space-4);
   }
   .scroll {
-    --fade: 2.5rem;
+    /* The fade, and room under the last line for Back to now. The phone sheet, short of height,
+       makes both smaller (src/components/Player.astro). */
+    --fade: var(--transcript-fade, 2.5rem);
     flex: 1 1 0;
     min-block-size: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: var(--fade) var(--space-12) calc(var(--fade) + 40px) 0;
+    padding: var(--fade) var(--space-12) calc(var(--fade) + var(--transcript-now-room, 40px)) 0;
     font: var(--text-16) / 1.45 var(--font-sans);
     mask-image: linear-gradient(transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
   }
