@@ -1,6 +1,6 @@
 # Episode transcripts
 
-Each episode gets a transcript: one WebVTT file per lesson in `public/transcripts/`, named by the lesson id (`pronunciation-13.vtt`, `grammar-04.vtt`, `supplementary-01.vtt`) and served at `/transcripts/<lesson id>.vtt` as `text/vtt; charset=utf-8` (`public/_headers`). They're being added a few episodes at a time. Pronunciation 1–23 and Grammar 1–7 are done.
+Each episode gets a transcript: one WebVTT file per lesson in `public/transcripts/`, named by the lesson id (`pronunciation-13.vtt`, `grammar-04.vtt`, `supplementary-01.vtt`) and served at `/transcripts/<lesson id>.vtt` as `text/vtt; charset=utf-8` (`public/_headers`). All 46 episodes are done: Pronunciation 1–24, Grammar 1–20 and Supplementary 1–2.
 
 The podcast feed links each one from its `<item>` with `<podcast:transcript url="…" type="text/vtt"/>`, so Apple Podcasts and other players can show it. An episode without a file gets no tag. Apple only shows a provided transcript once the show is set to **Display transcripts I provide** in Apple Podcasts Connect, and only if it is complete and correctly spelled: it must cover the whole episode, not just the dialog. Lesson pages don't show the transcripts yet (issue #99).
 
