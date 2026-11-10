@@ -142,9 +142,8 @@ items.forEach((item, index) => {
 });
 if (!/^Pronunciation 1 · /.test(text(items[0]?.title))) fail('the first item must be Pronunciation 1 (Lesson 1)');
 
-// An episode with a transcript (docs/transcripts.md) links it once: type text/vtt, on the site, at
-// the lesson's own path, served from a file in dist/ that passes the format checks. Transcripts are
-// being added a few episodes at a time, so an episode without one is only a warning.
+// Every episode links its transcript (docs/transcripts.md) once: type text/vtt, on the site, at
+// the lesson's own path, served from a file in dist/ that passes the format checks.
 function checkTranscriptTag(tag: any, lessonId: string, where: string) {
   const tags = [tag].flat().filter(Boolean);
   if (tags.length === 0) {
@@ -185,7 +184,7 @@ const withDialog = items.filter((item) => dialogs.get(text(item.guid).replace(/^
 const withNotes = [...dialogs.values()].filter(Boolean).length;
 if (withDialog !== withNotes) fail(`${withNotes} lessons have a dialog in their notes, but ${withDialog} feed items match them`);
 
-if (withoutTranscript.length) warnings.push(`${withoutTranscript.length} episodes have no transcript yet: ${withoutTranscript.join(', ')}`);
+if (withoutTranscript.length) fail(`${withoutTranscript.length} episodes have no <podcast:transcript>: ${withoutTranscript.join(', ')}`);
 for (const warning of warnings) console.warn(`⚠ ${warning}`);
 if (errors.length) {
   for (const error of errors) console.error(`✗ ${error}`);
