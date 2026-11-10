@@ -91,7 +91,7 @@ const printColours = [
     <Font cssVariable="--font-sans" preload={[{ weight: 400 }, { weight: 500 }, { weight: 700 }]} />
     <ClientRouter />
     <!-- Without JavaScript the phone can't switch views, so it shows the lessons below the page. -->
-    <noscript><style>@media (max-width: 51.99rem) { .app .side { display: flex !important; order: 1; } }</style></noscript>
+    <noscript><style>@media (max-width: 79.99rem) { .app .side { display: flex !important; order: 1; } }</style></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -162,7 +162,7 @@ const printColours = [
   /* Desktop: the sidebar beside the main pane, each scrolling on its own. The player is laid over
      the foot of the window (src/components/Player.astro): the board's gap shows below the sheets
      while it's hidden, and once it's there the page runs on behind it, with no gap between them. */
-  @media (min-width: 52rem) {
+  @media (min-width: 80rem) {
     .app {
       grid-template-columns: minmax(var(--sidebar-min), var(--sidebar-max)) 1fr;
       block-size: 100dvh;
@@ -186,7 +186,7 @@ const printColours = [
 
   /* Phone: one view at a time, edge to edge, with the "‹ Lessons" button pinned to the top of the
      page over whatever scrolls under it. */
-  @media (max-width: 51.99rem) {
+  @media (max-width: 79.99rem) {
     .app {
       gap: 0;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);

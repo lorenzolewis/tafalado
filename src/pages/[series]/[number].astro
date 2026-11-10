@@ -365,7 +365,7 @@ const view = {
   }
 
   /* Phone: the print bleeds to the pane's top, under the pinned "‹ Lessons" button. */
-  @media (max-width: 51.99rem) {
+  @media (max-width: 79.99rem) {
     :global(.pane):has(> .lesson) {
       padding-block-start: var(--bleed-y);
     }
@@ -377,7 +377,7 @@ const view = {
 
   /* Desktop: at the pane's full width 27:14 would still be tall, so the height is capped and the
      photo crops wider. The text stays within 44rem. */
-  @media (min-width: 52rem) {
+  @media (min-width: 80rem) {
     .lesson {
       --bleed-x: 48px;
       --bleed-y: 40px;

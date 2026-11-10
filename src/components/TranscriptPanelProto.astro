@@ -2,9 +2,15 @@
 // PROTOTYPE (#99): throwaway. The transcript panel, one component for both places it shows: the
 // phone sheet (src/components/Player.astro) and the desktop bar (TranscriptProtoShell.astro).
 // src/lib/transcript-proto-ui.ts fills it with the playing episode's lines and keeps it following.
+// The key shows how Portuguese and Spanish are marked: a word in the text, a chip on a whole line.
 ---
 
 <div class="proto-panel" data-proto-panel>
+  <p class="proto-key" aria-hidden="true">
+    <span><span class="proto-lang" data-lang="pt-BR">PT</span> <i lang="pt-BR">Português</i></span>
+    <span><span class="proto-lang" data-lang="es">ES</span> <i lang="es">Español</i></span>
+    <span>English</span>
+  </p>
   <div class="proto-scroll" data-proto-scroll></div>
   <button type="button" class="proto-now" data-proto-now hidden>Back to now</button>
 </div>

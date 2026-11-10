@@ -14,6 +14,8 @@ export interface Cue {
   speaker: string;
   /** The text as HTML, `<lang x>` turned into `<i lang="x">`. */
   html: string;
+  /** Set when the whole cue is in one marked language (`pt-BR`, `es`), e.g. a dialog line. */
+  lang?: string;
 }
 
 /** One reading of a dialog turn: the run of cues that says the turn's text. */
@@ -37,6 +39,14 @@ const seconds = (stamp: string) => {
 
 const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
+/** The language of a cue that is all one marked language: one language's spans, nothing else but punctuation. */
+function wholeLang(html: string): string | undefined {
+  const langs = new Set([...html.matchAll(/<i lang="([\w-]+)">/g)].map((m) => m[1]));
+  if (langs.size !== 1) return undefined;
+  const outside = html.replace(/<i lang="[\w-]+">[^<]*<\/i>/g, '');
+  return /[\p{L}\p{N}]/u.test(outside) ? undefined : [...langs][0];
+}
+
 export function parseVtt(vtt: string): Cue[] {
   const cues: Cue[] = [];
   for (const block of vtt.replaceAll('\r', '').split(/\n{2,}/)) {
@@ -53,7 +63,7 @@ export function parseVtt(vtt: string): Cue[] {
       .replace(/&lt;lang ([\w-]+)&gt;/g, '<i lang="$1">')
       .replaceAll('&lt;/lang&gt;', '</i>')
       .trim();
-    cues.push({ start: seconds(from), end: seconds(to), speaker, html });
+    cues.push({ start: seconds(from), end: seconds(to), speaker, html, lang: wholeLang(html) });
   }
   return cues;
 }

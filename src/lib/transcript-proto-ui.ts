@@ -7,11 +7,14 @@
 import { player, type PlayerState } from './player';
 import { allTracks } from './tracks';
 
-interface Cue { start: number; end: number; speaker: string; html: string }
+interface Cue { start: number; end: number; speaker: string; html: string; lang?: string }
+
+/** The chip on a line that is all one language. Hidden from screen readers: the text's lang says it. */
+const LANG_CHIP: Record<string, string> = { 'pt-BR': 'PT', es: 'ES' };
 interface Reading { start: number; end: number; firstCue: number; lastCue: number }
 interface TranscriptData { cues: Cue[]; turns: Reading[][] }
 
-const DESKTOP = matchMedia('(min-width: 52rem)');
+const DESKTOP = matchMedia('(min-width: 80rem)');
 /** One open state for both: only one of the sheet and the bar is on screen at a time. */
 const ui = { open: false };
 
@@ -46,14 +49,19 @@ const load = (trackId: string) => {
   return cache.get(trackId)!;
 };
 
-/** Each line is one button: the time, the speaker (read on every line, shown when it changes), the text. */
+/** Each line is one button: the time, a language chip when the whole line is Portuguese or Spanish,
+ *  the speaker (read on every line, shown when it changes), the text. */
 function listHtml(trackId: string, data: TranscriptData) {
   const items = data.cues.map((cue, i) => {
     const repeat = i > 0 && data.cues[i - 1].speaker === cue.speaker;
     return (
       `<li class="proto-cue" data-start="${cue.start}"${repeat ? ' data-repeat' : ''}>` +
       `<button type="button" class="proto-line" data-seek-to="${cue.start}">` +
-      `<span class="proto-time">${stamp(cue.start)}</span>` +
+      `<span class="proto-gutter"><span class="proto-time">${stamp(cue.start)}</span>` +
+      (cue.lang && LANG_CHIP[cue.lang]
+        ? `<span class="proto-lang" data-lang="${cue.lang}" aria-hidden="true">${LANG_CHIP[cue.lang]}</span>`
+        : '') +
+      `</span>` +
       `<span class="proto-who${repeat ? ' visually-hidden' : ''}">${esc(cue.speaker)}<span class="visually-hidden">:</span></span>` +
       `<span class="proto-text">${cue.html}</span></button></li>`
     );

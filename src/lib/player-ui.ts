@@ -15,7 +15,7 @@ const time = (seconds: number) => formatDuration(Math.floor(seconds));
 const bound = new WeakSet<Element>();
 
 /** The phone's sheet (src/components/Player.astro) is phone-only; the desktop row has everything. */
-const DESKTOP = '(min-width: 52rem)';
+const DESKTOP = '(min-width: 80rem)';
 
 /**
  * The mini-player is persisted across navigations, so it must be wired up only once: binding it

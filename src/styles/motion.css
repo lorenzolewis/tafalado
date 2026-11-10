@@ -46,7 +46,7 @@
 
 /* The sheet: the page, beside the sidebar on desktop; on a phone, whichever of the page and the
    Lessons view is shown. */
-@media (min-width: 52rem) {
+@media (min-width: 80rem) {
   .app > .side {
     view-transition-name: sidebar;
   }
@@ -58,7 +58,7 @@
     overflow: clip;
   }
 }
-@media (max-width: 51.99rem) {
+@media (max-width: 79.99rem) {
   .app[data-view='lessons'] > .side,
   .app:not([data-view='lessons']) > .pane {
     view-transition-name: sheet;
@@ -136,7 +136,7 @@ html[data-astro-transition='back']::view-transition-new(sheet) {
 }
 
 /* Phone: the sheet underneath slides a little too. */
-@media (max-width: 51.99rem) {
+@media (max-width: 79.99rem) {
   ::view-transition-old(sheet) {
     animation-name: sheet-under;
   }

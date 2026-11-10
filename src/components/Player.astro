@@ -4,7 +4,7 @@
 // focus) across navigations. The audio itself lives in src/lib/player.ts; src/lib/player-ui.ts wires
 // this markup to it.
 //
-// Phone (below 52rem): a slim bar with back 10s and play, which opens a modal sheet with everything.
+// Phone (below 80rem): a slim bar with back 10s and play, which opens a modal sheet with everything.
 // Desktop: one full row, with no sheet. Some controls appear twice (in the bar and in the sheet);
 // player-ui.ts binds and updates every copy. The sheet's copies are hidden while it is closed, and
 // the row's desktop-only copies on a phone, so each name is on one visible control at a time.
@@ -354,7 +354,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     align-items: center;
     gap: var(--space-4);
   }
-  /* Shown from 52rem (below); the later rules there win over this one. */
+  /* Shown from 80rem (below); the later rules there win over this one. */
   .desktop {
     display: none;
   }
@@ -461,8 +461,8 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     }
   }
 
-  /* ── Desktop row, from 52rem: everything in one row, no sheet ── */
-  @media (min-width: 52rem) {
+  /* ── Desktop row, from 80rem: everything in one row, no sheet ── */
+  @media (min-width: 80rem) {
     /* Laid over the foot of the window; the page runs on behind it (src/layouts/Base.astro). */
     .player {
       position: fixed;
@@ -470,7 +470,7 @@ const tracks = JSON.stringify((await getLessons()).map(toTrack)).replaceAll('<',
     }
     .row {
       display: grid;
-      /* 12rem minimums (not #59's 16rem and 14rem), so the row fits at 52rem (decided on #60). */
+      /* 12rem minimums (not #59's 16rem and 14rem), so the row fits at 80rem (decided on #60). */
       grid-template-columns: minmax(12rem, 1.3fr) auto minmax(12rem, 1.5fr) auto;
       align-items: center;
       gap: var(--space-24);
