@@ -15,7 +15,7 @@ const time = (seconds: number) => formatDuration(Math.floor(seconds));
 const bound = new WeakSet<Element>();
 
 /** The phone's sheet (src/components/Player.astro) is phone-only; the desktop row has everything. */
-const DESKTOP = '(min-width: 52rem)';
+const DESKTOP = '(min-width: 80rem)';
 
 /**
  * The mini-player is persisted across navigations, so it must be wired up only once: binding it
@@ -64,10 +64,11 @@ function bindMiniPlayer(root: HTMLElement) {
   matchMedia(DESKTOP).addEventListener('change', (event) => event.matches && closeSheet());
   document.addEventListener('astro:before-swap', closeSheet);
 
-  // The player is sticky at the bottom, so keep focused and scrolled-to content clear of it.
-  new ResizeObserver(() => {
-    document.documentElement.style.setProperty('--player-block-size', `${root.offsetHeight}px`);
-  }).observe(root);
+  // The player is sticky at the bottom, so keep focused and scrolled-to content clear of it. The
+  // swap to a new page replaces <html>'s style, so it is set again after each one.
+  const setBlockSize = () => document.documentElement.style.setProperty('--player-block-size', `${root.offsetHeight}px`);
+  new ResizeObserver(setBlockSize).observe(root);
+  document.addEventListener('astro:after-swap', setBlockSize);
   for (const rate of rates) rate.addEventListener('change', () => player.setRate(Number(rate.value)));
   for (const seek of seeks) seek.addEventListener('input', () => player.seek(Number(seek.value)));
 

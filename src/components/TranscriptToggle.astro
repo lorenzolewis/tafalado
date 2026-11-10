@@ -1,0 +1,32 @@
+---
+// "Show transcript" / "Hide transcript" (#99): the same pill on the desktop player row and in the
+// phone sheet (src/components/Player.astro), with one open state; src/lib/transcript-ui.ts keeps
+// every copy in step and hides them while the playing lesson has no transcript.
+---
+
+<button type="button" class="toggle" data-transcript-toggle aria-expanded="false" hidden>Show transcript</button>
+
+<style>
+  .toggle {
+    min-block-size: 40px;
+    padding: 0 var(--space-16);
+    border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+    border-radius: 999px;
+    background: none;
+    color: inherit;
+    font: 700 var(--text-14) / 1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .toggle[hidden] {
+    display: none;
+  }
+  .toggle:hover {
+    border-color: currentColor;
+  }
+  .toggle[aria-expanded='true'] {
+    border-color: var(--paper);
+    background: var(--paper);
+    color: var(--print-ink);
+  }
+</style>

@@ -34,6 +34,17 @@ pronunciation for speakers of Spanish.
 
 The full files go to the feed, `<v>` and `<lang>` included. Apple ingests `<v>` speaker names; a player that shows the `<lang>` tags as text would be a reason to serve a stripped copy to the feed later.
 
+## On the site
+
+The transcript shows only in the player (#99), never on the lesson page: a **Show transcript** pill on the desktop player row opens a bar on the right, and the same pill in the phone's player sheet opens it there. It is always the playing episode's, and it stays open across pages with the player (ADR 0001). Every line is a button that jumps there; the panel follows the playing line until it's scrolled, then offers **Back to now**. Portuguese is bold on the paper's underline, Spanish italic on a dotted one, and a line that is all one language gets a PT or ES chip.
+
+Each dialog turn on the lesson page gets a play button that jumps to its first reading, and is lit while any of its readings plays (#94). A turn's readings are found at build time by matching its Portuguese against the cues: letters and digits only, lowercased, whole words, across however many cues it was split into. A shared dialog (Pronunciation 11, 13, 15) is matched against the lesson that reads it. Pronunciation 24's clips aren't matched: they're excerpts broken up by discussion.
+
+- `src/lib/transcript.ts` parses the VTT (`parseVtt`), finds the readings (`matchTurns`) and holds the build checks; `src/lib/transcripts.ts` reads the files when the site builds.
+- The browser never parses VTT: each transcript is built into `/data/transcripts/<lesson id>.json` (not under `/transcripts/`, which `public/_headers` serves as `text/vtt`).
+- **The build fails** on a transcript named for no lesson, one that breaks the format above, and a dialog turn whose text the transcript never reads in full. So when a turn's text changes in the notes, change its readings here too (and the other way round).
+- `src/lib/transcript-ui.ts` wires the panel and the turns to the player.
+
 ## How they were made
 
 Each episode switches language every few seconds: Orlando explains in English, Valdo, Michelle and the guests speak Portuguese, José Luis reads the Spanish lines. A speech recognizer run over the whole file picks one language per 30-second window and garbles the rest, so the transcripts were made in four passes, one episode at a time.

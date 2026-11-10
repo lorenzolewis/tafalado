@@ -62,6 +62,9 @@
   --sidebar-min: 18rem;
   --sidebar-max: 22rem;
   --panel-gap: 10px;
+  /* The desktop transcript bar on the right (#99, src/components/TranscriptBar.astro). With both bars
+     the desktop layout needs about 80rem, the phone/desktop breakpoint. */
+  --transcript-bar: 22rem;
   /* The player pads its foot by the home-indicator inset, as the bottom-most thing on the screen. */
   --player-safe-b: env(safe-area-inset-bottom, 0px);
 

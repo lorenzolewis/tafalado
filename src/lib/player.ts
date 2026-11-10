@@ -23,6 +23,8 @@ export interface Track {
   durationSeconds: number;
   /** Running order of the original feed (1–46). */
   episode: number;
+  /** Where its transcript's JSON is (src/lib/transcripts.ts), when it has one (#99). */
+  transcript?: string;
 }
 
 export interface PlayerState {

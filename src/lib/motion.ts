@@ -4,7 +4,7 @@
 // navigation that would otherwise drop it on <body>.
 import { navigationDirection, type Direction } from './nav';
 
-const DESKTOP = '(min-width: 52rem)';
+const DESKTOP = '(min-width: 80rem)';
 /** Read by src/styles/motion.css, as the ClientRouter sets it for its own navigations. */
 const DIRECTION_ATTR = 'data-astro-transition';
 
