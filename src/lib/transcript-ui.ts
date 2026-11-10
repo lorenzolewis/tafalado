@@ -56,8 +56,8 @@ let sheetMotion: Animation[] = [];
 
 /**
  * Runs `change` (which opens or closes the transcript) and, in the open phone sheet, animates
- * between the two layouts: the sheet grows or shrinks from its foot, the art and Play shrink or grow, and
- * the panel fades in or out between them. Both ends run in the open layout, a flex column whose panel
+ * between the two layouts: the sheet grows or shrinks from its foot, the art folds away or back, and
+ * the panel fades in or out in its place. Both ends run in the open layout, a flex column whose panel
  * takes the space left, so the controls below it ride along with the sheet's height; closing swaps
  * to the closed layout once the motion ends.
  */
@@ -68,18 +68,17 @@ function animateSheet(change: () => void) {
   const art = sheet?.querySelector<HTMLElement>('.art.big');
   const title = sheet?.querySelector<HTMLElement>('.sheet-title');
   const panel = sheet?.querySelector<HTMLElement>('[data-transcript-panel]');
-  const play = sheet?.querySelector<HTMLElement>('.play.big');
-  if (!sheet?.open || !art || !title || !panel || !play || DESKTOP.matches || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!sheet?.open || !art || !title || !panel || DESKTOP.matches || matchMedia('(prefers-reduced-motion: reduce)').matches) {
     change();
     return;
   }
   const root = document.documentElement.dataset;
   const measure = () => {
     const style = getComputedStyle(panel);
+    const artStyle = getComputedStyle(art);
     return {
       height: sheet.offsetHeight,
-      art: art.offsetWidth,
-      play: play.offsetWidth,
+      art: { width: `${art.offsetWidth}px`, opacity: artStyle.opacity, marginBottom: artStyle.marginBottom },
       title: getComputedStyle(title).fontSize,
       margin: [style.marginTop, style.marginBottom],
       gap: getComputedStyle(sheet).rowGap,
@@ -89,7 +88,7 @@ function animateSheet(change: () => void) {
   change();
   const after = measure();
   const opening = 'transcriptOpen' in root;
-  if (before.height === after.height && before.art === after.art) return;
+  if (before.height === after.height && before.art.width === after.art.width) return;
 
   const [from, to] = opening ? [before, after] : [after, before];
   // The panel shown, and with no room: no margin, and its gap in the column taken back.
@@ -99,12 +98,9 @@ function animateSheet(change: () => void) {
   const run = (el: Element, keyframes: Keyframe[]) =>
     sheetMotion.push(el.animate(opening ? keyframes : [...keyframes].reverse(), SHEET_MOTION));
   run(sheet, [{ height: `${from.height}px` }, { height: `${to.height}px` }]);
-  run(art, [{ width: `${from.art}px` }, { width: `${to.art}px` }]);
+  // Visible throughout, so it can fold away.
+  run(art, [{ ...from.art, visibility: 'visible' }, { ...to.art, visibility: 'visible' }]);
   run(title, [{ fontSize: from.title }, { fontSize: to.title }]);
-  run(play, [
-    { width: `${from.play}px`, height: `${from.play}px` },
-    { width: `${to.play}px`, height: `${to.play}px` },
-  ]);
   run(panel, [shut, shown]);
   const mine = sheetMotion;
   Promise.all(mine.map((a) => a.finished)).then(

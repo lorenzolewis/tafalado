@@ -30,8 +30,11 @@ import Icon from './Icon.astro';
   .toggle[hidden] {
     display: none;
   }
-  .toggle:hover {
-    background: var(--plate-track);
+  /* Not on touch screens, where a tap would leave it looking pressed. */
+  @media (hover: hover) {
+    .toggle:hover {
+      background: var(--plate-track);
+    }
   }
   .toggle:focus-visible {
     outline-color: var(--plate-accent);
@@ -44,5 +47,14 @@ import Icon from './Icon.astro';
   .toggle :global(.icon) {
     inline-size: 20px;
     block-size: 20px;
+  }
+  /* The narrowest phones fit it beside Speed and mute by dropping the icon. */
+  @media (max-width: 23rem) {
+    .toggle {
+      padding-inline: var(--space-12);
+    }
+    .toggle :global(.icon) {
+      display: none;
+    }
   }
 </style>

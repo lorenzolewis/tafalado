@@ -97,7 +97,6 @@ const tracks = JSON.stringify(
       </button>
       <button type="button" class="ctl" data-action="forward" aria-label="Forward 30 seconds"><Icon name="forward30" /></button>
     </div>
-    <TranscriptToggle />
     <div class="sheet-extras">
       <span class="speed">
         <select data-rate aria-label="Speed">
@@ -105,6 +104,7 @@ const tracks = JSON.stringify(
         </select>
         <Icon name="chevron" />
       </span>
+      <TranscriptToggle />
       <button type="button" class="ctl" data-action="mute" aria-label="Mute" aria-pressed="false">
         <Icon name="volume" class="i-volume" /><Icon name="mute" class="i-mute" />
       </button>
@@ -450,15 +450,19 @@ const tracks = JSON.stringify(
     inline-size: 30px;
     block-size: 30px;
   }
+  /* Speed, the transcript's toggle and mute, spread across one row. */
   .sheet-extras {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: var(--space-4);
     inline-size: 100%;
     margin-block-start: var(--space-8);
   }
 
-  /* The transcript (#99): between the art and the controls while open, with the art smaller and the
-     sheet the full height. src/lib/transcript-ui.ts sets data-transcript-open on <html>. */
+  /* The transcript (#99): in place of the art while open, between the title and the controls, with
+     the sheet the full height. src/lib/transcript-ui.ts sets data-transcript-open on <html>, and
+     animates between the two layouts. */
   .sheet :global([data-transcript-panel]) {
     display: none;
   }
@@ -479,12 +483,12 @@ const tracks = JSON.stringify(
     min-block-size: 7rem;
     margin-block: var(--space-8);
   }
+  /* The art folds away to nothing, its gap in the column taken back. */
   :global(html[data-transcript-open]) .art.big {
-    inline-size: min(30vw, 6rem, 10dvh);
-  }
-  :global(html[data-transcript-open]) .play.big {
-    inline-size: 56px;
-    block-size: 56px;
+    visibility: hidden;
+    inline-size: 0;
+    margin-block-end: calc(-1 * var(--space-12));
+    opacity: 0;
   }
   :global(html[data-transcript-open]) .sheet-title {
     font-size: var(--text-18);
