@@ -62,7 +62,8 @@ export function podcastApps(feed: string, show: Partial<Record<ShowUrl, string>>
 }
 
 // Episode transcripts (docs/transcripts.md): one WebVTT file per lesson in public/transcripts/,
-// named by the lesson id (`pronunciation-13.vtt`), linked from the feed's <podcast:transcript>.
+// named by the lesson id (`pronunciation-13.vtt`). The feed's <podcast:transcript> links a built
+// copy of it (feedTranscriptPath).
 
 export const TRANSCRIPT_TYPE = 'text/vtt';
 
@@ -72,11 +73,34 @@ export function transcriptPath(lessonId: string): string {
 }
 
 /**
+ * `/transcripts/feed/pronunciation-13.vtt`: the feed's copy of a lesson's transcript, built by
+ * src/pages/transcripts/feed/[id].vtt.ts with feedVtt(). A trial: Apple Podcasts Connect rejected
+ * the full files without saying why, and the <lang> spans and NOTE block are the likely cause.
+ */
+export function feedTranscriptPath(lessonId: string): string {
+  return `/transcripts/feed/${lessonId}.vtt`;
+}
+
+/**
+ * The feed's copy of a transcript: the same cues, timings and <v> speakers, without NOTE blocks
+ * or <lang> spans (their text stays). Apple documents only <v> speaker names for VTT.
+ */
+export function feedVtt(vtt: string): string {
+  const blocks = vtt.replace(/\r\n?/g, '\n').trim().split(/\n{2,}/);
+  return (
+    blocks
+      .filter((block) => !/^NOTE(\s|$)/.test(block))
+      .map((block) => block.replace(/<lang [^>]*>|<\/lang>/g, ''))
+      .join('\n\n') + '\n'
+  );
+}
+
+/**
  * The item's <podcast:transcript> tag, or '' when the lesson has no transcript. `available` holds
- * the lesson ids with a file in public/transcripts/; `url` makes a path absolute. The full file is
- * linked, its <v> speakers and <lang> spans included.
+ * the lesson ids with a file in public/transcripts/; `url` makes a path absolute. It links the
+ * feed's copy (feedTranscriptPath), not the full file.
  */
 export function transcriptTag(lessonId: string, available: ReadonlySet<string>, url: (path: string) => string): string {
   if (!available.has(lessonId)) return '';
-  return `<podcast:transcript url="${url(transcriptPath(lessonId))}" type="${TRANSCRIPT_TYPE}"/>`;
+  return `<podcast:transcript url="${url(feedTranscriptPath(lessonId))}" type="${TRANSCRIPT_TYPE}"/>`;
 }

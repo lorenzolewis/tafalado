@@ -4,7 +4,7 @@ Each episode gets a transcript: one WebVTT file per lesson in `public/transcript
 
 The podcast feed links each one from its `<item>` with `<podcast:transcript url="…" type="text/vtt"/>`, so Apple Podcasts and other players can show it. An episode without a file gets no tag. Apple only shows a provided transcript once the show is set to **Display transcripts I provide** in Apple Podcasts Connect, and only if it is complete and correctly spelled: it must cover the whole episode, not just the dialog. Lesson pages don't show the transcripts yet (issue #99).
 
-`pnpm validate:feed` checks that each linked transcript is the lesson's own file, on the site, in `dist/`, and follows the format below. An episode without one fails the check. `src/lib/transcript-check.test.ts` checks the committed files too.
+`pnpm validate:feed` checks that each linked transcript is the feed's copy of the lesson's own file (below), on the site, in `dist/`, and follows the format below. An episode without one fails the check. `src/lib/transcript-check.test.ts` checks the committed files too.
 
 ## Format
 
@@ -32,7 +32,7 @@ pronunciation for speakers of Spanish.
 - `&`, `<` and `>` are escaped as `&amp;`, `&lt;` and `&gt;`. No other tags.
 - **The whole episode**: the intro, the explanations, the dialog, the cultural talk and the goodbye.
 
-The full files go to the feed, `<v>` and `<lang>` included. Apple ingests `<v>` speaker names; a player that shows the `<lang>` tags as text would be a reason to serve a stripped copy to the feed later.
+The feed links a copy of each file, not the file itself: `/transcripts/feed/<lesson id>.vtt`, built by `src/pages/transcripts/feed/[id].vtt.ts` with `feedVtt()` (`src/lib/podcast.ts`). The copy has the same cues, timings and `<v>` speakers, but no `NOTE` block and no `<lang>` spans (their text stays). Apple Podcasts Connect rejected the full files with only "didn't follow our transcript guidelines", and Apple documents only `<v>` speaker names for VTT. The copies are a trial: if Apple still rejects them, the cause is something else. The full files stay at `/transcripts/<lesson id>.vtt` and are still the source for the player. `pnpm validate:feed` checks that the copies have no `<lang>` or `NOTE` and that the full files are still in `dist/`.
 
 ## On the site
 

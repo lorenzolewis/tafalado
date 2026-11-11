@@ -9,7 +9,7 @@ import { parse as parseYaml } from 'yaml';
 import { checkDescription } from '../src/lib/feed-notes.ts';
 import { resolveDialog, type NotesFile } from '../src/lib/notes-check.ts';
 import { notesSchema } from '../src/lib/notes-schema.ts';
-import { TRANSCRIPT_TYPE, transcriptPath } from '../src/lib/podcast.ts';
+import { TRANSCRIPT_TYPE, feedTranscriptPath, transcriptPath } from '../src/lib/podcast.ts';
 import { checkTranscript } from '../src/lib/transcript-check.ts';
 
 const DIST = new URL('../dist/', import.meta.url);
@@ -166,13 +166,21 @@ function checkTranscriptTag(tag: any, lessonId: string, where: string) {
     fail(`${where} <podcast:transcript>: ${url} is not on ${site.origin}`);
     return;
   }
-  if (transcript.pathname !== transcriptPath(lessonId)) fail(`${where} <podcast:transcript>: ${url} is not ${transcriptPath(lessonId)}`);
+  if (transcript.pathname !== feedTranscriptPath(lessonId)) fail(`${where} <podcast:transcript>: ${url} is not ${feedTranscriptPath(lessonId)}`);
   let vtt: string;
   try {
     vtt = readFileSync(new URL(`.${decodeURIComponent(transcript.pathname)}`, DIST), 'utf8');
   } catch {
     fail(`${where}: transcript ${transcript.pathname} is not in dist/`);
     return;
+  }
+  // The feed's copy: the full file, still in dist/, without its NOTE block or <lang> spans.
+  if (/<\/?lang\b/.test(vtt)) fail(`${where}: transcript ${transcript.pathname} still has <lang> spans`);
+  if (/(^|\n\n)NOTE(\s|$)/.test(vtt)) fail(`${where}: transcript ${transcript.pathname} still has a NOTE block`);
+  try {
+    readFileSync(new URL(`.${transcriptPath(lessonId)}`, DIST));
+  } catch {
+    fail(`${where}: the full transcript ${transcriptPath(lessonId)} is not in dist/`);
   }
   const check = checkTranscript(vtt);
   for (const error of check.errors.slice(0, 5)) fail(`${where}: transcript ${error}`);
@@ -197,5 +205,5 @@ console.log(`✓ atom:link self is ${FEED_URL}; links, images and enclosures on 
 console.log('✓ ADR 0003: itunes:type serial, itunes:episode 1–46 in order, no itunes:season, series in titles');
 console.log(`✓ ${items.length} enclosures, every length matches the file size in dist/`);
 console.log(`✓ ${withDialog} descriptions hold their lesson's dialog in pt-BR, es and en; no <mark>`);
-console.log(`✓ ${transcripts} transcripts (text/vtt, on the site, in dist/): ${transcriptCues} cues, each with a speaker, ≤ 2 lines of ≤ 65 characters`);
+console.log(`✓ ${transcripts} transcripts (text/vtt, feed copies without <lang> or NOTE, in dist/): ${transcriptCues} cues, each with a speaker, ≤ 2 lines of ≤ 65 characters`);
 console.log(`✓ first episode: ${text(items[0].title)}`);

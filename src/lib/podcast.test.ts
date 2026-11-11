@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { APPLE_PODCASTS_URL, podcastApps, transcriptPath, transcriptTag } from './podcast';
+import { APPLE_PODCASTS_URL, feedTranscriptPath, feedVtt, podcastApps, transcriptPath, transcriptTag } from './podcast';
 
 const FEED = 'https://tafalado.lorenzo.soy/feed.xml';
 const linked = (apps: ReturnType<typeof podcastApps>) => apps.filter((app) => app.href).map((app) => app.name);
@@ -42,14 +42,46 @@ describe('podcastApps', () => {
 describe('transcriptTag', () => {
   const url = (path: string) => new URL(path, 'https://tafalado.lorenzo.soy').href;
 
-  it('links the lesson’s WebVTT file on the site', () => {
+  it('links the feed’s copy of the lesson’s WebVTT file on the site', () => {
     expect(transcriptPath('grammar-04')).toBe('/transcripts/grammar-04.vtt');
+    expect(feedTranscriptPath('grammar-04')).toBe('/transcripts/feed/grammar-04.vtt');
     expect(transcriptTag('pronunciation-13', new Set(['pronunciation-13']), url)).toBe(
-      '<podcast:transcript url="https://tafalado.lorenzo.soy/transcripts/pronunciation-13.vtt" type="text/vtt"/>',
+      '<podcast:transcript url="https://tafalado.lorenzo.soy/transcripts/feed/pronunciation-13.vtt" type="text/vtt"/>',
     );
   });
 
   it('adds nothing for a lesson without a transcript', () => {
     expect(transcriptTag('grammar-04', new Set(['pronunciation-13']), url)).toBe('');
+  });
+});
+
+describe('feedVtt', () => {
+  it('keeps cues and <v> speakers, drops NOTE blocks and <lang> spans but not their text', () => {
+    const vtt = [
+      'WEBVTT',
+      '',
+      'NOTE pronunciation-01. Machine draft.',
+      '',
+      '00:00:03.100 --> 00:00:07.550',
+      '<v Orlando>Welcome to <lang pt-BR>Tá Falado</lang>, the Brazilian Portuguese',
+      'pronunciation for speakers of Spanish.',
+      '',
+      '00:00:08.000 --> 00:00:09.000',
+      '<v José Luis><lang es>Hola</lang>',
+      '',
+    ].join('\n');
+    expect(feedVtt(vtt)).toBe(
+      [
+        'WEBVTT',
+        '',
+        '00:00:03.100 --> 00:00:07.550',
+        '<v Orlando>Welcome to Tá Falado, the Brazilian Portuguese',
+        'pronunciation for speakers of Spanish.',
+        '',
+        '00:00:08.000 --> 00:00:09.000',
+        '<v José Luis>Hola',
+        '',
+      ].join('\n'),
+    );
   });
 });
