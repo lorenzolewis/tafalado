@@ -45,3 +45,18 @@ export function navigationDirection(from: string, to: string, history: Direction
 export function viewSwitchDirection(to: View): Direction {
   return to === 'lessons' ? 'back' : 'forward';
 }
+
+/**
+ * Whether a link leads to the page already shown (#111): the same path and query, with no fragment
+ * on either. The ClientRouter would fetch, swap and transition to it again; a fragment (such as
+ * #lessons) it handles on the same page itself.
+ */
+export function isCurrentPage(href: URL, here: URL): boolean {
+  return (
+    href.origin === here.origin &&
+    pagePath(href.pathname) === pagePath(here.pathname) &&
+    href.search === here.search &&
+    !href.hash &&
+    !here.hash
+  );
+}
