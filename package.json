@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"@astrojs/sitemap": "3.7.4",
+		"@counterscale/tracker": "3.4.1",
 		"@leeoniya/ufuzzy": "1.0.19",
 		"astro": "7.4.5"
 	},

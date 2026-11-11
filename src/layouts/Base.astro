@@ -124,6 +124,15 @@ const printColours = [
         else addEventListener('load', register, { once: true });
       }
     </script>
+    <script>
+      // Page views to Counterscale. Bundled scripts run once per visit under <ClientRouter />; the
+      // tracker hooks history.pushState, so client-side navigations are counted too. It skips localhost.
+      import * as Counterscale from '@counterscale/tracker';
+      Counterscale.init({
+        siteId: 'tafalado',
+        reporterUrl: 'https://counterscale.lorenzo-lewis.workers.dev/collect',
+      });
+    </script>
   </body>
 </html>
 
