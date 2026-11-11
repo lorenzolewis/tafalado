@@ -4,7 +4,7 @@
 import { navigate } from 'astro:transitions/client';
 import { createLessonFilter } from './lesson-filter';
 import { switchView } from './motion';
-import { LESSONS_ID, pagePath, viewOf, viewSwitchDirection, type View } from './nav';
+import { LESSONS_ID, isCurrentPage, pagePath, viewOf, viewSwitchDirection, type View } from './nav';
 import { LINE_PAGE, searchView, type HitGroup } from './search-view';
 import { seekTo } from './seek';
 import { escape, stamp } from './transcript-view';
@@ -271,6 +271,23 @@ document.addEventListener(
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     void openLessons();
+  },
+  { capture: true },
+);
+
+// Links to the page already shown, such as the wordmark on the home page (#111): nothing to do.
+// The ClientRouter would fetch, swap and transition to the same page again. Captured before its
+// click handler, which then leaves the click alone; modified, middle and new-tab clicks keep the
+// browser's own handling.
+document.addEventListener(
+  'click',
+  (event) => {
+    const link = (event.target as Element).closest?.('a');
+    if (!link?.href || event.button !== 0 || event.defaultPrevented) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if ((link.target && link.target !== '_self') || link.hasAttribute('download')) return;
+    if (link.dataset.astroReload !== undefined) return;
+    if (isCurrentPage(new URL(link.href), new URL(location.href))) event.preventDefault();
   },
   { capture: true },
 );

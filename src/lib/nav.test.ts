@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { navigationDirection, seriesOf, viewSwitchDirection } from './nav';
+import { isCurrentPage, navigationDirection, seriesOf, viewSwitchDirection } from './nav';
 
 describe('seriesOf', () => {
   it("gives a lesson page's series", () => {
@@ -41,5 +41,26 @@ describe('viewSwitchDirection', () => {
     expect(viewSwitchDirection('lessons')).toBe('back');
     expect(viewSwitchDirection('page')).toBe('forward');
     expect(viewSwitchDirection('home')).toBe('forward');
+  });
+});
+
+describe('isCurrentPage', () => {
+  const at = (href: string) => new URL(href, 'https://tafalado.lorenzo.soy');
+
+  it('is the page shown, as the static build may serve it', () => {
+    expect(isCurrentPage(at('/'), at('/'))).toBe(true);
+    expect(isCurrentPage(at('/'), at('/index.html'))).toBe(true);
+    expect(isCurrentPage(at('/grammar/03'), at('/grammar/03.html'))).toBe(true);
+  });
+
+  it('is not another page, another query or another origin', () => {
+    expect(isCurrentPage(at('/'), at('/grammar/03'))).toBe(false);
+    expect(isCurrentPage(at('/?q=1'), at('/'))).toBe(false);
+    expect(isCurrentPage(new URL('https://example.com/'), at('/'))).toBe(false);
+  });
+
+  it('leaves fragments to the router: #lessons, or leaving it for the page', () => {
+    expect(isCurrentPage(at('/#lessons'), at('/'))).toBe(false);
+    expect(isCurrentPage(at('/'), at('/#lessons'))).toBe(false);
   });
 });

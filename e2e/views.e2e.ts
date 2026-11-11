@@ -37,3 +37,14 @@ test('on a phone, the Lessons view and the page switch both ways, and focus land
   await expect(page).toHaveURL(/\/pronunciation\/02#lessons$/);
   await expect(lessons).toBeVisible();
 });
+
+test("the Lessons view's wordmark shows the home page (#111)", async ({ page }) => {
+  await page.goto('/#lessons');
+  const lessons = page.getByRole('navigation', { name: 'Site and lessons' });
+  await expect(lessons).toBeVisible();
+
+  await lessons.getByRole('link', { name: 'Tá Falado' }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('main')).toBeVisible();
+  await expect(lessons).toBeHidden();
+});
