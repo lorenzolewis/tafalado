@@ -8,48 +8,32 @@ const rowSeries = ['pronunciation', 'pronunciation', 'pronunciation', 'pronuncia
 const hit = (lesson: string, start: number): TranscriptHit => ({ lesson, start, text: 'o coração', ranges: [2, 9] });
 
 const view = (input: Partial<SearchViewInput>) =>
-  searchView({
-    query: 'coracao',
-    matches: [],
-    rowLessons,
-    rowSeries,
-    series: null,
-    hits: [],
-    allEpisodes: false,
-    lineLimit: 50,
-    ...input,
-  });
-const shown = (v: ReturnType<typeof searchView>) => v.order.filter((i) => !v.hidden[i]);
+  searchView({ query: 'coracao', matches: [], rowLessons, rowSeries, series: null, hits: [], lineLimit: 50, ...input });
+const groups = (v: ReturnType<typeof searchView>) => v.groups.map((g) => [g.row, g.hits.map((h) => h.start)]);
 
 describe('search view', () => {
-  it('lists title, topic and intro matches first, then transcript-only lessons by how many lines match', () => {
+  it('shows the lessons the filter matches, as the plain filter does, whatever the transcripts match', () => {
+    const v = view({ matches: [3, 1], hits: [hit('/pronunciation/01', 4), hit('/grammar/01', 1)] });
+    expect(v.hidden).toEqual([true, false, true, false, true, true]);
+    expect(v.counts).toEqual({ pronunciation: 2, grammar: 0 });
+  });
+
+  it('groups the lines: matched lessons first, best first, then the rest by how many lines match', () => {
     const v = view({
       matches: [3, 1],
-      hits: [hit('/pronunciation/01', 4), hit('/grammar/01', 1), hit('/grammar/01', 8), hit('/pronunciation/04', 2)],
-      allEpisodes: true,
+      hits: [
+        hit('/pronunciation/01', 4),
+        hit('/pronunciation/02', 6),
+        hit('/pronunciation/04', 2),
+        hit('/grammar/01', 1),
+        hit('/grammar/01', 8),
+      ],
     });
-    expect(shown(v)).toEqual([3, 1, 4, 0]);
-    // The rest follow, hidden, in their own order.
-    expect(v.order).toEqual([3, 1, 4, 0, 2, 5]);
-  });
-
-  it('shows the top three episodes until asked for more', () => {
-    const input = { matches: [0, 1, 2, 3, 4] };
-    expect(shown(view(input))).toEqual([0, 1, 2]);
-    expect(view(input).moreEpisodes).toBe(2);
-    expect(shown(view({ ...input, allEpisodes: true }))).toEqual([0, 1, 2, 3, 4]);
-    expect(view({ ...input, allEpisodes: true }).moreEpisodes).toBe(0);
-  });
-
-  it('groups the lines by episode, in the episodes’ order, past the top three too', () => {
-    const v = view({
-      matches: [5, 1, 2, 3],
-      hits: [hit('/pronunciation/02', 1), hit('/pronunciation/04', 3), hit('/grammar/02', 7), hit('/pronunciation/02', 9)],
-    });
-    expect(v.groups.map((g) => [g.row, g.hits.map((h) => h.start)])).toEqual([
-      [5, [7]],
-      [1, [1, 9]],
-      [3, [3]],
+    expect(groups(v)).toEqual([
+      [3, [2]],
+      [1, [6]],
+      [4, [1, 8]],
+      [0, [4]],
     ]);
   });
 
@@ -62,37 +46,34 @@ describe('search view', () => {
     expect(view({ hits: [...many, ...more], lineLimit: 100 }).moreLines).toBe(0);
   });
 
-  it('narrows both sections to the pressed series pill', () => {
-    const v = view({ matches: [0], hits: [hit('/pronunciation/02', 1), hit('/grammar/01', 2)], series: 'grammar' });
-    expect(shown(v)).toEqual([4]);
-    expect(v.groups.map((g) => g.row)).toEqual([4]);
-    expect(v.counts).toEqual({ pronunciation: 2, grammar: 1 });
-    expect(v.pills).toEqual({ pronunciation: false, grammar: true });
+  it('narrows the lines to the pressed series pill, and keeps the pills of series with lines', () => {
+    const hits = [hit('/pronunciation/02', 1), hit('/grammar/01', 2)];
+    expect(groups(view({ matches: [0], hits, series: 'grammar' }))).toEqual([[4, [2]]]);
+    // Grammar has no lesson match, but it has a line, so its pill stays to narrow to it.
+    expect(view({ matches: [0], hits }).pills).toEqual({ pronunciation: true, grammar: true });
   });
 
-  it('says how many episodes and lines match', () => {
+  it('says how many lessons and lines match', () => {
     expect(view({ matches: [0], hits: [hit('/pronunciation/01', 1), hit('/grammar/01', 2)] }).status).toBe(
-      '2 lessons match, 2 lines in transcripts',
+      '1 lesson matches, 2 lines in transcripts',
     );
-    expect(view({ matches: [0], hits: [] }).status).toBe('1 lesson matches, 0 lines in transcripts');
-    expect(view({ matches: [0], hits: 'loading' }).status).toBe('1 lesson matches. Searching transcripts…');
+    expect(view({ matches: [], hits: [hit('/grammar/01', 2)] }).status).toBe('0 lessons match, 1 line in transcripts');
+    expect(view({ matches: [0, 4], hits: 'loading' }).status).toBe('2 lessons match. Searching transcripts…');
   });
 
-  it('offers to clear the filter when neither section matches', () => {
+  it('offers to clear the filter when neither the lessons nor the transcripts match', () => {
     const v = view({ matches: [], hits: [] });
     expect(v.status).toBe('No lessons match.');
     expect(v.empty).toBe(true);
+    expect(view({ matches: [], hits: [hit('/grammar/01', 2)] }).empty).toBe(false);
     expect(view({ matches: [], hits: 'loading' }).empty).toBe(false);
   });
 
-  it('is the plain lesson filter below two characters or with transcripts off', () => {
-    for (const input of [{ query: 'c', matches: [0, 4] }, { query: 'coracao', matches: [0, 4], hits: null }]) {
-      const v = view({ ...input, hits: input.hits === null ? null : [hit('/pronunciation/02', 1)] });
-      expect(v.transcripts).toBe(false);
-      expect(v.order).toEqual([0, 1, 2, 3, 4, 5]);
-      expect(v.hidden).toEqual([false, true, true, true, false, true]);
-      expect(v.groups).toEqual([]);
-      expect(v.status).toBe('2 lessons match');
-    }
+  it('is the plain lesson filter below two characters', () => {
+    const v = view({ query: 'c', matches: [0, 4], hits: [hit('/pronunciation/02', 1)] });
+    expect(v.transcripts).toBe(false);
+    expect(v.hidden).toEqual([false, true, true, true, false, true]);
+    expect(v.groups).toEqual([]);
+    expect(v.status).toBe('2 lessons match');
   });
 });

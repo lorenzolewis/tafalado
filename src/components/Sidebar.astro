@@ -29,17 +29,10 @@ const current = (on: boolean) => (on ? 'page' : undefined);
       <!-- The filter opens in this row, in place of the heading (which stays for screen readers). -->
       <div class="lessons-head">
         <h2>Lessons</h2>
-        <search class="search" id="lesson-search" hidden>
-          <div class="field">
-            <label for="lesson-filter" class="visually-hidden">Filter lessons</label>
-            <Icon name="search" />
-            <input type="search" id="lesson-filter" autocomplete="off" placeholder="nh, ão, ficar…" />
-          </div>
-          <!-- Opt-in (#7): also search what is said in each episode. Wired in src/lib/sidebar-ui.ts. -->
-          <label class="also">
-            <input type="checkbox" data-search-transcripts />
-            Also search transcripts
-          </label>
+        <search class="field" id="lesson-search" hidden>
+          <label for="lesson-filter" class="visually-hidden">Filter lessons</label>
+          <Icon name="search" />
+          <input type="search" id="lesson-filter" autocomplete="off" placeholder="nh, ão, ficar…" />
         </search>
         <button type="button" class="round" aria-expanded="false" aria-controls="lesson-search" data-search-toggle>
           <Icon name="search" class="i-open" /><Icon name="close" class="i-close" /><span class="visually-hidden">Filter lessons</span>
@@ -62,9 +55,8 @@ const current = (on: boolean) => (on ? 'page' : undefined);
     <div class="empty" hidden data-empty>
       <button type="button" class="link-btn" data-clear>Clear the filter</button>
     </div>
-    <!-- One scroll box: the lessons and, while transcripts are searched, the lines found in them. -->
+    <!-- One scroll box: the lessons and, from two characters typed, the lines found in the transcripts (#7). -->
     <div class="results" data-results>
-      <h3 class="section-head" data-episodes-head hidden>Episodes</h3>
       <ol class="list">
         {
           lessons.map(({ data, body }) => (
@@ -96,7 +88,6 @@ const current = (on: boolean) => (on ? 'page' : undefined);
           ))
         }
       </ol>
-      <button type="button" class="link-btn more" data-more-episodes hidden>Show more episodes</button>
       <section class="hits" aria-labelledby="transcript-hits-head" data-hits hidden>
         <h3 class="section-head" id="transcript-hits-head">In transcripts</h3>
         <p class="hits-note" data-hits-loading hidden>Loading transcripts…</p>
@@ -167,7 +158,6 @@ const current = (on: boolean) => (on ? 'page' : undefined);
   }
   /* Open: the field takes the heading's place in the row, and the button closes it. */
   .lessons-head:has([aria-expanded='true']) {
-    align-items: start;
     padding-inline-start: var(--space-12);
   }
   .lessons-head:has([aria-expanded='true']) h2 {
@@ -204,18 +194,9 @@ const current = (on: boolean) => (on ? 'page' : undefined);
   .round[aria-expanded='true'] :global(.i-close) {
     display: block;
   }
-  /* The field, with the transcripts checkbox under it. */
-  .search {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-inline-size: 0;
-  }
-  .search[hidden] {
-    display: none;
-  }
   .field {
     display: flex;
+    flex: 1;
     align-items: center;
     gap: var(--space-8);
     min-inline-size: 0;
@@ -225,8 +206,11 @@ const current = (on: boolean) => (on ? 'page' : undefined);
     border-radius: var(--radius-control);
     background: var(--surface);
   }
+  .field[hidden] {
+    display: none;
+  }
   /* It opens out of the button, leftwards across the row. */
-  .search:not([hidden]) {
+  .field:not([hidden]) {
     animation: field-open 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   @keyframes field-open {
@@ -238,7 +222,7 @@ const current = (on: boolean) => (on ? 'page' : undefined);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .search:not([hidden]) {
+    .field:not([hidden]) {
       animation: none;
     }
   }
@@ -262,23 +246,6 @@ const current = (on: boolean) => (on ? 'page' : undefined);
   /* The row's own button closes and clears the filter, so the browser's clear button would be a second ×. */
   .field input::-webkit-search-cancel-button {
     appearance: none;
-  }
-
-  .also {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-    min-block-size: 36px;
-    padding-inline: var(--space-4);
-    color: var(--muted);
-    font-size: var(--text-14);
-    cursor: pointer;
-  }
-  .also input {
-    inline-size: 18px;
-    block-size: 18px;
-    margin: 0;
-    accent-color: var(--ink);
   }
 
   /* Series pills, each on its own paper (base.css sets --paper by data-pill); pressed is reversed
