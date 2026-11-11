@@ -7,7 +7,8 @@ import type { Cue, Reading } from './transcript';
 /** The chip on a line that is all one language. */
 const LANG_CHIP: Record<string, string> = { 'pt-BR': 'PT', es: 'ES' };
 
-const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+/** Text as HTML: `&`, `<` and `>` escaped. */
+export const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 /** `0:03`, `12:04`: where a line or a turn starts. */
 export const stamp = (seconds: number) => formatDuration(Math.floor(seconds));

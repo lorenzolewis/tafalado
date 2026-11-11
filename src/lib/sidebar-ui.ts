@@ -2,15 +2,63 @@
 // once by the sidebar, so it runs once per visit: the sidebar is kept across navigations, so its
 // filter is bound once, while the current row and the phone's view are updated on every page.
 import { navigate } from 'astro:transitions/client';
-import { createLessonFilter, filterView } from './lesson-filter';
+import { createLessonFilter } from './lesson-filter';
 import { switchView } from './motion';
 import { LESSONS_ID, pagePath, viewOf, viewSwitchDirection, type View } from './nav';
+import { LINE_PAGE, searchView, type HitGroup } from './search-view';
+import { seekTo } from './seek';
+import { escape, stamp } from './transcript-view';
+import {
+  MIN_TRANSCRIPT_QUERY,
+  TRANSCRIPT_CUES_PATH,
+  createTranscriptSearch,
+  markedHtml,
+  type TranscriptCues,
+  type TranscriptHit,
+} from './transcript-search';
 
 const bound = new WeakSet<Element>();
 /** How long the lesson filter waits after a keystroke before showing results. */
 const SEARCH_DELAY_MS = 120;
 /** Shows one series' lessons with no query (or every series, for null). Set once the sidebar is bound. */
 let showOnly: ((id: string | null) => void) | undefined;
+
+/** The transcript search, built once from the cue file, which is fetched when the filter first opens. */
+let transcriptSearch: Promise<((query: string) => TranscriptHit[]) | null> | undefined;
+/** Null when it didn't load; opening the filter again tries again (`retry`). */
+function loadTranscriptSearch(retry = false) {
+  if (retry) transcriptSearch = undefined;
+  transcriptSearch ??= fetch(TRANSCRIPT_CUES_PATH)
+    .then((response) => (response.ok ? (response.json() as Promise<TranscriptCues>) : Promise.reject()))
+    .then(createTranscriptSearch)
+    .catch(() => null);
+  return transcriptSearch;
+}
+
+/** The In transcripts section's lines, under each episode's name (which links to its lesson). */
+function groupsHtml(groups: HitGroup[], rows: HTMLElement[]): string {
+  return groups
+    .map(({ row, hits }) => {
+      const el = rows[row]!;
+      const href = el.dataset.lesson!;
+      const name = el.querySelector('.row-title')!.textContent!.trim();
+      const number = el.querySelector('.number')!.textContent!.trim();
+      const sub = el.querySelector('.row-sub')!.textContent!.replace(/\s+/g, ' ').trim();
+      const lines = hits
+        .map(
+          (h) =>
+            `<li><button type="button" class="hit" data-hit-lesson="${href}" data-hit-start="${h.start}">` +
+            `<span class="hit-time">${stamp(h.start)}</span><span class="hit-text">${markedHtml(h.text, h.ranges)}</span></button></li>`,
+        )
+        .join('');
+      return (
+        `<li class="hit-group" data-series="${el.dataset.series}">` +
+        `<a class="hit-lesson" href="${href}"><span class="hit-number" aria-hidden="true">${escape(number)}</span>${escape(name)}` +
+        `<span class="visually-hidden">, ${escape(sub)}</span></a><ol>${lines}</ol></li>`
+      );
+    })
+    .join('');
+}
 
 function bindSidebar(root: HTMLElement) {
   if (bound.has(root)) return;
@@ -26,12 +74,58 @@ function bindSidebar(root: HTMLElement) {
   const pills = [...root.querySelectorAll<HTMLButtonElement>('[data-pill]')];
   const rows = [...root.querySelectorAll<HTMLElement>('[data-filter-text]')];
   const rowSeries = rows.map((row) => row.dataset.series!);
+  const rowLessons = rows.map((row) => row.dataset.lesson!);
   const filter = createLessonFilter(rows.map((row) => row.dataset.filterText!));
+  const hitsSection = $<HTMLElement>('[data-hits]');
+  const hitsLoading = $<HTMLElement>('[data-hits-loading]');
+  const hitGroups = $<HTMLElement>('[data-hit-groups]');
+  const moreLines = $<HTMLButtonElement>('[data-more-lines]');
   let series: string | null = null;
+  /** The transcript search once loaded; until then a query shows the transcripts as loading. */
+  let searchTranscripts: ((query: string) => TranscriptHit[]) | undefined;
+  // "Show more lines": reset by each new query.
+  let lineLimit = LINE_PAGE;
+  let shownQuery = '';
+  let shownGroups = '';
+
+  /** The cue file didn't load: no lines until the filter is opened again, rather than refetching on every keystroke. */
+  let failed = false;
+  /**
+   * Fetches the cue file if it isn't loaded: when the filter opens (so it's usually there by the
+   * first word typed), or on a search (a value the browser restored, with the filter opened for it).
+   */
+  function ensureTranscripts(opened = false) {
+    if (searchTranscripts) return;
+    if (!opened && (failed || input.value.trim().length < MIN_TRANSCRIPT_QUERY)) return;
+    const retry = failed;
+    failed = false;
+    void loadTranscriptSearch(retry).then((search) => {
+      if (search) searchTranscripts = search;
+      else failed = true;
+      update();
+    });
+  }
 
   function update() {
-    const view = filterView({ query: input.value, matches: filter(input.value), rowSeries, series });
+    const query = input.value;
+    if (query !== shownQuery) {
+      shownQuery = query;
+      lineLimit = LINE_PAGE;
+    }
+    ensureTranscripts();
+    const hits = searchTranscripts ? searchTranscripts(query) : failed ? [] : 'loading';
+    const view = searchView({ query, matches: filter(query), rowLessons, rowSeries, series, hits, lineLimit });
     rows.forEach((row, i) => (row.hidden = view.hidden[i]!));
+    hitsSection.hidden = !view.transcripts;
+    hitsLoading.hidden = !view.loading && !(failed && view.transcripts);
+    hitsLoading.textContent = failed ? 'The transcripts didn’t load. Close and reopen the filter to try again.' : 'Loading transcripts…';
+    const groups = groupsHtml(view.groups, rows);
+    if (groups !== shownGroups) {
+      shownGroups = groups;
+      hitGroups.innerHTML = groups;
+    }
+    moreLines.hidden = view.moreLines === 0;
+    moreLines.textContent = `Show more lines (${view.moreLines})`;
     for (const pill of pills) {
       const id = pill.dataset.pill!;
       pill.hidden = !view.pills[id];
@@ -66,6 +160,18 @@ function bindSidebar(root: HTMLElement) {
     pill.addEventListener('click', () => setSeries(series === pill.dataset.pill ? null : pill.dataset.pill!));
   }
   pillAll.addEventListener('click', () => setSeries(null));
+  // "Show more lines" hides once there's no more, so focus goes on to the first line it showed.
+  moreLines.addEventListener('click', () => {
+    const before = hitGroups.querySelectorAll('.hit').length;
+    lineLimit += LINE_PAGE;
+    update();
+    hitGroups.querySelectorAll<HTMLElement>('.hit')[before]?.focus();
+  });
+  // A line plays its episode from there, whichever is playing.
+  hitGroups.addEventListener('click', (event) => {
+    const hit = (event.target as Element).closest<HTMLElement>('[data-hit-start]');
+    if (hit) seekTo(hit.dataset.hitLesson!, Number(hit.dataset.hitStart));
+  });
   $('[data-clear]').addEventListener('click', () => {
     input.value = '';
     setSeries(null);
@@ -79,8 +185,10 @@ function bindSidebar(root: HTMLElement) {
   toggle.addEventListener('click', () => {
     const open = Boolean(search.hidden);
     openSearch(open);
-    if (open) input.focus();
-    else if (input.value) {
+    if (open) {
+      input.focus();
+      ensureTranscripts(true);
+    } else if (input.value) {
       input.value = '';
       update();
     }
@@ -149,7 +257,7 @@ async function openLessons() {
  */
 export function showAllLessons() {
   showOnly?.(null);
-  document.querySelector('[data-sidebar] .list')?.scrollTo(0, 0);
+  document.querySelector('[data-sidebar] [data-results]')?.scrollTo(0, 0);
   void openLessons();
 }
 

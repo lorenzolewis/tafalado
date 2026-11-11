@@ -478,6 +478,7 @@ const tracks = JSON.stringify(
   }
   /* It keeps room for a few lines even on a short phone; past that the sheet scrolls. */
   :global(html[data-transcript-open]) .sheet :global([data-transcript-panel]) {
+    --behind: var(--plate);
     --transcript-fade: 1rem;
     --transcript-now-room: 0px;
     display: flex;

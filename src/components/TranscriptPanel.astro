@@ -2,15 +2,28 @@
 // The transcript of the playing episode (#99): one component for both places it shows, the phone
 // sheet (src/components/Player.astro) and the desktop bar (TranscriptBar.astro). Its lines are
 // filled in by src/lib/transcript-ui.ts from the episode's JSON, so the styles for them are global
-// under the panel. A one-line key says how Portuguese and Spanish are marked.
+// under the panel. A one-line key says how Portuguese and Spanish are marked. Find in transcript
+// (#106) opens under it, wired in src/lib/transcript-find-ui.ts.
+import Icon from './Icon.astro';
 ---
 
 <div class="panel" data-transcript-panel>
-  <p class="key" aria-hidden="true">
-    <span><span class="lang-chip" data-lang="pt-BR">PT</span> <i lang="pt-BR">Português</i></span>
-    <span><span class="lang-chip" data-lang="es">ES</span> <i lang="es">Español</i></span>
-    <span>English</span>
-  </p>
+  <div class="head">
+    <p class="key" aria-hidden="true">
+      <span><span class="lang-chip" data-lang="pt-BR">PT</span> <i lang="pt-BR">Português</i></span>
+      <span><span class="lang-chip" data-lang="es">ES</span> <i lang="es">Español</i></span>
+      <span>English</span>
+    </p>
+    <button type="button" class="find-toggle" aria-expanded="false" data-find-toggle>
+      <Icon name="search" /><span class="visually-hidden">Find in transcript</span>
+    </button>
+  </div>
+  <search class="find" aria-label="Find in transcript" data-find hidden>
+    <input type="search" autocomplete="off" aria-label="Find in transcript" placeholder="Find in transcript" data-find-input />
+    <span class="find-count" role="status" data-find-status></span>
+    <button type="button" class="find-step" data-find-step="-1" aria-label="Previous match"><Icon name="chevron" class="up" /></button>
+    <button type="button" class="find-step" data-find-step="1" aria-label="Next match"><Icon name="chevron" /></button>
+  </search>
   <div class="scroll" data-transcript-scroll></div>
   <button type="button" class="now" data-transcript-now hidden>Back to now</button>
 </div>
@@ -21,6 +34,8 @@
   .panel {
     /* The column of times (and language chips) at the start of each line. */
     --gutter: 3.25rem;
+    /* What the lines sit on, for the current find match (the phone sheet sets its plate). */
+    --behind: var(--surface);
     position: relative;
     display: flex;
     flex: 1 1 0;
@@ -32,8 +47,15 @@
     overflow: clip;
     text-align: start;
   }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding-inline-end: var(--space-8);
+  }
   .key {
     display: flex;
+    flex: 1;
     flex-wrap: wrap;
     gap: var(--space-4) var(--space-16);
     margin: 0;
@@ -44,6 +66,89 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-4);
+  }
+  /* Find in transcript: a button at the key's end opens the field under it. */
+  .find-toggle,
+  .find-step {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: 36px;
+    block-size: 36px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .find-toggle:hover,
+  .find-step:hover {
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+  .find-toggle[aria-expanded='true'] {
+    background: var(--paper);
+    color: var(--print-ink);
+  }
+  .find-toggle :global(.icon),
+  .find-step :global(.icon) {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  .find-step :global(.up) {
+    rotate: 180deg;
+  }
+  .find {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: var(--space-8) var(--space-8) 0 calc(var(--gutter) + var(--space-12) - var(--space-4));
+    padding-inline: var(--space-12) var(--space-4);
+    border: 2px solid currentColor;
+    border-radius: var(--radius-control);
+  }
+  .find[hidden] {
+    display: none;
+  }
+  .find:focus-within {
+    outline: 2px solid var(--paper);
+    outline-offset: 2px;
+  }
+  .find input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: 36px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    outline: none;
+    font: var(--text-16) / 1.2 var(--font-sans);
+  }
+  .find input::placeholder {
+    color: inherit;
+    opacity: 0.6;
+  }
+  .find-count {
+    flex: none;
+    opacity: 0.75;
+    font: 500 var(--text-14) / 1 var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Every match on a tint of the text; the current one reversed out of it, in the colour behind the
+     line (--behind: the bar's page, the sheet's plate, or the playing line's paper). */
+  .panel :global(mark[data-found]) {
+    border-radius: 2px;
+    background: color-mix(in srgb, currentColor 22%, transparent);
+    color: inherit;
+    font-weight: inherit;
+  }
+  /* `color` stays the text's, so currentColor is; the glyphs are painted in --behind. */
+  .panel :global(mark[data-found='current']) {
+    background: currentColor;
+    outline: 2px solid currentColor;
+    -webkit-text-fill-color: var(--behind);
+  }
+  .panel :global(.cue[aria-current]) {
+    --behind: var(--paper);
   }
   .scroll {
     /* The fade, and room under the last line for Back to now. The phone sheet, short of height,
