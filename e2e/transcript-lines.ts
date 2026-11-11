@@ -1,4 +1,4 @@
-// Shared by the transcript e2e tests (transcript.e2e.ts, transcript-phone.e2e.ts). Not *.e2e.ts,
+// Shared by the transcript e2e tests (transcript.e2e.ts, transcript-phone.e2e.ts, transcript-search.e2e.ts). Not *.e2e.ts,
 // so Playwright doesn't run it on its own.
 import { expect, type Locator, type Page } from '@playwright/test';
 
@@ -35,4 +35,28 @@ export async function checkLines(page: Page, transcript: Locator, seek: Locator)
   await now.click();
   await expect(now).toBeHidden();
   await expect(transcript.locator('li[aria-current="true"]')).toBeInViewport();
+}
+
+/** Finds "ingresso" in an open transcript: "1 of n", Enter and Shift+Enter step and wrap, Escape clears. */
+export async function checkFind(transcript: Locator) {
+  await transcript.getByRole('button', { name: 'Find in transcript' }).click();
+  const field = transcript.getByRole('searchbox', { name: 'Find in transcript' });
+  await expect(field).toBeFocused();
+  await field.fill('ingresso');
+  const status = transcript.getByRole('status');
+  await expect(status).toHaveText(/^1 of \d+$/);
+  const total = Number((await status.textContent())!.split(' of ')[1]);
+  expect(total).toBeGreaterThan(1);
+  await expect(transcript.locator('mark[data-found]')).toHaveCount(total);
+  await expect(transcript.locator('mark[aria-current]')).toHaveText(/ingresso/i);
+
+  await field.press('Enter');
+  await expect(status).toHaveText(`2 of ${total}`);
+  await field.press('Shift+Enter');
+  await field.press('Shift+Enter');
+  await expect(status).toHaveText(`${total} of ${total}`);
+
+  await field.press('Escape');
+  await expect(field).toBeHidden();
+  await expect(transcript.locator('mark[data-found]')).toHaveCount(0);
 }

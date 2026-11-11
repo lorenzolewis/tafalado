@@ -1,7 +1,8 @@
 // The episode transcript in the phone's player sheet (#99): it opens there (not in the desktop
-// bar), follows the playing line, seeks when a line is chosen, and offers "Back to now" once scrolled.
+// bar), follows the playing line, seeks when a line is chosen, and offers "Back to now" once scrolled;
+// its find field works there too (#106).
 import { devices, expect, test } from '@playwright/test';
-import { checkLines } from './transcript-lines';
+import { checkFind, checkLines } from './transcript-lines';
 
 test.use({ ...devices['iPhone 15'], defaultBrowserType: undefined });
 
@@ -19,4 +20,16 @@ test('the transcript opens in the player sheet, follows and seeks', async ({ pag
   // The desktop bar stays out of the way.
   await expect(page.getByRole('complementary', { name: 'Transcript' })).toBeHidden();
   await checkLines(page, sheet, seek);
+});
+
+test('the player sheet finds a word in the transcript', async ({ page }) => {
+  await page.goto('/pronunciation/13');
+  const player = page.getByRole('region', { name: 'Audio player' });
+  await page.getByRole('main').getByRole('button', { name: 'Play', exact: true }).click();
+  await player.getByRole('button', { name: /, open the player$/ }).click();
+  const sheet = page.getByRole('dialog', { name: 'Player' });
+  await sheet.getByRole('button', { name: 'Show transcript' }).click();
+  await checkFind(sheet);
+  // Escape cleared the find, and left the sheet open.
+  await expect(sheet).toBeVisible();
 });

@@ -11,6 +11,8 @@
 //   while any of its readings plays.
 import { player, type PlayerState, type Track } from './player';
 import { seriesOf } from './nav';
+import { seekTo } from './seek';
+import { bindFind, type Find } from './transcript-find-ui';
 import type { Reading, TranscriptData } from './transcript';
 import { cueAt, cuesHtml, readingAt } from './transcript-view';
 import { allTracks } from './tracks';
@@ -134,18 +136,21 @@ interface Follower {
   /** The track whose lines are in the box. */
   lesson?: string;
   starts: number[];
+  find: Find;
 }
 const followers: Follower[] = [];
 
 function bindPanel(panel: HTMLElement) {
   const box = panel.querySelector<HTMLElement>('[data-transcript-scroll]')!;
   const now = panel.querySelector<HTMLButtonElement>('[data-transcript-now]')!;
-  const follower: Follower = { box, now, following: true, starts: [] };
   const stop = () => {
-    if (!box.querySelector('[aria-current]')) return;
+    if (!box.querySelector('.cue[aria-current]')) return;
     follower.following = false;
     now.hidden = false;
   };
+  // While finding, the panel stays on the matches; Back to now still returns to the playing line.
+  const find = bindFind(panel, box, stop);
+  const follower: Follower = { box, now, following: true, starts: [], find };
   box.addEventListener('wheel', stop, { passive: true });
   box.addEventListener('touchmove', stop, { passive: true });
   box.addEventListener('pointerdown', (event) => event.target === box && stop()); // its scrollbar
@@ -169,7 +174,7 @@ function resume(follower: Follower, scroll: boolean) {
 
 function follow(follower: Follower, instant: boolean) {
   const { box } = follower;
-  const line = box.querySelector<HTMLElement>('[aria-current]');
+  const line = box.querySelector<HTMLElement>('.cue[aria-current]');
   // Not while it's off screen (the closed sheet, the hidden bar): it starts at the line when shown.
   if (!line || !follower.following || box.offsetParent === null) return;
   const top = line.offsetTop - box.offsetTop - box.clientHeight * FOLLOW_AT + line.offsetHeight / 2;
@@ -184,6 +189,7 @@ async function fill(track: Track) {
   for (const f of mine) {
     f.lesson = track.id;
     f.starts = [];
+    f.find.reset(); // the old episode's matches go with it
     f.box.innerHTML = '<p class="empty">Loading…</p>';
   }
   const url = transcriptOf(track);
@@ -207,7 +213,7 @@ function update({ track, currentTime }: PlayerState) {
     if (!list) continue;
     const i = f.lesson === track?.id ? cueAt(f.starts, currentTime) : -1;
     const current = i >= 0 ? list.children[i] : null;
-    const before = list.querySelector('[aria-current]');
+    const before = list.querySelector(':scope > [aria-current]');
     if (before === current) continue;
     before?.removeAttribute('aria-current');
     current?.setAttribute('aria-current', 'true');
@@ -221,17 +227,6 @@ function update({ track, currentTime }: PlayerState) {
     if (k === -1) turn.removeAttribute('data-reading');
     else turn.dataset.reading = `${k + 1}/${readings.length}`;
   }
-}
-
-/** Jumps to `seconds` into a lesson and plays, loading the lesson first if another is playing. */
-function seekTo(lesson: string, seconds: number) {
-  if (player.state.track?.id !== lesson) {
-    const track = allTracks().find((t) => t.id === lesson);
-    if (!track) return;
-    player.play(track);
-  }
-  player.seek(seconds);
-  if (player.state.paused) player.play();
 }
 
 // ── The dialog's turns on this page ──
