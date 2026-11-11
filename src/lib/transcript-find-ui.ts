@@ -8,15 +8,18 @@ import { findInCues } from './find-in-cues';
 const FIND_AT = 0.4;
 
 export interface Find {
-  /** Clears the query and the marks: the panel is showing another episode. */
+  /** Closes the field and forgets the query: the panel is showing another episode. */
   reset(): void;
 }
 
-/**
- * Binds one panel's find field. `onFinding` runs whenever matches are shown, so the panel stops
- * following playback and doesn't scroll away from them.
- */
-export function bindFind(panel: HTMLElement, box: HTMLElement, onFinding: () => void): Find {
+/** What the panel does around finding: stop following playback while there are matches, and follow again after. */
+export interface FindHooks {
+  onFinding(): void;
+  onDone(): void;
+}
+
+/** Binds one panel's find field. */
+export function bindFind(panel: HTMLElement, box: HTMLElement, { onFinding, onDone }: FindHooks): Find {
   const toggle = panel.querySelector<HTMLButtonElement>('[data-find-toggle]')!;
   const field = panel.querySelector<HTMLElement>('[data-find]')!;
   const input = panel.querySelector<HTMLInputElement>('[data-find-input]')!;
@@ -75,6 +78,7 @@ export function bindFind(panel: HTMLElement, box: HTMLElement, onFinding: () => 
   }
 
   function find() {
+    const had = found.length > 0;
     unmark();
     const texts = [...box.querySelectorAll<HTMLElement>('.cue .text')];
     const matches = findInCues(
@@ -87,6 +91,7 @@ export function bindFind(panel: HTMLElement, box: HTMLElement, onFinding: () => 
       found[i] = mark(texts[cue]!, start, end);
     }
     show(found.length ? 0 : -1);
+    if (had && !found.length) onDone();
   }
 
   const step = (by: number) => found.length && show((current + by + found.length) % found.length);
@@ -120,6 +125,9 @@ export function bindFind(panel: HTMLElement, box: HTMLElement, onFinding: () => 
 
   return {
     reset() {
+      // The old episode's lines (and their marks) are already gone.
+      field.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
       input.value = '';
       found = [];
       current = -1;

@@ -8,7 +8,7 @@ import { LESSONS_ID, pagePath, viewOf, viewSwitchDirection, type View } from './
 import { LINE_PAGE, TOP_EPISODES, searchView, type HitGroup, type SearchView } from './search-view';
 import { seekTo } from './seek';
 import { read, write } from './storage';
-import { stamp } from './transcript-view';
+import { escape, stamp } from './transcript-view';
 import {
   MIN_TRANSCRIPT_QUERY,
   TRANSCRIPT_CUES_PATH,
@@ -30,18 +30,15 @@ const isBoolean = (value: unknown): value is boolean => typeof value === 'boolea
 
 /** The transcript search, built once from the cue file, which is fetched the first time it's needed. */
 let transcriptSearch: Promise<((query: string) => TranscriptHit[]) | null> | undefined;
-function loadTranscriptSearch() {
+/** Null when it didn't load; ticking the box again tries again (`retry`). */
+function loadTranscriptSearch(retry = false) {
+  if (retry) transcriptSearch = undefined;
   transcriptSearch ??= fetch(TRANSCRIPT_CUES_PATH)
     .then((response) => (response.ok ? (response.json() as Promise<TranscriptCues>) : Promise.reject()))
     .then(createTranscriptSearch)
-    .catch(() => {
-      transcriptSearch = undefined; // try again next time
-      return null;
-    });
+    .catch(() => null);
   return transcriptSearch;
 }
-
-const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 /** The In transcripts section's lines, under each episode's name (which links to its lesson). */
 function groupsHtml(groups: HitGroup[], rows: HTMLElement[]): string {
@@ -103,13 +100,17 @@ function bindSidebar(root: HTMLElement) {
   let shownGroups = '';
 
   transcriptsBox.checked = read(SEARCH_TRANSCRIPTS, isBoolean) ?? false;
-  /** Fetches the cue file if it's needed and not loaded: once ticked, on the first search. */
-  function ensureTranscripts(force = false) {
+  /** The cue file didn't load: no lines until the box is ticked again, rather than refetching on every keystroke. */
+  let failed = false;
+  /** Fetches the cue file if it's needed and not loaded: when ticked, or on the first search with it ticked. */
+  function ensureTranscripts(ticked = false) {
     if (searchTranscripts || !transcriptsBox.checked) return;
-    if (!force && input.value.trim().length < MIN_TRANSCRIPT_QUERY) return;
-    void loadTranscriptSearch().then((search) => {
+    if (!ticked && (failed || input.value.trim().length < MIN_TRANSCRIPT_QUERY)) return;
+    const retry = failed;
+    failed = false;
+    void loadTranscriptSearch(retry).then((search) => {
       if (search) searchTranscripts = search;
-      else hitsLoading.textContent = 'The transcripts didn’t load.';
+      else failed = true;
       update();
     });
   }
@@ -122,7 +123,7 @@ function bindSidebar(root: HTMLElement) {
       lineLimit = LINE_PAGE;
     }
     ensureTranscripts();
-    const hits = !transcriptsBox.checked ? null : searchTranscripts ? searchTranscripts(query) : 'loading';
+    const hits = !transcriptsBox.checked ? null : searchTranscripts ? searchTranscripts(query) : failed ? [] : 'loading';
     const view = searchView({ query, matches: filter(query), rowLessons, rowSeries, series, hits, allEpisodes, lineLimit });
     rows.forEach((row, i) => (row.hidden = view.hidden[i]!));
     // The Episodes section: the matching rows, best first. Back in episode order without it.
@@ -135,7 +136,8 @@ function bindSidebar(root: HTMLElement) {
     moreEpisodes.hidden = view.moreEpisodes === 0;
     moreEpisodes.textContent = `Show more episodes (${view.moreEpisodes})`;
     hitsSection.hidden = !view.transcripts;
-    hitsLoading.hidden = !view.loading;
+    hitsLoading.hidden = !view.loading && !(failed && view.transcripts);
+    hitsLoading.textContent = failed ? 'The transcripts didn’t load. Untick and tick the box to try again.' : 'Loading transcripts…';
     const groups = groupsHtml(view.groups, rows);
     if (groups !== shownGroups) {
       shownGroups = groups;

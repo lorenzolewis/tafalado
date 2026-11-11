@@ -148,8 +148,15 @@ function bindPanel(panel: HTMLElement) {
     follower.following = false;
     now.hidden = false;
   };
-  // While finding, the panel stays on the matches; Back to now still returns to the playing line.
-  const find = bindFind(panel, box, stop);
+  // While finding, the panel stays on the matches (even before any line has played); Back to now
+  // still returns to the playing line, and clearing the find follows it again.
+  const find = bindFind(panel, box, {
+    onFinding: () => {
+      follower.following = false;
+      now.hidden = false;
+    },
+    onDone: () => resume(follower, true),
+  });
   const follower: Follower = { box, now, following: true, starts: [], find };
   box.addEventListener('wheel', stop, { passive: true });
   box.addEventListener('touchmove', stop, { passive: true });

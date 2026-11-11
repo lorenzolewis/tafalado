@@ -5,6 +5,7 @@
 import { fuzzySearch, latinize } from './fuzzy';
 import type { Cue } from './transcript';
 import { visibleText } from './transcript-check';
+import { escape } from './transcript-view';
 
 /** Where the sidebar fetches every cue, the first time transcripts are searched. */
 export const TRANSCRIPT_CUES_PATH = '/data/transcript-cues.json';
@@ -52,8 +53,6 @@ export function createTranscriptSearch(data: TranscriptCues): (query: string) =>
     return matches.sort((a, b) => a.index - b.index).map(({ index, ranges }) => ({ ...cues[index]!, ranges }));
   };
 }
-
-const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 /** A line's text as HTML: escaped, with each range marked. */
 export function markedHtml(text: string, ranges: number[]): string {

@@ -44,6 +44,7 @@ Each dialog turn on the lesson page gets a play button that jumps to its first r
 - The browser never parses VTT: each transcript is built into `/data/transcripts/<lesson id>.json` (not under `/transcripts/`, which `public/_headers` serves as `text/vtt`).
 - **The build fails** on a transcript named for no lesson, one that breaks the format above, and a dialog turn whose text the transcript never reads in full. So when a turn's text changes in the notes, change its readings here too (and the other way round).
 - `src/lib/transcript-ui.ts` wires the panel and the turns to the player.
+- Transcripts are searchable (#7, #106). The sidebar's lesson filter has an opt-in **Also search transcripts** box. It searches `/data/transcript-cues.json`: every cue's plain text in one file, fetched the first time it's needed (`src/lib/transcript-search.ts`, `src/lib/search-view.ts`). The panel's **Find in transcript** field marks a word in the playing episode (`src/lib/find-in-cues.ts`, `src/lib/transcript-find-ui.ts`). Why it is built this way is in `docs/research/transcript-search.md`.
 
 ## How they were made
 
