@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Standard tier, copied from Lorenzo's renovate skill template: weekly updates, auto-merge patches and non-major dev dependencies once CI passes",
+  "extends": [
+    "config:recommended",
+    "security:minimumReleaseAgeNpm",
+    ":maintainLockFilesWeekly",
+    "schedule:weekly"
+  ],
+  "timezone": "Europe/Madrid",
+  "prConcurrentLimit": 5,
+  "postUpdateOptions": ["npmDedupe", "pnpmDedupe", "yarnDedupeHighest"],
+  "packageRules": [
+    {
+      "description": "Auto-merge patch, pin and digest updates once CI passes",
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Auto-merge minor updates to dev dependencies once CI passes",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor"],
+      "automerge": true
+    },
+    {
+      "description": "Majors need a click in the Dependency Dashboard before a PR is opened",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}
